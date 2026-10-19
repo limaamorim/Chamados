@@ -17,10 +17,12 @@ type BaseConhecimentoProps = {
 function BaseConhecimento({
     abrirNovoChamado
 }: BaseConhecimentoProps) {
+    // Estados locais da tela: pesquisa, categoria e artigo aberto.
     const [busca, setBusca] = useState("");
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
     const [artigoSelecionado, setArtigoSelecionado] = useState<Artigo | null>(null);
 
+    // Filter: combina categoria e texto nos artigos locais. useMemo reaproveita o resultado enquanto os filtros não mudam.
     const artigosFiltrados = useMemo(() => {
         const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
@@ -47,6 +49,7 @@ function BaseConhecimento({
         setArtigoSelecionado(null);
     }
 
+    // Interface da página.
     return (
         <section className="base-conhecimento">
 
@@ -55,7 +58,7 @@ function BaseConhecimento({
                 descricao="Encontre orientações e soluções para os problemas mais comuns do dia a dia."
             />
 
-            <div>
+            <div className="base-barra-pesquisa">
                 <CampoPesquisa
                     valor={busca}
                     aoAlterar={(valor) => {
@@ -76,7 +79,7 @@ function BaseConhecimento({
                         Limpar
                     </button>
                 )}
-            </div> <br />
+            </div>
 
             {artigoSelecionado ? (
                 <article className="base-artigo-detalhe">

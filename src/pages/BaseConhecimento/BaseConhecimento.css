@@ -229,3 +229,14 @@
     }
 }
 
+
+.base-barra-pesquisa {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 600px) {
+    .base-conhecimento { padding: 20px 16px; }
+    .base-lista-artigos, .base-categorias { grid-template-columns: 1fr; }
+}

@@ -1,11 +1,16 @@
-import { useState } from "react";
-import { Cr2cd_chamadosService } from "../../generated/services/Cr2cd_chamadosService";
+import { useEffect, useState } from "react";
+import { criarChamado } from "../../services/chamadosService";
+import {
+    categoriasChamado,
+    prioridadesChamado,
+    CATEGORIA_PADRAO,
+    PRIORIDADE_PADRAO,
+    validarCamposChamado,
+} from "../../utils/chamados";
 import Header from "../../components/ui/Header";
 import BotaoNovoChamado from "../../components/ui/BotaoNovoChamado";
-import { FLW_NotificarNovoChamadoService } from "../../generated/services/FLW_NotificarNovoChamadoService";
 
 import type {
-    Cr2cd_chamadosBase,
     Cr2cd_chamadoscr2cd_categoria,
     Cr2cd_chamadoscr2cd_prioridade,
 } from "../../generated/models/Cr2cd_chamadosModel";
@@ -17,13 +22,14 @@ type NovoChamadoProps = {
 };
 
 function NovoChamado({ voltar }: NovoChamadoProps) {
+    // Estados locais: guardam os valores dos campos e atualizam a interface.
     const [titulo, setTitulo] = useState("");
 
     const [categoria, setCategoria] =
-        useState<Cr2cd_chamadoscr2cd_categoria>(997180000);
+        useState<Cr2cd_chamadoscr2cd_categoria>(CATEGORIA_PADRAO);
 
     const [prioridade, setPrioridade] =
-        useState<Cr2cd_chamadoscr2cd_prioridade>(997180000);
+        useState<Cr2cd_chamadoscr2cd_prioridade>(PRIORIDADE_PADRAO);
 
     const [descricao, setDescricao] = useState("");
 
@@ -31,111 +37,58 @@ function NovoChamado({ voltar }: NovoChamadoProps) {
     const [erro, setErro] = useState("");
     const [salvando, setSalvando] = useState(false);
 
-    const nomesCategoria: Record<number, string> = {
-        997180000: "Acesso",
-        997180001: "Software",
-        997180002: "Hardware",
-        997180003: "Rede",
-        997180004: "E-mail",
-        997180005: "Outros",
-    };
+    const [aviso, setAviso] = useState("");
 
-    const nomesPrioridade: Record<number, string> = {
-        997180000: "Baixa",
-        997180001: "Média",
-        997180002: "Alta",
-    };
+    // O efeito remove a mensagem depois de 3 segundos e cancela o timer ao sair da página.
+    useEffect(() => {
+        if (!mensagem) return;
+        const timer = window.setTimeout(() => setMensagem(""), 3000);
+        return () => window.clearTimeout(timer);
+    }, [mensagem]);
 
-    async function criarChamado() {
-        if (!titulo.trim() || !descricao.trim()) {
-            setErro("Preencha o título e a descrição.");
+    // A página controla o formulário; o service cuida da gravação e da notificação.
+    async function salvarNovoChamado() {
+        if (salvando) return;
+        const erroValidacao = validarCamposChamado(titulo, descricao);
+        if (erroValidacao) {
+            setErro(erroValidacao);
             return;
         }
 
         setSalvando(true);
         setErro("");
         setMensagem("");
-
-        const novoChamado: Omit<
-            Cr2cd_chamadosBase,
-            "cr2cd_chamadoid"
-        > = {
-            cr2cd_titulo: titulo.trim(),
-            cr2cd_descricao: descricao.trim(),
-
-            cr2cd_categoria: categoria,
-            cr2cd_prioridade: prioridade,
-
-            // Aberto
-            cr2cd_status: 997180000,
-
-            cr2cd_solicitante: "José Amorim",
-            cr2cd_datadeabertura: new Date().toISOString(),
-
-            statecode: 0,
-        };
+        setAviso("");
 
         try {
-            console.log("1 - Vou enviar para o Dataverse");
-            console.log("Registro:", novoChamado);
-
-            const resultado = await Cr2cd_chamadosService.create(novoChamado);
-
-            console.log("2 - Chamado salvo no Dataverse");
-
-            const resultadoFluxo =
-                await FLW_NotificarNovoChamadoService.Run({
-                    text: titulo.trim(),
-                    text_1: descricao.trim(),
-                    text_2: nomesCategoria[categoria],
-                    text_4: nomesPrioridade[prioridade],
-                });
-
-            console.log("3 - Resultado do fluxo:", resultadoFluxo);
-
-            console.log("2 - Dataverse respondeu");
-            console.log("Resultado:", resultado);
-
+            // Mantém o solicitante usado no protótipo atual.
+            const resultado = await criarChamado({ titulo, descricao, categoria, prioridade }, "José Amorim");
             setTitulo("");
-            setCategoria(997180000);
-            setPrioridade(997180000);
             setDescricao("");
-
+            setCategoria(CATEGORIA_PADRAO);
+            setPrioridade(PRIORIDADE_PADRAO);
             setMensagem("Chamado criado com sucesso!");
-
-            setTimeout(() => {
-                setMensagem("");
-            }, 3000);
-
+            setAviso(resultado.aviso);
         } catch (error) {
-
-            console.error("3 - ERRO AO CRIAR:", error);
-
-            setErro("Não foi possível criar o chamado. Veja o console.");
-
+            setErro(error instanceof Error ? error.message : "Não foi possível criar o chamado.");
         } finally {
-
-            console.log("4 - Finalizou");
             setSalvando(false);
-
         }
     }
 
+    // Interface da página.
     return (
         <section className="novo-chamado-pagina">
             <Header
                 titulo="Novo chamado"
                 descricao="Preencha os dados da sua solicitação."
+                mensagem={mensagem}
             />
 
-            {mensagem && (
-                <div className="mensagem-sucesso">
-                    ✓ {mensagem}
-                </div>
-            )}
+            {aviso && <p className="mensagem-aviso" role="status">{aviso}</p>}
 
             {erro && (
-                <div className="mensagem-erro">
+                <div className="mensagem-erro" role="alert">
                     {erro}
                 </div>
             )}
@@ -167,12 +120,9 @@ function NovoChamado({ voltar }: NovoChamadoProps) {
                             )
                         }
                     >
-                        <option value={997180000}>Acesso</option>
-                        <option value={997180001}>Software</option>
-                        <option value={997180002}>Hardware</option>
-                        <option value={997180003}>Rede</option>
-                        <option value={997180004}>E-mail</option>
-                        <option value={997180005}>Outros</option>
+                        {categoriasChamado.map(({ codigo, nome }) => (
+                            <option key={codigo} value={codigo}>{nome}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -190,9 +140,9 @@ function NovoChamado({ voltar }: NovoChamadoProps) {
                             )
                         }
                     >
-                        <option value={997180000}>Baixa</option>
-                        <option value={997180001}>Média</option>
-                        <option value={997180002}>Alta</option>
+                        {prioridadesChamado.map(({ codigo, nome }) => (
+                            <option key={codigo} value={codigo}>{nome}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -221,7 +171,7 @@ function NovoChamado({ voltar }: NovoChamadoProps) {
                     </button>
 
                     <BotaoNovoChamado
-                        aoClicar={criarChamado}
+                        aoClicar={salvarNovoChamado}
                         texto={salvando ? "Criando..." : "Criar chamado"}
                         disabled={salvando}
                     />

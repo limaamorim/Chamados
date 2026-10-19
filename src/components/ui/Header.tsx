@@ -46,7 +46,7 @@ function Header({ titulo, descricao, mensagem = "" }: HeaderProps) {
             </div>
 
             {mensagem && (
-                <div className="mensagem-sucesso">
+                <div className="mensagem-sucesso" role="status">
                     {mensagem}
                 </div>
             )}

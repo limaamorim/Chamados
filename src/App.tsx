@@ -10,6 +10,8 @@ import Relatorios from "./pages/Relatorio/Relatorio";
 import "./App.css";
 
 function App() {
+    // Estado no componente pai: é compartilhado com a Sidebar por propriedades (props).
+    // O setter lembra Set, mas este estado não vira uma variável global automaticamente.
     const [paginaAtiva, setPaginaAtiva] = useState("chamados");
 
     function exibirPagina() {

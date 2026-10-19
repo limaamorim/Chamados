@@ -1,9 +1,10 @@
 
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
-import {
+import type {
     Cr2cd_chamadoscr2cd_categoria,
     Cr2cd_chamadoscr2cd_prioridade,
 } from "../../generated/models/Cr2cd_chamadosModel";
+import { categoriasChamado, prioridadesChamado } from "../../utils/chamados";
 import "./EditarChamadoModal.css";
 import "./Modal.css";
 
@@ -13,6 +14,7 @@ type EditarChamadoModalProps = {
     setTitulo: (valor: string) => void;
     descricao: string;
     setDescricao: (valor: string) => void;
+    erro?: string;
     salvando: boolean;
     fechar: () => void;
     salvar: () => void;
@@ -26,18 +28,14 @@ function EditarChamadoModal({
     setTitulo,
     descricao,
     setDescricao,
+    erro = "",
     salvando,
     fechar,
     salvar,
     obterStatus,
     atualizarChamado,
 }: EditarChamadoModalProps) {
-    const categorias = Object.entries(Cr2cd_chamadoscr2cd_categoria)
-        .filter(([chave, valor]) => Number.isNaN(Number(chave)) && typeof valor === "number");
-
-    const prioridades = Object.entries(Cr2cd_chamadoscr2cd_prioridade)
-        .filter(([chave, valor]) => Number.isNaN(Number(chave)) && typeof valor === "number");
-
+    // As opções são compartilhadas com a criação e vêm dos mapas gerados pelo Power Apps.
     return (
         <div
             className="modal-fundo"
@@ -66,6 +64,8 @@ function EditarChamadoModal({
                         ×
                     </button>
                 </div>
+
+                {erro && <p className="mensagem-erro" role="alert">{erro}</p>}
 
                 <div className="formulario-edicao">
                     <div className="campo-edicao">
@@ -102,9 +102,9 @@ function EditarChamadoModal({
                                 })
                             }
                         >
-                            {categorias.map(([chave, valor]) => (
-                                <option key={chave} value={valor}>
-                                    {chave}
+                            {categoriasChamado.map(({ codigo, nome }) => (
+                                <option key={codigo} value={codigo}>
+                                    {nome}
                                 </option>
                             ))}
                         </select>
@@ -124,9 +124,9 @@ function EditarChamadoModal({
                                 })
                             }
                         >
-                            {prioridades.map(([chave, valor]) => (
-                                <option key={chave} value={valor}>
-                                    {chave}
+                            {prioridadesChamado.map(({ codigo, nome }) => (
+                                <option key={codigo} value={codigo}>
+                                    {nome}
                                 </option>
                             ))}
                         </select>

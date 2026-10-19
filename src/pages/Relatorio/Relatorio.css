@@ -1,5 +1,5 @@
 .pagina-relatorios {
-    padding: 24px;
+    padding: 32px 40px;
     width: 100%;
 }
 
@@ -7,3 +7,7 @@
     border-radius: 12px;
     background: white;
 }          
+
+@media (max-width: 600px) {
+    .pagina-relatorios { padding: 20px 16px; }
+}

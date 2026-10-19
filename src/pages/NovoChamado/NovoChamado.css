@@ -109,31 +109,12 @@
   background-color: #066bbb;
 }
 
-.mensagem-sucesso {
-  margin-bottom: 20px;
-  padding: 14px 18px;
-
-  border: 1px solid #b7e4c7;
-  border-radius: 10px;
-
-  background-color: #e8f7ee;
-  color: #23844a;
-
-  font-weight: 600;
-}
-
-.mensagem-erro {
-  margin-bottom: 20px;
-  padding: 14px 18px;
-  border: 1px solid #f1b5b5;
-  border-radius: 10px;
-  background-color: #fff0f0;
-  color: #b42318;
-  font-weight: 600;
-}
-
 .botao-criar:disabled,
 .botao-cancelar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  .novo-chamado-pagina { padding: 20px 16px; }
+  .formulario-card { grid-template-columns: 1fr; padding: 20px; }
 }

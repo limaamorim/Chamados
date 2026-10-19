@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { Cr2cd_chamadosService } from "../../generated/services/Cr2cd_chamadosService"
+import { listarChamados, atualizarChamado, excluirChamado } from "../../services/chamadosService";
+import {
+    obterCategoria,
+    obterPrioridade,
+    obterStatus,
+    podeAlterarChamado,
+    validarCamposChamado,
+    CATEGORIA_PADRAO,
+    PRIORIDADE_PADRAO,
+} from "../../utils/chamados";
 import Header from "../../components/ui/Header";
 import KpiCard from "../../components/Dashboard/KpiCard";
 import ChamadosTable from "../../components/Dashboard/ChamadosTable";
 import DetalhesChamadoModal from "../../components/Dashboard/DetalhesChamadoModal";
 import EditarChamadoModal from "../../components/Dashboard/EditarChamadoModal";
 import ExcluirChamadoModal from "../../components/Dashboard/ExcluirChamadoModal";
-
-import {
-    Cr2cd_chamadoscr2cd_categoria,
-    Cr2cd_chamadoscr2cd_prioridade,
-    Cr2cd_chamadoscr2cd_status,
-} from "../../generated/models/Cr2cd_chamadosModel";
 
 import type {
     Cr2cd_chamados,
@@ -24,6 +27,7 @@ type DashboardProps = {
 };
 
 function Dashboard({ abrirNovoChamado }: DashboardProps) {
+    // Estados da página: lista, modais, formulário de edição e mensagens.
     const [chamados, setChamados] = useState<Cr2cd_chamados[]>([]);
     const [chamadoSelecionado, setChamadoSelecionado] =
         useState<Cr2cd_chamados | null>(null);
@@ -38,171 +42,104 @@ function Dashboard({ abrirNovoChamado }: DashboardProps) {
     const [descricaoEdicao, setDescricaoEdicao] = useState("");
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [erroOperacao, setErroOperacao] = useState("");
     const [salvandoEdicao, setSalvandoEdicao] = useState(false);
     const [excluindo, setExcluindo] = useState(false);
     const [mensagem, setMensagem] = useState("");
 
+    // Busca os dados quando a página é montada. O cancelamento evita atualizar uma página já fechada.
     useEffect(() => {
-        carregarChamados();
+        let ativo = true;
+        listarChamados()
+            .then((dados) => { if (ativo) setChamados(dados); })
+            .catch((error: unknown) => {
+                if (ativo) setErro(error instanceof Error ? error.message : "Não foi possível carregar os chamados.");
+            })
+            .finally(() => { if (ativo) setCarregando(false); });
+        return () => { ativo = false; };
     }, []);
 
+    useEffect(() => {
+        if (!mensagem) return;
+        const timer = window.setTimeout(() => setMensagem(""), 3000);
+        return () => window.clearTimeout(timer);
+    }, [mensagem]);
+
+    // Recarrega a lista após editar ou excluir, sem esconder o resultado da operação.
     async function carregarChamados() {
         try {
             setCarregando(true);
             setErro("");
-
-            console.log("Buscando chamados no Dataverse...");
-
-            const resultado = await Cr2cd_chamadosService.getAll({
-                orderBy: ["createdon desc"],
-            });
-
-            console.log("Resposta Dataverse:", resultado);
-
-            if (resultado.success && resultado.data) {
-                setChamados(resultado.data);
-            } else {
-                setErro("Não foi possível carregar os chamados.");
-            }
+            const dados = await listarChamados();
+            // Substitui a lista inteira; não acrescenta um item como Collect.
+            setChamados(dados);
         } catch (error) {
-            console.error("Erro ao buscar chamados:", error);
-            setErro("Não foi possível carregar os chamados.");
+            setErro(error instanceof Error ? error.message : "Não foi possível carregar os chamados.");
         } finally {
             setCarregando(false);
         }
     }
 
-    function obterCategoria(chamado: Cr2cd_chamados) {
-        if (chamado.cr2cd_categoria === undefined) {
-            return "-";
-        }
-
-        return (
-            Cr2cd_chamadoscr2cd_categoria[chamado.cr2cd_categoria] ?? "-"
-        );
-    }
-
-    function obterPrioridade(chamado: Cr2cd_chamados) {
-        if (chamado.cr2cd_prioridade === undefined) {
-            return "-";
-        }
-
-        return (
-            Cr2cd_chamadoscr2cd_prioridade[chamado.cr2cd_prioridade] ?? "-"
-        );
-    }
-
-    function obterStatus(chamado: Cr2cd_chamados) {
-        if (chamado.cr2cd_status === undefined) {
-            return "-";
-        }
-
-        return Cr2cd_chamadoscr2cd_status[chamado.cr2cd_status] ?? "-";
-    }
-
-
+    // filter seleciona os registros de cada status; length conta os resultados para os cards.
     const abertos = chamados.filter(
-        (chamado) => obterStatus(chamado) === "Aberto"
+        (chamado) => podeAlterarChamado(chamado)
     ).length;
 
     const emAndamento = chamados.filter(
-        (chamado) => obterStatus(chamado) === "Em andamento"
+        (chamado) => chamado.cr2cd_status === 997180001
     ).length;
 
     const resolvidos = chamados.filter(
-        (chamado) => obterStatus(chamado) === "Resolvido"
+        (chamado) => chamado.cr2cd_status === 997180002
     ).length;
 
+    // Os handlers controlam a interface. As operações de dados estão no service.
     async function salvarEdicao() {
-        if (!chamadoEditando) {
-            return;
-        }
-
-        if (obterStatus(chamadoEditando) !== "Aberto") {
-            setErro("Somente chamados abertos podem ser editados.");
-            return;
-        }
-
-        if (!tituloEdicao.trim() || !descricaoEdicao.trim()) {
-            setErro("Preencha o título e a descrição.");
+        if (!chamadoEditando || salvandoEdicao) return;
+        const erroValidacao = validarCamposChamado(tituloEdicao, descricaoEdicao);
+        if (erroValidacao) {
+            setErroOperacao(erroValidacao);
             return;
         }
 
         try {
             setSalvandoEdicao(true);
-            setErro("");
+            setErroOperacao("");
             setMensagem("");
-
-            const resultado = await Cr2cd_chamadosService.update(
-                chamadoEditando.cr2cd_chamadoid,
-                {
-                    cr2cd_titulo: tituloEdicao.trim(),
-                    cr2cd_descricao: descricaoEdicao.trim(),
-                    cr2cd_categoria: chamadoEditando.cr2cd_categoria,
-                    cr2cd_prioridade: chamadoEditando.cr2cd_prioridade,
-                }
-            );
-
-            console.log("Resultado da edição:", resultado);
-
-            if (!resultado.success) {
-                setErro(
-                    resultado.error?.message ??
-                    "Não foi possível atualizar o chamado."
-                );
-                return;
-            }
-
+            await atualizarChamado(chamadoEditando, {
+                titulo: tituloEdicao,
+                descricao: descricaoEdicao,
+                categoria: chamadoEditando.cr2cd_categoria ?? CATEGORIA_PADRAO,
+                prioridade: chamadoEditando.cr2cd_prioridade ?? PRIORIDADE_PADRAO,
+            });
             setChamadoEditando(null);
             setMensagem("Chamado atualizado com sucesso!");
-
             await carregarChamados();
-
-            window.setTimeout(() => {
-                setMensagem("");
-            }, 3000);
         } catch (error) {
-            console.error("Erro ao atualizar chamado:", error);
-            setErro("Não foi possível atualizar o chamado.");
+            setErroOperacao(error instanceof Error ? error.message : "Não foi possível atualizar o chamado.");
         } finally {
             setSalvandoEdicao(false);
         }
     }
+
     async function confirmarExclusao() {
-        if (!chamadoExcluindo) {
-            return;
-        }
-
-        if (obterStatus(chamadoExcluindo) !== "Aberto") {
-            setErro("Somente chamados abertos podem ser excluídos.");
-            return;
-        }
-
+        if (!chamadoExcluindo || excluindo) return;
         try {
             setExcluindo(true);
-            setErro("");
+            setErroOperacao("");
             setMensagem("");
-
-            await Cr2cd_chamadosService.delete(
-                chamadoExcluindo.cr2cd_chamadoid
-            );
-
+            await excluirChamado(chamadoExcluindo);
             setChamadoExcluindo(null);
             setMensagem("Chamado excluído com sucesso!");
-
             await carregarChamados();
-
-            window.setTimeout(() => {
-                setMensagem("");
-            }, 3000);
         } catch (error) {
-            console.error("Erro ao excluir chamado:", error);
-            setErro("Não foi possível excluir o chamado.");
+            setErroOperacao(error instanceof Error ? error.message : "Não foi possível excluir o chamado.");
         } finally {
             setExcluindo(false);
         }
     }
 
+    // Interface: cabeçalho, indicadores, tabela e modais.
     return (
         <section className="dashboard">
             <Header
@@ -246,7 +183,7 @@ function Dashboard({ abrirNovoChamado }: DashboardProps) {
             )}
 
             {erro && (
-                <p className="mensagem-erro">{erro}</p>
+                <p className="mensagem-erro" role="alert">{erro}</p>
             )}
 
             {!carregando && !erro && (
@@ -260,11 +197,13 @@ function Dashboard({ abrirNovoChamado }: DashboardProps) {
                         setChamadoSelecionado(chamado)
                     }
                     editarChamado={(chamado) => {
+                        setErroOperacao("");
                         setChamadoEditando(chamado);
                         setTituloEdicao(chamado.cr2cd_titulo ?? "");
                         setDescricaoEdicao(chamado.cr2cd_descricao ?? "");
                     }}
                     excluirChamado={(chamado) => {
+                        setErroOperacao("");
                         setChamadoExcluindo(chamado);
                     }}
                 />
@@ -288,6 +227,7 @@ function Dashboard({ abrirNovoChamado }: DashboardProps) {
                     setTitulo={setTituloEdicao}
                     descricao={descricaoEdicao}
                     setDescricao={setDescricaoEdicao}
+                    erro={erroOperacao}
                     salvando={salvandoEdicao}
                     fechar={() => setChamadoEditando(null)}
                     salvar={salvarEdicao}
@@ -300,6 +240,7 @@ function Dashboard({ abrirNovoChamado }: DashboardProps) {
             {chamadoExcluindo && (
                 <ExcluirChamadoModal
                     chamado={chamadoExcluindo}
+                    erro={erroOperacao}
                     excluindo={excluindo}
                     fechar={() => setChamadoExcluindo(null)}
                     confirmar={confirmarExclusao}

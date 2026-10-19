@@ -5,6 +5,7 @@ import "./Modal.css";
 
 type ExcluirChamadoModalProps = {
     chamado: Cr2cd_chamados;
+    erro?: string;
     excluindo: boolean;
     fechar: () => void;
     confirmar: () => void;
@@ -12,6 +13,7 @@ type ExcluirChamadoModalProps = {
 
 function ExcluirChamadoModal({
     chamado,
+    erro = "",
     excluindo,
     fechar,
     confirmar,
@@ -44,6 +46,8 @@ function ExcluirChamadoModal({
                         ×
                     </button>
                 </div>
+
+                {erro && <p className="mensagem-erro" role="alert">{erro}</p>}
 
                 <div className="conteudo-exclusao">
                     <p>

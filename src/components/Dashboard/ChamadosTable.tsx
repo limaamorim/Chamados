@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { podeAlterarChamado } from "../../utils/chamados";
 
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import CampoPesquisa from "../../components/ui/CampoPesquisa";
@@ -30,8 +31,10 @@ function ChamadosTable({
     editarChamado,
     excluirChamado,
 }: ChamadosTableProps) {
+    // Estado local da pesquisa: funciona como uma variável de contexto desta interface.
     const [pesquisa, setPesquisa] = useState("");
 
+    // Filter: filtra somente os chamados já carregados no navegador.
     const chamadosFiltrados = chamados.filter((chamado) =>
         (chamado.cr2cd_titulo ?? "")
             .toLowerCase()
@@ -106,7 +109,7 @@ function ChamadosTable({
                                                 →
                                             </button>
 
-                                            {status === "Aberto" && (
+                                            {podeAlterarChamado(chamado) && (
                                                 <>
                                                     <button
                                                         className="botao-acao botao-editar"

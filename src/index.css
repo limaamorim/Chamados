@@ -25,3 +25,33 @@ select,
 textarea {
   font: inherit;
 }
+
+/* Mensagens compartilhadas pelas páginas e pelos modais. */
+.mensagem-sucesso,
+.mensagem-erro,
+.mensagem-aviso {
+  flex-basis: 100%;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px solid;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.mensagem-sucesso {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.mensagem-erro {
+  background: #fff0f0;
+  border-color: #f1b5b5;
+  color: #b42318;
+}
+
+.mensagem-aviso {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}

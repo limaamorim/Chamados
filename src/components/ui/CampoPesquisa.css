@@ -1,0 +1,23 @@
+
+.campo-pesquisa {
+    flex: 1;
+    height: 52px;
+    padding: 0 17px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #d4dee9;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.campo-pesquisa span {
+    font-size: 24px;
+}
+
+.campo-pesquisa input {
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #25344d;
+}

@@ -1,0 +1,231 @@
+
+.base-conhecimento {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 32px 40px;
+    color: #1e293b;
+}
+
+.base-cabecalho {
+    margin-bottom: 24px;
+}
+
+.base-etiqueta {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.base-cabecalho h1 {
+    margin: 0 0 10px;
+    color: #172b4d;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.base-cabecalho p {
+    max-width: 620px;
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.base-pesquisa {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 54px;
+    box-sizing: border-box;
+    margin-bottom: 32px;
+    padding: 0 16px;
+    background: #ffffff;
+    border: 1px solid #dce4ef;
+    border-radius: 10px;
+}
+
+.base-pesquisa > span {
+    color: #64748b;
+    font-size: 25px;
+}
+
+.base-pesquisa input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 15px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #1e293b;
+    font: inherit;
+    font-size: 14px;
+}
+
+.base-pesquisa input::placeholder {
+    color: #94a3b8;
+}
+
+.base-pesquisa:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.base-pesquisa button,
+.base-voltar {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.base-lista-artigos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.base-destaques .artigo-card {
+    min-height: 190px;
+    box-sizing: border-box;
+}
+
+.base-artigo-detalhe {
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.base-voltar {
+    display: block;
+    margin-bottom: 26px;
+    padding: 0;
+    font-size: 13px;
+}
+
+.base-artigo-detalhe > h2 {
+    margin: 4px 0 10px;
+    color: #172b4d;
+    font-size: 24px;
+    line-height: 1.4;
+}
+
+.base-artigo-descricao {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.base-passo-a-passo {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.base-passo-a-passo h3 {
+    margin: 0 0 20px;
+    font-size: 17px;
+}
+
+.base-passo-a-passo ol {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding-left: 24px;
+}
+
+.base-passo-a-passo li {
+    padding-left: 6px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.base-ajuda-final {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 24px;
+    padding: 22px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+}
+
+.base-ajuda-final strong {
+    color: #1e3a5f;
+    font-size: 14px;
+}
+
+.base-ajuda-final p {
+    margin: 7px 0 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.base-botao-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.base-botao-principal:hover {
+    background: #1d4ed8;
+}
+
+.base-vazio {
+    padding: 36px 20px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+}
+
+.base-vazio > span {
+    color: #94a3b8;
+    font-size: 32px;
+}
+
+.base-vazio h3 {
+    margin: 12px 0 8px;
+    font-size: 16px;
+}
+
+.base-vazio p {
+    margin: 0 0 20px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media (max-width: 1050px) {
+    .base-conhecimento {
+        padding: 28px 24px;
+    }
+
+    .base-categorias {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+

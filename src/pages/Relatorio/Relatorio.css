@@ -1,0 +1,9 @@
+.pagina-relatorios {
+    padding: 24px;
+    width: 100%;
+}
+
+.pagina-relatorios iframe {
+    border-radius: 12px;
+    background: white;
+}          

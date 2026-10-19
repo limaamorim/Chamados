@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "appId": "32a759dd-1429-4af6-8320-6e0276b191b1",
+  "appDisplayName": "Caze",
+  "region": "prod",
+  "appType": "CodeApp",
+  "environmentId": "640edcea-61b1-e8d1-9ddd-1fa816dc1a11",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {
+    "4b8441b1-9cc8-46e4-8059-60845b40c4cc": {
+      "id": "/providers/microsoft.powerapps/apis/shared_office365",
+      "displayName": "Office 365 Outlook"
+    },
+    "b29e822f-67c3-4300-bdea-b1248594848d": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+      "displayName": "Logic flows",
+      "dataSources": [
+        "flw_notificarnovochamado"
+      ],
+      "workflowDetails": {
+        "workflowEntityId": "e505bad0-85c9-f111-aaaf-70a8a59a485c",
+        "workflowDisplayName": "FLW_NotificarNovoChamado",
+        "workflowName": "bcac871b-ab90-db9e-ecf6-06f37ffb9403",
+        "dependencies": {
+          "shared_office365": "4b8441b1-9cc8-46e4-8059-60845b40c4cc"
+        }
+      }
+    }
+  },
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "chamado": {
+          "entitySetName": "cr2cd_chamados",
+          "logicalName": "cr2cd_chamado",
+          "isHidden": false
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
+}

@@ -1,0 +1,56 @@
+.kpi-card {
+    min-height: 130px;
+    padding: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid #dce4ed;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(29, 48, 72, 0.07);
+}
+
+.kpi-card span {
+    color: #617087;
+}
+
+.kpi-card strong {
+    display: block;
+    margin-top: 12px;
+    color: #12213c;
+    font-size: 32px;
+}
+
+.kpi-icone {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+    font-size: 23px;
+}
+
+.kpi-icone.azul {
+    background-color: #daedff;
+    color: #087ed8;
+}
+
+.kpi-icone.laranja {
+    background-color: #fff0dc;
+    color: #db861a;
+}
+
+.kpi-icone.verde {
+    background-color: #ddf7e8;
+    color: #29965a;
+}
+
+.kpi-icone.roxo {
+    background-color: #eee7ff;
+    color: #7450c7;
+}

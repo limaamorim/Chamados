@@ -1,0 +1,67 @@
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    position: relative;
+}
+
+.header-titulo h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.header-titulo p {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.header-usuario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-usuario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #3730a3;
+    font-weight: 700;
+}
+
+.dados-usuario {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dados-usuario strong {
+    color: #111827;
+    font-size: 14px;
+}
+
+.dados-usuario span {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.mensagem-sucesso {
+    flex-basis: 100%;
+    padding: 12px 16px;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 14px;
+}

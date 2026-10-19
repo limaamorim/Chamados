@@ -1,0 +1,47 @@
+
+.modal-exclusao {
+    max-width: 480px;
+}
+
+.conteudo-exclusao {
+    padding: 24px;
+}
+
+.conteudo-exclusao p {
+    margin: 0 0 14px;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.conteudo-exclusao strong {
+    display: block;
+    overflow-wrap: anywhere;
+    color: #111827;
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+.conteudo-exclusao .aviso-exclusao {
+    margin-bottom: 0;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.botao-confirmar-exclusao {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #dc2626;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.botao-confirmar-exclusao:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.botao-confirmar-exclusao:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

@@ -1,0 +1,108 @@
+
+.artigo-card {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    text-align: left;
+    color: #1f2937;
+    background: #ffffff;
+    border: 1px solid #e5eaf1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.artigo-card:hover {
+    border-color: #93baf5;
+    box-shadow: 0 5px 18px rgba(31, 74, 130, 0.08);
+    transform: translateY(-2px);
+}
+
+.artigo-icone {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #eaf2ff;
+    color: #2563eb;
+    font-size: 22px;
+}
+
+.artigo-icone.categoria-software {
+    background: #f0eaff;
+    color: #7048e8;
+}
+
+.artigo-icone.categoria-acesso-e-contas {
+    background: #e2f7ed;
+    color: #13875a;
+}
+
+.artigo-icone.categoria-rede-e-internet {
+    background: #fff0df;
+    color: #d97706;
+}
+
+.artigo-icone.categoria-seguranca {
+    background: #ffe8e8;
+    color: #dc2626;
+}
+
+.artigo-card-conteudo {
+    flex: 1;
+    min-width: 0;
+}
+
+.artigo-categoria {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.artigo-card h3 {
+    margin: 0 0 8px;
+    color: #1e293b;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.artigo-card p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.artigo-card-rodape {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.artigo-seta {
+    align-self: center;
+    color: #2563eb;
+    font-size: 26px;
+}
+
+@media (max-width: 600px) {
+    .artigo-card {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .artigo-visualizacoes {
+        display: none;
+    }
+}

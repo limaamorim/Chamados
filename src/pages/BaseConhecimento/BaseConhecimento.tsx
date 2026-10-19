@@ -1,26 +1,27 @@
-
 import { useMemo, useState } from "react";
-import ArtigoCard from "../../components/BaseConhecimento/ArtigoCard";
-import type { Artigo } from "../../components/BaseConhecimento/ArtigoCard";
-import Header from "../../components/ui/Header";
+import ArtigoCard from "./components/ArtigoCard";
+import type { Artigo } from "../../data/baseConhecimento";
+import Pagina from "../../components/layout/Pagina";
+import ArtigoDetalhe from "./components/ArtigoDetalhe";
 import CampoPesquisa from "../../components/ui/CampoPesquisa";
-import CategoriasCard from "../../components/BaseConhecimento/CategoriasCard";
-import BotaoNovoChamado from "../../components/ui/BotaoNovoChamado";
-import { artigos, categorias } from "../../data/Data";
+import CategoriasCard from "./components/CategoriasCard";
+import Button from "../../components/ui/Button";
+import { artigos, categorias } from "../../data/baseConhecimento";
 import "./BaseConhecimento.css";
 
 type BaseConhecimentoProps = {
     abrirNovoChamado: () => void;
 };
 
-
-function BaseConhecimento({
-    abrirNovoChamado
+export default function BaseConhecimento({
+    abrirNovoChamado,
 }: BaseConhecimentoProps) {
     // Estados locais da tela: pesquisa, categoria e artigo aberto.
     const [busca, setBusca] = useState("");
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
-    const [artigoSelecionado, setArtigoSelecionado] = useState<Artigo | null>(null);
+    const [artigoSelecionado, setArtigoSelecionado] = useState<Artigo | null>(
+        null
+    );
 
     // Filter: combina categoria e texto nos artigos locais. useMemo reaproveita o resultado enquanto os filtros não mudam.
     const artigosFiltrados = useMemo(() => {
@@ -35,8 +36,10 @@ function BaseConhecimento({
                 artigo.titulo,
                 artigo.descricao,
                 artigo.categoria,
-                ...artigo.conteudo
-            ].join(" ").toLocaleLowerCase("pt-BR");
+                ...artigo.conteudo,
+            ]
+                .join(" ")
+                .toLocaleLowerCase("pt-BR");
 
             return correspondeCategoria && textoArtigo.includes(termo);
         });
@@ -51,13 +54,11 @@ function BaseConhecimento({
 
     // Interface da página.
     return (
-        <section className="base-conhecimento">
-
-            <Header
-                titulo="Base de conhecimento"
-                descricao="Encontre orientações e soluções para os problemas mais comuns do dia a dia."
-            />
-
+        <Pagina
+            className="base-conhecimento"
+            titulo="Base de conhecimento"
+            descricao="Encontre orientações e soluções para os problemas mais comuns do dia a dia."
+        >
             <div className="base-barra-pesquisa">
                 <CampoPesquisa
                     valor={busca}
@@ -69,52 +70,24 @@ function BaseConhecimento({
                 />
 
                 {busca && (
-                    <button
-                        type="button"
+                    <Button
+                        variante="secundario"
                         onClick={() => {
                             setBusca("");
                             setArtigoSelecionado(null);
                         }}
                     >
                         Limpar
-                    </button>
+                    </Button>
                 )}
             </div>
 
             {artigoSelecionado ? (
-                <article className="base-artigo-detalhe">
-                    <button
-                        type="button"
-                        className="base-voltar"
-                        onClick={() => setArtigoSelecionado(null)}
-                    >
-                        ← Voltar para os artigos
-                    </button>
-
-                    <span className="base-etiqueta">
-                        {artigoSelecionado.categoria}
-                    </span>
-
-                    <h2>{artigoSelecionado.titulo}</h2>
-                    <p className="base-artigo-descricao">
-                        {artigoSelecionado.descricao}
-                    </p>
-
-                    <div className="base-passo-a-passo">
-                        <h3>Como resolver</h3>
-                        <ol>
-                            {artigoSelecionado.conteudo.map((passo, indice) => (
-                                <li key={indice}>{passo}</li>
-                            ))}
-                        </ol>
-                    </div>
-
-                    <BotaoNovoChamado
-                        aoClicar={abrirNovoChamado}
-                        texto=" Criar chamado"
-                        variante="principal"
-                    />
-                </article>
+                <ArtigoDetalhe
+                    artigo={artigoSelecionado}
+                    voltar={() => setArtigoSelecionado(null)}
+                    abrirNovoChamado={abrirNovoChamado}
+                />
             ) : (
                 <>
                     <CategoriasCard
@@ -148,8 +121,8 @@ function BaseConhecimento({
                                 {busca
                                     ? "Resultados da pesquisa"
                                     : categoriaSelecionada === "Todos"
-                                        ? "Todos os artigos"
-                                        : categoriaSelecionada}
+                                      ? "Todos os artigos"
+                                      : categoriaSelecionada}
                             </h2>
                             <span>{artigosFiltrados.length} encontrados</span>
                         </div>
@@ -169,13 +142,12 @@ function BaseConhecimento({
                                 <span aria-hidden="true">⌕</span>
                                 <h3>Nenhum artigo encontrado</h3>
                                 <p>
-                                    Tente outro termo ou selecione uma categoria diferente.
+                                    Tente outro termo ou selecione uma categoria
+                                    diferente.
                                 </p>
-                                <BotaoNovoChamado
-                                    aoClicar={abrirNovoChamado}
-                                    texto="Criar chamado"
-                                    variante="principal"
-                                />
+                                <Button icone="+" onClick={abrirNovoChamado}>
+                                    Criar chamado
+                                </Button>
                             </div>
                         )}
                     </section>
@@ -185,16 +157,12 @@ function BaseConhecimento({
                             <strong>Não encontrou o que precisava?</strong>
                             <p>Entre em contato com a equipe de atendimento.</p>
                         </div>
-                        <BotaoNovoChamado
-                            aoClicar={abrirNovoChamado}
-                            texto="Criar chamado"
-                            variante="principal"
-                        />
+                        <Button icone="+" onClick={abrirNovoChamado}>
+                            Criar chamado
+                        </Button>
                     </aside>
                 </>
             )}
-        </section>
+        </Pagina>
     );
 }
-
-export default BaseConhecimento;

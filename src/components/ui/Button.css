@@ -1,0 +1,43 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.button-principal {
+    color: white;
+    background: #087ed8;
+}
+.button-principal:hover:not(:disabled) {
+    background: #066bbb;
+}
+.button-secundario {
+    color: #344054;
+    background: white;
+    border-color: #d0d5dd;
+}
+.button-secundario:hover:not(:disabled) {
+    background: #f5f7fa;
+}
+.button-perigo {
+    color: white;
+    background: #dc2626;
+}
+.button-perigo:hover:not(:disabled) {
+    background: #b91c1c;
+}
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}

@@ -1,19 +1,19 @@
-
 import { useState } from "react";
-import { podeAlterarChamado } from "../../utils/chamados";
+import {
+    obterStatus,
+    obterCategoria,
+    obterPrioridade,
+    podeAlterarChamado,
+} from "../../../utils/chamados";
 
-import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
-import CampoPesquisa from "../../components/ui/CampoPesquisa";
-import BotaoNovoChamado from "../../components/ui/BotaoNovoChamado";
+import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
+import CampoPesquisa from "../../../components/ui/CampoPesquisa";
+import Button from "../../../components/ui/Button";
 
 import "./ChamadosTable.css";
 
 type ChamadosTableProps = {
     chamados: Cr2cd_chamados[];
-
-    obterStatus: (chamado: Cr2cd_chamados) => string;
-    obterCategoria: (chamado: Cr2cd_chamados) => string;
-    obterPrioridade: (chamado: Cr2cd_chamados) => string;
 
     abrirNovoChamado: () => void;
     visualizarChamado: (chamado: Cr2cd_chamados) => void;
@@ -23,9 +23,6 @@ type ChamadosTableProps = {
 
 function ChamadosTable({
     chamados,
-    obterStatus,
-    obterCategoria,
-    obterPrioridade,
     abrirNovoChamado,
     visualizarChamado,
     editarChamado,
@@ -50,9 +47,9 @@ function ChamadosTable({
                     placeholder="Pesquisar chamados..."
                 />
 
-                <BotaoNovoChamado
-                    aoClicar={abrirNovoChamado}
-                />
+                <Button onClick={abrirNovoChamado} icone="+">
+                    Novo chamado
+                </Button>
             </div>
 
             <div className="tabela-container">
@@ -80,9 +77,7 @@ function ChamadosTable({
                                         CH-{chamado.cr2cd_numero}
                                     </td>
 
-                                    <td>
-                                        {chamado.cr2cd_titulo ?? "-"}
-                                    </td>
+                                    <td>{chamado.cr2cd_titulo ?? "-"}</td>
 
                                     <td>{categoria}</td>
                                     <td>{prioridade}</td>
@@ -114,7 +109,9 @@ function ChamadosTable({
                                                     <button
                                                         className="botao-acao botao-editar"
                                                         onClick={() =>
-                                                            editarChamado(chamado)
+                                                            editarChamado(
+                                                                chamado
+                                                            )
                                                         }
                                                         title="Editar chamado"
                                                     >
@@ -124,7 +121,9 @@ function ChamadosTable({
                                                     <button
                                                         className="botao-acao botao-excluir"
                                                         onClick={() =>
-                                                            excluirChamado(chamado)
+                                                            excluirChamado(
+                                                                chamado
+                                                            )
                                                         }
                                                         title="Excluir chamado"
                                                     >

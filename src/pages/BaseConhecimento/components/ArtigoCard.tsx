@@ -1,17 +1,5 @@
-
+import type { Artigo } from "../../../data/baseConhecimento";
 import "./ArtigoCard.css";
-
-export type Artigo = {
-    id: number;
-    titulo: string;
-    descricao: string;
-    categoria: string;
-    icone: string;
-    tempoLeitura: number;
-    conteudo: string[];
-    destaque?: boolean;
-    visualizacoes: number;
-};
 
 type ArtigoCardProps = {
     artigo: Artigo;
@@ -25,20 +13,19 @@ function ArtigoCard({ artigo, aoAbrir }: ArtigoCardProps) {
             className="artigo-card"
             onClick={() => aoAbrir(artigo)}
         >
-            <div className={`artigo-icone categoria-${artigo.categoria
-                .toLowerCase()
-                .replaceAll(" ", "-")
-                .replaceAll("ê", "e")
-                .replaceAll("í", "i")
-                .replaceAll("ã", "a")}`}
+            <div
+                className={`artigo-icone categoria-${artigo.categoria
+                    .toLowerCase()
+                    .replaceAll(" ", "-")
+                    .replaceAll("ê", "e")
+                    .replaceAll("í", "i")
+                    .replaceAll("ã", "a")}`}
             >
                 {artigo.icone}
             </div>
 
             <div className="artigo-card-conteudo">
-                <span className="artigo-categoria">
-                    {artigo.categoria}
-                </span>
+                <span className="artigo-categoria">{artigo.categoria}</span>
 
                 <h3>{artigo.titulo}</h3>
 
@@ -52,7 +39,9 @@ function ArtigoCard({ artigo, aoAbrir }: ArtigoCardProps) {
                 </div>
             </div>
 
-            <span className="artigo-seta" aria-hidden="true">›</span>
+            <span className="artigo-seta" aria-hidden="true">
+                ›
+            </span>
         </button>
     );
 }

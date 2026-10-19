@@ -1,4 +1,3 @@
-
 import "./CampoPesquisa.css";
 
 type CampoPesquisaProps = {
@@ -14,15 +13,14 @@ function CampoPesquisa({
 }: CampoPesquisaProps) {
     return (
         <div className="campo-pesquisa">
-            <span>⌕</span>
+            <span aria-hidden="true">⌕</span>
 
             <input
-                type="text"
+                type="search"
+                aria-label={placeholder}
                 placeholder={placeholder}
                 value={valor}
-                onChange={(evento) =>
-                    aoAlterar(evento.target.value)
-                }
+                onChange={(evento) => aoAlterar(evento.target.value)}
             />
         </div>
     );

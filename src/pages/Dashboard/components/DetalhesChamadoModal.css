@@ -1,0 +1,25 @@
+.detalhes-chamado {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+.detalhes-chamado dt {
+    color: #667085;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+.detalhes-chamado dd {
+    color: #344054;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+.detalhe-completo {
+    grid-column: 1 / -1;
+}
+@media (max-width: 600px) {
+    .detalhes-chamado {
+        grid-template-columns: 1fr;
+    }
+}

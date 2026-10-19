@@ -1,0 +1,14 @@
+.conteudo-exclusao p {
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+.conteudo-exclusao strong {
+    display: block;
+    margin-bottom: 18px;
+    overflow-wrap: anywhere;
+}
+.conteudo-exclusao .aviso-exclusao {
+    color: #b91c1c;
+    margin-bottom: 0;
+    font-size: 13px;
+}

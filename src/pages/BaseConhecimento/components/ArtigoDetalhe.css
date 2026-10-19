@@ -1,0 +1,56 @@
+.base-artigo-detalhe {
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.base-artigo-detalhe > h2 {
+    margin: 4px 0 10px;
+    color: #172b4d;
+    font-size: 24px;
+    line-height: 1.4;
+}
+
+.base-artigo-descricao {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.base-passo-a-passo {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.base-passo-a-passo h3 {
+    margin: 0 0 20px;
+    font-size: 17px;
+}
+
+.base-passo-a-passo ol {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding-left: 24px;
+}
+
+.base-passo-a-passo li {
+    padding-left: 6px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.base-artigo-detalhe > .button {
+    margin-top: 20px;
+}
+.base-etiqueta {
+    display: block;
+    color: #2563eb;
+    font-size: 12px;
+    margin-top: 24px;
+}

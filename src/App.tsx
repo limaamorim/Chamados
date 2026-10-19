@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-import Sidebar from "./components/ui/Sidebar";
+import Sidebar from "./components/layout/Sidebar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NovoChamado from "./pages/NovoChamado/NovoChamado";
 import BaseConhecimento from "./pages/BaseConhecimento/BaseConhecimento";

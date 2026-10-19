@@ -1,0 +1,115 @@
+.sidebar {
+    width: 270px;
+    min-width: 270px;
+    min-height: 100vh;
+    padding: 28px 20px;
+    background-color: #061d36;
+    color: white;
+    transition:
+        width 0.25s ease,
+        min-width 0.25s ease;
+}
+
+.sidebar-fechada {
+    width: 86px;
+    min-width: 86px;
+}
+
+.sidebar-cabecalho {
+    min-height: 64px;
+    margin-bottom: 35px;
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-cabecalho h2 {
+    font-size: 26px;
+}
+
+.sidebar-cabecalho span {
+    display: block;
+    margin-top: 3px;
+    color: #b9c8d9;
+    font-size: 13px;
+}
+
+.botao-recolher {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.botao-recolher:hover {
+    background-color: #143b62;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-item {
+    width: 100%;
+    height: 54px;
+    padding: 0 16px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #dce7f2;
+
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.menu-item:hover {
+    background-color: #143b62;
+    color: white;
+}
+
+.menu-item-ativo {
+    background-color: #087ed8;
+    color: white;
+}
+
+.menu-item-ativo:hover {
+    background-color: #087ed8;
+}
+
+.menu-icone {
+    width: 24px;
+    font-size: 21px;
+    text-align: center;
+}
+
+.menu-texto {
+    white-space: nowrap;
+}
+
+.sidebar-fechada .sidebar-cabecalho {
+    padding: 0;
+    justify-content: center;
+}
+
+.sidebar-fechada .menu-item {
+    padding: 0;
+    justify-content: center;
+}

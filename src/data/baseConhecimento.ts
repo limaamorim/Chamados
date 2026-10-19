@@ -1,5 +1,14 @@
-
-import type { Artigo } from "../components/BaseConhecimento/ArtigoCard";
+export type Artigo = {
+    id: number;
+    titulo: string;
+    descricao: string;
+    categoria: string;
+    icone: string;
+    tempoLeitura: number;
+    conteudo: string[];
+    destaque?: boolean;
+    visualizacoes: number;
+};
 
 export const categorias = [
     { nome: "Todos", icone: "▦" },
@@ -25,13 +34,14 @@ export const artigos: Artigo[] = [
             "Abra o Outlook no computador ou no navegador.",
             "Informe seu e-mail corporativo e siga as instruções de autenticação.",
             "Se for solicitada uma verificação adicional, conclua o processo de segurança.",
-            "Caso o acesso continue falhando, registre um chamado informando a mensagem de erro."
-        ]
+            "Caso o acesso continue falhando, registre um chamado informando a mensagem de erro.",
+        ],
     },
     {
         id: 2,
         titulo: "Como solicitar acesso a um sistema",
-        descricao: "Veja como solicitar permissão para utilizar sistemas internos.",
+        descricao:
+            "Veja como solicitar permissão para utilizar sistemas internos.",
         categoria: "Acesso e contas",
         icone: "♙",
         tempoLeitura: 2,
@@ -41,13 +51,14 @@ export const artigos: Artigo[] = [
             "Identifique o sistema ao qual você precisa ter acesso.",
             "Informe a finalidade do acesso e o tipo de permissão necessária.",
             "Abra um chamado na categoria de acesso e contas.",
-            "Aguarde a análise e a aprovação do responsável pelo sistema."
-        ]
+            "Aguarde a análise e a aprovação do responsável pelo sistema.",
+        ],
     },
     {
         id: 3,
         titulo: "Problemas de conexão com a VPN",
-        descricao: "Confira as verificações iniciais para problemas de conexão.",
+        descricao:
+            "Confira as verificações iniciais para problemas de conexão.",
         categoria: "Rede e internet",
         icone: "⌁",
         tempoLeitura: 4,
@@ -57,8 +68,8 @@ export const artigos: Artigo[] = [
             "Verifique se sua conexão com a internet está funcionando.",
             "Confirme se você está utilizando o aplicativo de VPN autorizado pela empresa.",
             "Confira se suas credenciais corporativas estão corretas.",
-            "Se o erro persistir, anote a mensagem apresentada e abra um chamado."
-        ]
+            "Se o erro persistir, anote a mensagem apresentada e abra um chamado.",
+        ],
     },
     {
         id: 4,
@@ -72,8 +83,8 @@ export const artigos: Artigo[] = [
             "Acesse o portal oficial de recuperação de conta da sua organização.",
             "Siga as etapas de verificação de identidade.",
             "Crie uma senha conforme as regras de segurança apresentadas.",
-            "Nunca compartilhe sua senha ou códigos de autenticação."
-        ]
+            "Nunca compartilhe sua senha ou códigos de autenticação.",
+        ],
     },
     {
         id: 5,
@@ -87,8 +98,8 @@ export const artigos: Artigo[] = [
             "Feche os programas que não estão sendo utilizados.",
             "Salve seu trabalho antes de reiniciar o computador.",
             "Verifique se há atualizações pendentes pelos canais autorizados.",
-            "Se o problema continuar, abra um chamado descrevendo quando ele começou."
-        ]
+            "Se o problema continuar, abra um chamado descrevendo quando ele começou.",
+        ],
     },
     {
         id: 6,
@@ -102,13 +113,14 @@ export const artigos: Artigo[] = [
             "Não clique em links suspeitos recebidos por e-mail ou mensagem.",
             "Nunca compartilhe senhas ou códigos de autenticação.",
             "Utilize apenas ferramentas e aplicativos aprovados pela empresa.",
-            "Reporte mensagens suspeitas pelos canais oficiais de segurança."
-        ]
+            "Reporte mensagens suspeitas pelos canais oficiais de segurança.",
+        ],
     },
     {
         id: 7,
         titulo: "Como instalar um aplicativo autorizado",
-        descricao: "Consulte as orientações para instalar ferramentas de trabalho.",
+        descricao:
+            "Consulte as orientações para instalar ferramentas de trabalho.",
         categoria: "Software",
         icone: "▤",
         tempoLeitura: 3,
@@ -117,7 +129,7 @@ export const artigos: Artigo[] = [
             "Verifique se o aplicativo está autorizado para uso corporativo.",
             "Utilize o catálogo ou portal de instalação disponibilizado pela empresa.",
             "Siga as instruções de instalação e autenticação.",
-            "Se precisar de permissão administrativa, solicite suporte."
-        ]
-    }
+            "Se precisar de permissão administrativa, solicite suporte.",
+        ],
+    },
 ];

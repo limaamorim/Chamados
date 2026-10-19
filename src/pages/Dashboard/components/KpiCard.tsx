@@ -15,9 +15,7 @@ function KpiCard({ titulo, valor, icone, cor }: KpiCardProps) {
                 <strong>{valor}</strong>
             </div>
 
-            <div className={`kpi-icone ${cor}`}>
-                {icone}
-            </div>
+            <div className={`kpi-icone ${cor}`}>{icone}</div>
         </article>
     );
 }

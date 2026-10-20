@@ -10,7 +10,7 @@ export const STATUS_ABERTO = 997180000;
 export const CATEGORIA_PADRAO: Cr2cd_chamadoscr2cd_categoria = 997180000;
 export const PRIORIDADE_PADRAO: Cr2cd_chamadoscr2cd_prioridade = 997180000;
 
-export type DadosChamado = {
+export type DadosChamado = { // Objeto com esses 4 campos
     titulo: string;
     descricao: string;
     categoria: Cr2cd_chamadoscr2cd_categoria;

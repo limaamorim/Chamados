@@ -4,10 +4,12 @@
  */
 
 // Models
+export * as BaseConhecimentoModel from './models/BaseConhecimentoModel';
 export * as CommonModels from './models/CommonModels';
 export * as Cr2cd_chamadosModel from './models/Cr2cd_chamadosModel';
 export * as FLW_NotificarNovoChamadoModel from './models/FLW_NotificarNovoChamadoModel';
 
 // Services
+export * from './services/BaseConhecimentoService';
 export * from './services/Cr2cd_chamadosService';
 export * from './services/FLW_NotificarNovoChamadoService';

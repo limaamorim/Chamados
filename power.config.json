@@ -29,6 +29,22 @@
           "shared_office365": "4b8441b1-9cc8-46e4-8059-60845b40c4cc"
         }
       }
+    },
+    "ab85e346-fd5d-4dca-b4e9-631bccb4e48c": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "displayName": "SharePoint",
+      "dataSources": [
+        "baseconhecimento"
+      ],
+      "dataSets": {
+        "https://devgbsn.sharepoint.com": {
+          "dataSources": {
+            "baseconhecimento": {
+              "tableName": "4ff14333-ea34-405e-aae1-a3350976d547"
+            }
+          }
+        }
+      }
     }
   },
   "databaseReferences": {

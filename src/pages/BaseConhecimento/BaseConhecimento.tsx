@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ArtigoCard from "./components/ArtigoCard";
 import type { Artigo } from "../../data/baseConhecimento";
 import Pagina from "../../components/layout/Pagina";
@@ -6,7 +6,7 @@ import ArtigoDetalhe from "./components/ArtigoDetalhe";
 import CampoPesquisa from "../../components/ui/CampoPesquisa";
 import CategoriasCard from "./components/CategoriasCard";
 import Button from "../../components/ui/Button";
-import { artigos, categorias } from "../../data/baseConhecimento";
+import { listarArtigos } from "../../services/baseConhecimentoService";
 import "./BaseConhecimento.css";
 
 type BaseConhecimentoProps = {
@@ -16,6 +16,32 @@ type BaseConhecimentoProps = {
 export default function BaseConhecimento({
     abrirNovoChamado,
 }: BaseConhecimentoProps) {
+    const [artigos, setArtigos] = useState<Artigo[]>([]);
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState("");
+
+    useEffect(() => {
+        let ativo = true;
+        listarArtigos()
+            .then((dados) => {
+                if (ativo) setArtigos(dados);
+            })
+            .catch((error: unknown) => {
+                if (ativo) setErro(error instanceof Error ? error.message : "Não foi possível carregar os artigos.");
+            })
+            .finally(() => {
+                if (ativo) setCarregando(false);
+            });
+        return () => { ativo = false; };
+    }, []);
+
+    const categorias = [
+        { nome: "Todos", icone: "▦" },
+        ...Array.from(new Set(artigos.map((artigo) => artigo.categoria)))
+            .filter((nome) => nome !== "Todos")
+            .map((nome) => ({ nome, icone: "▤" })),
+    ];
+
     // Estados locais da tela: pesquisa, categoria e artigo aberto.
     const [busca, setBusca] = useState("");
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
@@ -23,7 +49,7 @@ export default function BaseConhecimento({
         null
     );
 
-    // Filter: combina categoria e texto nos artigos locais. useMemo reaproveita o resultado enquanto os filtros não mudam.
+    // Filter: combina categoria e texto nos artigos carregados. useMemo reaproveita o resultado enquanto os filtros não mudam.
     const artigosFiltrados = useMemo(() => {
         const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
@@ -43,9 +69,10 @@ export default function BaseConhecimento({
 
             return correspondeCategoria && textoArtigo.includes(termo);
         });
-    }, [busca, categoriaSelecionada]);
+    }, [artigos, busca, categoriaSelecionada]);
 
-    const artigosDestaque = artigos.filter((artigo) => artigo.destaque);
+    // Sem coluna de destaque na lista, mostramos os três primeiros artigos.
+    const artigosDestaque = artigos.slice(0, 3);
 
     function selecionarCategoria(categoria: string) {
         setCategoriaSelecionada(categoria);
@@ -56,6 +83,7 @@ export default function BaseConhecimento({
     return (
         <Pagina
             className="base-conhecimento"
+            erro={erro}
             titulo="Base de conhecimento"
             descricao="Encontre orientações e soluções para os problemas mais comuns do dia a dia."
         >
@@ -82,7 +110,8 @@ export default function BaseConhecimento({
                 )}
             </div>
 
-            {artigoSelecionado ? (
+            {carregando && <p role="status">Carregando artigos...</p>}
+            {!carregando && !erro && (artigoSelecionado ? (
                 <ArtigoDetalhe
                     artigo={artigoSelecionado}
                     voltar={() => setArtigoSelecionado(null)}
@@ -97,10 +126,10 @@ export default function BaseConhecimento({
                         totalArtigos={artigos.length}
                     />
 
-                    {categoriaSelecionada === "Todos" && !busca && (
+                    {categoriaSelecionada === "Todos" && !busca && artigosDestaque.length > 0 && (
                         <section className="base-secao">
                             <div className="base-titulo-secao">
-                                <h2>Artigos em destaque</h2>
+                                <h2>Explore os artigos</h2>
                             </div>
 
                             <div className="base-lista-artigos base-destaques">
@@ -162,7 +191,7 @@ export default function BaseConhecimento({
                         </Button>
                     </aside>
                 </>
-            )}
+            ))}
         </Pagina>
     );
 }

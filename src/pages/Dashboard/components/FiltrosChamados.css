@@ -1,0 +1,10 @@
+.filtros-chamados { margin-bottom: 20px; }
+.filtros-chamados .barra-acoes { display: flex; gap: 16px; margin-bottom: 18px; }
+.filtros-chamados-campos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.filtros-chamados-campos label { display: block; margin-bottom: 8px; color: #48576d; font-size: 14px; font-weight: bold; }
+.filtros-chamados-campos select { width: 100%; padding: 12px; border: 1px solid #dce4ed; border-radius: 9px; background: white; color: #17233c; }
+.filtros-chamados-campos select:focus-visible { outline: 2px solid #087ed8; outline-offset: 2px; }
+@media (max-width: 600px) {
+    .filtros-chamados .barra-acoes { flex-direction: column; }
+    .filtros-chamados-campos { grid-template-columns: 1fr; }
+}

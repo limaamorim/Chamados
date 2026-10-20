@@ -5,18 +5,21 @@ type KpiCardProps = {
     valor: number;
     icone: string;
     cor: "azul" | "laranja" | "verde" | "roxo";
+    ativo: boolean;
+    aoClicar: () => void;
+    disabled?: boolean;
 };
 
-function KpiCard({ titulo, valor, icone, cor }: KpiCardProps) {
+function KpiCard({ titulo, valor, icone, cor, ativo, aoClicar, disabled }: KpiCardProps) {
     return (
-        <article className="kpi-card">
-            <div>
+        <button type="button" className={`kpi-card${ativo ? " kpi-card-ativo" : ""}`} aria-pressed={ativo} onClick={aoClicar} disabled={disabled}>
+            <span className="kpi-dados">
                 <span>{titulo}</span>
                 <strong>{valor}</strong>
-            </div>
+            </span>
 
-            <div className={`kpi-icone ${cor}`}>{icone}</div>
-        </article>
+            <span className={`kpi-icone ${cor}`} aria-hidden="true">{icone}</span>
+        </button>
     );
 }
 

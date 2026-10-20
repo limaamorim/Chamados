@@ -1,0 +1,6 @@
+.paginacao-chamados { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding-top: 18px; color: #617087; font-size: 14px; }
+.paginacao-chamados nav { display: flex; gap: 6px; }
+.paginacao-chamados button { min-width: 36px; height: 36px; border: 1px solid #dce4ed; border-radius: 8px; background: white; color: #172033; cursor: pointer; }
+.paginacao-chamados button[aria-current="page"] { color: white; background: #087ed8; border-color: #087ed8; }
+.paginacao-chamados button:disabled { opacity: .4; cursor: default; }
+.paginacao-chamados button:focus-visible { outline: 2px solid #087ed8; outline-offset: 2px; }

@@ -7,7 +7,9 @@ import DetalhesChamadoModal from "./components/DetalhesChamadoModal";
 import EditarChamadoModal from "./components/EditarChamadoModal";
 import ExcluirChamadoModal from "./components/ExcluirChamadoModal";
 import { useChamados } from "../../hooks/useChamados";
-import { podeAlterarChamado } from "../../utils/chamados";
+import { useFiltrosChamados } from "../../hooks/useFiltrosChamados";
+import FiltrosChamados from "./components/FiltrosChamados";
+import Paginacao from "../../components/ui/Paginacao";
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import "./Dashboard.css";
 
@@ -38,14 +40,10 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
         setModal({ tipo, chamado });
     }
 
-    // Filter: seleciona cada status na lista carregada; length conta os registros.
-    const abertos = chamados.filter(podeAlterarChamado).length;
-    const emAndamento = chamados.filter(
-        (chamado) => chamado.cr2cd_status === 997180001
-    ).length;
-    const resolvidos = chamados.filter(
-        (chamado) => chamado.cr2cd_status === 997180002
-    ).length;
+    const lista = useFiltrosChamados(chamados);
+    const cores = ["azul", "laranja", "verde"] as const;
+    const icones = ["▣", "◷", "✓"];
+    const titulos = ["Abertos", "Em andamento", "Resolvidos"];
 
     return (
         <Pagina
@@ -55,30 +53,20 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
             erro={erro}
         >
             <div className="kpis">
-                <KpiCard
-                    titulo="Abertos"
-                    valor={abertos}
-                    icone="▣"
-                    cor="azul"
-                />
-                <KpiCard
-                    titulo="Em andamento"
-                    valor={emAndamento}
-                    icone="◷"
-                    cor="laranja"
-                />
-                <KpiCard
-                    titulo="Resolvidos"
-                    valor={resolvidos}
-                    icone="✓"
-                    cor="verde"
-                />
-                <KpiCard
-                    titulo="Total"
-                    valor={chamados.length}
-                    icone="Σ"
-                    cor="roxo"
-                />
+                {lista.indicadores.map((indicador, indice) => (
+                    <KpiCard
+                        key={indicador.codigo}
+                        titulo={titulos[indice] ?? indicador.nome}
+                        valor={indicador.total}
+                        icone={icones[indice] ?? "▣"}
+                        cor={cores[indice] ?? "azul"}
+                        ativo={lista.filtros.status === String(indicador.codigo)}
+                        aoClicar={() => lista.alterarFiltro("status", String(indicador.codigo))}
+                        disabled={carregando}
+                    />
+                ))}
+                <KpiCard titulo="Total" valor={chamados.length} icone="Σ" cor="roxo"
+                    ativo={!lista.filtros.status} aoClicar={() => lista.alterarFiltro("status", "")} disabled={carregando} />
             </div>
             {carregando && <p role="status">Carregando chamados...</p>}
             {erro && (
@@ -91,15 +79,16 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
                 </Button>
             )}
             {!carregando && !erro && (
-                <ChamadosTable
-                    chamados={chamados}
-                    abrirNovoChamado={abrirNovoChamado}
-                    visualizarChamado={(chamado) =>
-                        abrirModal("detalhes", chamado)
-                    }
-                    editarChamado={(chamado) => abrirModal("editar", chamado)}
-                    excluirChamado={(chamado) => abrirModal("excluir", chamado)}
-                />
+                <>
+                    <FiltrosChamados filtros={lista.filtros} alterar={lista.alterarFiltro} abrirNovoChamado={abrirNovoChamado} />
+                    <ChamadosTable
+                        chamados={lista.chamadosPagina}
+                        visualizarChamado={(chamado) => abrirModal("detalhes", chamado)}
+                        editarChamado={(chamado) => abrirModal("editar", chamado)}
+                        excluirChamado={(chamado) => abrirModal("excluir", chamado)}
+                    />
+                    <Paginacao pagina={lista.paginaAtual} totalPaginas={lista.totalPaginas} totalItens={lista.totalFiltrados} aoMudar={lista.mudarPagina} />
+                </>
             )}
             {modal?.tipo === "detalhes" && (
                 <DetalhesChamadoModal

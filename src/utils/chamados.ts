@@ -73,3 +73,52 @@ export function criarDadosFormulario(chamado?: Cr2cd_chamados): DadosChamado {
         prioridade: chamado?.cr2cd_prioridade ?? PRIORIDADE_PADRAO,
     };
 }
+
+// As mesmas opções do model alimentam o filtro e os indicadores.
+export const statusChamado = Object.entries(Cr2cd_chamadoscr2cd_status).map(
+    ([codigo, nome]) => ({
+        codigo: Number(codigo) as Cr2cd_chamadoscr2cd_status,
+        nome,
+    })
+);
+
+export type FiltrosChamados = {
+    pesquisa: string;
+    status: string;
+    prioridade: string;
+    categoria: string;
+};
+
+function normalizarTexto(texto: string) {
+    return texto.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+// Filter: todas as condições precisam ser verdadeiras. String vazia significa todos.
+export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosChamados) {
+    const pesquisa = normalizarTexto(filtros.pesquisa);
+    return chamados.filter((chamado) =>
+        normalizarTexto(`${chamado.cr2cd_titulo ?? ""} CH-${chamado.cr2cd_numero ?? ""}`).includes(pesquisa)
+        && (!filtros.status || String(chamado.cr2cd_status) === filtros.status)
+        && (!filtros.prioridade || String(chamado.cr2cd_prioridade) === filtros.prioridade)
+        && (!filtros.categoria || String(chamado.cr2cd_categoria) === filtros.categoria)
+    );
+}
+
+export function paginarChamados(chamados: Cr2cd_chamados[], pagina: number, tamanho = 10) {
+    const totalPaginas = Math.max(1, Math.ceil(chamados.length / tamanho));
+    // Após excluir o último registro de uma página, mostra a última página válida.
+    const paginaAtual = Math.max(1, Math.min(pagina, totalPaginas));
+    const inicio = (paginaAtual - 1) * tamanho;
+    return { paginaAtual, totalPaginas, chamadosPagina: chamados.slice(inicio, inicio + tamanho) };
+}
+
+export function classeBadge(nome: string) {
+    return normalizarTexto(nome).replaceAll(" ", "-");
+}
+
+export function formatarDataAbertura(chamado: Cr2cd_chamados) {
+    const valor = chamado.cr2cd_datadeabertura || chamado.createdon;
+    if (!valor) return "-";
+    const data = new Date(valor);
+    return Number.isNaN(data.getTime()) ? "-" : data.toLocaleDateString("pt-BR");
+}

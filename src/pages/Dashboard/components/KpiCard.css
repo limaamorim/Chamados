@@ -12,7 +12,7 @@
     box-shadow: 0 4px 12px rgba(29, 48, 72, 0.07);
 }
 
-.kpi-card span {
+.kpi-dados > span {
     color: #617087;
 }
 
@@ -54,3 +54,9 @@
     background-color: #eee7ff;
     color: #7450c7;
 }
+
+.kpi-card { width: 100%; text-align: left; font: inherit; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+.kpi-card:hover:enabled, .kpi-card-ativo { border-color: #087ed8; box-shadow: 0 4px 12px rgba(8, 126, 216, .12); }
+.kpi-card:focus-visible { outline: 2px solid #087ed8; outline-offset: 3px; }
+.kpi-card:disabled { cursor: default; opacity: .6; }
+.kpi-icone { flex-shrink: 0; }

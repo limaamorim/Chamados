@@ -13,12 +13,21 @@ import type { DadosChamado } from "../utils/chamados";
 // As páginas chamam estas funções. Somente este arquivo conversa com os serviços gerados.
 // Não editamos generated/: seus arquivos podem ser recriados pela CLI do Power Apps.
 export async function listarChamados() {
-    // Equivale à ideia de Sort: o Dataverse devolve os registros mais recentes primeiro.
-    const resultado = await Cr2cd_chamadosService.getAll({ orderBy: ["createdon desc"] });
-    if (!resultado.success || !resultado.data) {
-        throw new Error(resultado.error?.message ?? "Não foi possível carregar os chamados.");
-    }
-    return resultado.data;
+    const chamados: Cr2cd_chamados[] = [];
+    let skipToken: string | undefined;
+    // Sort: ordena no Dataverse. Segue a continuação para não filtrar só a primeira página.
+    do {
+        const resultado = await Cr2cd_chamadosService.getAll({
+            orderBy: ["createdon desc"],
+            skipToken,
+        });
+        if (!resultado.success || !resultado.data) {
+            throw new Error(resultado.error?.message ?? "Não foi possível carregar os chamados.");
+        }
+        chamados.push(...resultado.data);
+        skipToken = resultado.skipToken;
+    } while (skipToken);
+    return chamados;
 }
 
 export async function criarChamado(dados: DadosChamado, solicitante: string) {

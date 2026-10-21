@@ -59,11 +59,13 @@ export function podeAlterarChamado(
 }
 
 export function validarCamposChamado(titulo: string, descricao: string) {
+    // Ideia de If + IsBlank + TrimEnds: impede título ou descrição vazios/só com espaços.
     if (!titulo.trim() || !descricao.trim())
         return "Preencha o título e a descrição.";
     return "";
 }
 
+// ?? → ideia de Coalesce para null/undefined; diferente de Coalesce, preserva texto vazio.
 // Cria um rascunho independente do registro: editar campos não altera a lista antes de salvar.
 export function criarDadosFormulario(chamado?: Cr2cd_chamados): DadosChamado {
     return {

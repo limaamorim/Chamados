@@ -17,6 +17,7 @@ export default function NovoChamado({ voltar }: NovoChamadoProps) {
     async function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
         const criado = await salvar(dados);
+        // Ideia de ResetForm: só volta aos valores iniciais se a criação deu certo.
         if (criado) setDados(criarDadosFormulario());
     }
 

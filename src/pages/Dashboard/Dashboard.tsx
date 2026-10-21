@@ -30,7 +30,8 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
         recarregar,
         limparErroOperacao,
     } = useChamados();
-    // Abrir e fechar modais é responsabilidade da interface, não do hook de dados.
+    // useState → ideia de UpdateContext: guarda qual modal e qual chamado estão abertos.
+    // O chamado vem da linha clicada (lembra ThisItem), sem executar LookUp.
     const [modal, setModal] = useState<ModalAtivo | null>(null);
 
     function abrirModal(tipo: ModalAtivo["tipo"], chamado: Cr2cd_chamados) {
@@ -38,7 +39,9 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
         setModal({ tipo, chamado });
     }
 
-    // Filter: seleciona cada status na lista carregada; length conta os registros.
+    // filter(...).length → CountRows(Filter(...)): conta cada status para os cartões.
+    // chamados.length → CountRows(chamados). Os cartões usam a lista completa carregada,
+    // enquanto a pesquisa e o filtro de status atuam somente na tabela filha.
     const abertos = chamados.filter(podeAlterarChamado).length;
     const emAndamento = chamados.filter(
         (chamado) => chamado.cr2cd_status === 997180001

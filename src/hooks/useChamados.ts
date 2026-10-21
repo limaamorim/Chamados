@@ -10,6 +10,8 @@ import { useMensagemTemporaria } from "./useMensagemTemporaria";
 
 // Controla os dados e as operações do Dashboard. Não decide quais modais estão abertos.
 export function useChamados() {
+    // Lista em memória: lembra uma coleção, mas useState não é Collect.
+    // Cada uso deste hook tem seu próprio estado; ele não cria variáveis globais.
     const [chamados, setChamados] = useState<Cr2cd_chamados[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
@@ -62,6 +64,7 @@ export function useChamados() {
         setMensagem("");
         try {
             await atualizarChamado(chamado, dados);
+            // Ideia de Refresh + ClearCollect: consulta novamente e substitui a lista local.
             await carregar();
             if (ativo.current) setMensagem("Chamado atualizado com sucesso!");
             return true;
@@ -105,6 +108,7 @@ export function useChamados() {
     }
 
     function recarregar() {
+        // Lembra UpdateContext({carregando: true}): mostra o estado de carregamento.
         setCarregando(true);
         void carregar();
     }

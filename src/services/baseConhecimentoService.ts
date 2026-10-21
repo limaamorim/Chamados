@@ -7,6 +7,7 @@ function obterParagrafos(conteudo: string) {
     const documento = new DOMParser().parseFromString(conteudo, "text/html");
     documento.querySelectorAll("br").forEach((elemento) => elemento.replaceWith("\n"));
     documento.querySelectorAll("p, div, li, h1, h2, h3").forEach((elemento) => elemento.append("\n"));
+    // split → Split; map aplica trim (TrimEnds) a cada trecho; filter(Boolean) tira vazios.
     return (documento.body.textContent ?? "").split(/\r?\n/).map((texto) => texto.trim()).filter(Boolean);
 }
 
@@ -28,5 +29,7 @@ export async function listarArtigos(): Promise<Artigo[]> {
     if (!resultado.success || !resultado.data) {
         throw new Error(resultado.error?.message ?? "Não foi possível carregar os artigos.");
     }
+    // filter → Filter: descarta pastas e itens sem ID antes de montar os artigos da tela.
+    // map converte cada registro para Artigo; só transforma dados, não salva no SharePoint.
     return resultado.data.filter((item) => item.ID !== undefined && !item["{IsFolder}"]).map(converterArtigo);
 }

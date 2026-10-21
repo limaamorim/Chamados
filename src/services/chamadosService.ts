@@ -14,7 +14,8 @@ import type { DadosChamado } from "../utils/chamados";
 // As páginas chamam estas funções. Somente este arquivo conversa com os serviços gerados.
 // Não editamos generated/: seus arquivos podem ser recriados pela CLI do Power Apps.
 export async function listarChamados() {
-    // Equivale à ideia de Sort: o Dataverse devolve os registros mais recentes primeiro.
+    // orderBy → ideia de SortByColumns (ou Sort): ordena por createdon, decrescente.
+    // A ordenação ocorre no Dataverse; não existe sort() local neste projeto.
     const resultado = await Cr2cd_chamadosService.getAll({ orderBy: ["createdon desc"] });
     if (!resultado.success || !resultado.data) {
         throw new Error(resultado.error?.message ?? "Não foi possível carregar os chamados.");
@@ -38,6 +39,8 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
         statecode: 0,
     };
 
+    // create() → Patch(Fonte, Defaults(Fonte), registro): cria um registro no Dataverse.
+    // Não é Collect de uma coleção local; await espera a resposta antes de continuar.
     const resultado = await Cr2cd_chamadosService.create(registro);
     if (!resultado.success) {
         throw new Error(resultado.error?.message ?? "Não foi possível criar o chamado.");
@@ -65,6 +68,8 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
         const erro = validarCamposChamado(dados.titulo, dados.descricao); 
         if (erro) throw new Error(erro); 
 
+        // update() → Patch: usa o ID para alterar apenas os campos enviados.
+        // O registro já veio da linha selecionada; não precisamos de LookUp aqui.
         const resultado = await Cr2cd_chamadosService.update(chamado.cr2cd_chamadoid, {
             cr2cd_titulo: dados.titulo.trim(), 
             cr2cd_descricao: dados.descricao.trim(),
@@ -79,5 +84,7 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
 export async function excluirChamado(chamado: Cr2cd_chamados) { 
     if (!podeAlterarChamado(chamado)) throw new Error("Somente chamados abertos podem ser excluídos.");
     
+    // delete() → Remove: apaga do Dataverse o registro identificado pelo ID.
+    // O hook useChamados recarrega a lista depois; esconder uma linha não seria excluir.
     await Cr2cd_chamadosService.delete(chamado.cr2cd_chamadoid); 
 }

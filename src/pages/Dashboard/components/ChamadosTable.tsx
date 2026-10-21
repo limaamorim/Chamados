@@ -29,13 +29,19 @@ function ChamadosTable({
     editarChamado,
     excluirChamado,
 }: ChamadosTableProps) {
-    // Estado local da pesquisa: funciona como uma variável de contexto desta interface.
+    // useState guarda um valor; o setter muda esse valor e atualiza a interface.
+    // Lembra UpdateContext: pesquisa, status e abertura do filtro pertencem a este componente.
     const [pesquisa, setPesquisa] = useState("");
 
     const [statusSelecionado, setStatusSelecionado] = useState("todos");
     const [filtroAberto, setFiltroAberto] = useState(false);
 
-    // Filter: filtra somente os chamados já carregados no navegador.
+    // filter() → Filter: mantém cada chamado somente se as duas condições forem verdadeiras.
+    // ?? evita erro quando o título está ausente; toLowerCase() → Lower.
+    // includes() verifica se o título contém a pesquisa (ideia do operador in do Power Apps).
+    // && → And: texto E status precisam combinar. || → Or: "todos" OU o status escolhido.
+    // Number() → Value: converte o texto do select para comparar com o código numérico.
+    // O filtro atua na lista local; não consulta nem exclui registros no Dataverse.
     const chamadosFiltrados = chamados.filter((chamado) =>
         (chamado.cr2cd_titulo ?? "")
             .toLowerCase()

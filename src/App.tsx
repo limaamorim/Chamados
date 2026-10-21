@@ -14,6 +14,8 @@ function App() {
     // O setter lembra Set, mas este estado não vira uma variável global automaticamente.
     const [paginaAtiva, setPaginaAtiva] = useState("chamados");
 
+    // Trocar paginaAtiva lembra Navigate: decide qual componente de página mostrar.
+    // Aqui não há rota por URL; o estado vive no App e é passado aos filhos por props.
     function exibirPagina() {
         if (paginaAtiva === "novo") {
             return (

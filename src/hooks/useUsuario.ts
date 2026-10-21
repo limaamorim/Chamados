@@ -6,6 +6,7 @@ export function useUsuario() {
     const [nomeUsuario, setNomeUsuario] = useState("Usuário");
     useEffect(() => {
         let ativo = true;
+        // contexto.user.fullName → ideia de User().FullName: nome da conta no cabeçalho.
         getContext()
             .then((contexto) => {
                 if (ativo && contexto.user.fullName)

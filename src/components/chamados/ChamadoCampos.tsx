@@ -15,6 +15,9 @@ export default function ChamadoCampos({
     alterar,
     disabled = false,
 }: ChamadoCamposProps) {
+    // alterar recebe setDados do formulário: lembra UpdateContext para o rascunho.
+    // {...dados, titulo: novoValor} copia os campos e troca só titulo; não grava no Dataverse.
+    // Salvar no banco é outra etapa, feita por criarChamado/atualizarChamado (ideia de Patch).
     const id = useId();
     return (
         <fieldset className="chamado-campos" disabled={disabled}>

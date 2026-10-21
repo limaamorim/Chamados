@@ -24,6 +24,7 @@ export default function BaseConhecimento({
         let ativo = true;
         listarArtigos()
             .then((dados) => {
+                // setArtigos(dados) → ideia de ClearCollect: substitui a lista local inteira.
                 if (ativo) setArtigos(dados);
             })
             .catch((error: unknown) => {
@@ -35,6 +36,8 @@ export default function BaseConhecimento({
         return () => { ativo = false; };
     }, []);
 
+    // new Set remove categorias repetidas: lembra Distinct, não Set do Power Apps.
+    // map extrai a categoria; filter tira "Todos" para não duplicar a opção fixa.
     const categorias = [
         { nome: "Todos", icone: "▦" },
         ...Array.from(new Set(artigos.map((artigo) => artigo.categoria)))
@@ -42,14 +45,17 @@ export default function BaseConhecimento({
             .map((nome) => ({ nome, icone: "▤" })),
     ];
 
-    // Estados locais da tela: pesquisa, categoria e artigo aberto.
+    // useState + setters → comportamento parecido com UpdateContext nesta tela.
+    // Guarda pesquisa, categoria e o próprio artigo escolhido (sem buscar com LookUp).
     const [busca, setBusca] = useState("");
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("Todos");
     const [artigoSelecionado, setArtigoSelecionado] = useState<Artigo | null>(
         null
     );
 
-    // Filter: combina categoria e texto nos artigos carregados. useMemo reaproveita o resultado enquanto os filtros não mudam.
+    // filter() → Filter: combina categoria e texto nos artigos carregados.
+    // useMemo reaproveita o resultado enquanto artigos, busca e categoria não mudam.
+    // trim() lembra TrimEnds; toLocaleLowerCase() lembra Lower; includes() lembra in.
     const artigosFiltrados = useMemo(() => {
         const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
@@ -71,7 +77,8 @@ export default function BaseConhecimento({
         });
     }, [artigos, busca, categoriaSelecionada]);
 
-    // Sem coluna de destaque na lista, mostramos os três primeiros artigos.
+    // slice(0, 3) → FirstN(artigos, 3): copia até os três primeiros, sem alterar artigos.
+    // Não há ordenação adicional: usa a ordem recebida do SharePoint.
     const artigosDestaque = artigos.slice(0, 3);
 
     function selecionarCategoria(categoria: string) {

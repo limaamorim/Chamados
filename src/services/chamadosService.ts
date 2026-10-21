@@ -21,7 +21,7 @@ export async function listarChamados() {
     }
     return resultado.data;
 }
-
+    
 export async function criarChamado(dados: DadosChamado, solicitante: string) {
     const erro = validarCamposChamado(dados.titulo, dados.descricao);
     if (erro) throw new Error(erro);

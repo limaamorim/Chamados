@@ -32,10 +32,7 @@ function ArtigoCard({ artigo, aoAbrir }: ArtigoCardProps) {
                 <p>{artigo.descricao}</p>
 
                 <div className="artigo-card-rodape">
-                    <span>{artigo.tempoLeitura} min de leitura</span>
-                    <span className="artigo-visualizacoes">
-                        {artigo.visualizacoes} visualizações
-                    </span>
+                    {artigo.tempoLeitura > 0 && <span>{artigo.tempoLeitura} min de leitura</span>}
                 </div>
             </div>
 

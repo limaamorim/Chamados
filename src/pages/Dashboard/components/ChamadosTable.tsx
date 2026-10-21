@@ -6,6 +6,7 @@ import {
     podeAlterarChamado,
 } from "../../../utils/chamados";
 
+import { Cr2cd_chamadoscr2cd_status } from "../../../generated/models/Cr2cd_chamadosModel";
 import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
 import CampoPesquisa from "../../../components/ui/CampoPesquisa";
 import Button from "../../../components/ui/Button";
@@ -31,11 +32,15 @@ function ChamadosTable({
     // Estado local da pesquisa: funciona como uma variável de contexto desta interface.
     const [pesquisa, setPesquisa] = useState("");
 
+    const [statusSelecionado, setStatusSelecionado] = useState("todos");
+    const [filtroAberto, setFiltroAberto] = useState(false);
+
     // Filter: filtra somente os chamados já carregados no navegador.
     const chamadosFiltrados = chamados.filter((chamado) =>
         (chamado.cr2cd_titulo ?? "")
             .toLowerCase()
-            .includes(pesquisa.toLowerCase())
+            .includes(pesquisa.toLowerCase()) &&
+        (statusSelecionado === "todos" || chamado.cr2cd_status === Number(statusSelecionado))
     );
 
     return (
@@ -46,6 +51,35 @@ function ChamadosTable({
                     aoAlterar={setPesquisa}
                     placeholder="Pesquisar chamados..."
                 />
+
+                <div className="filtro-status">
+                    <Button
+                        variante="secundario"
+                        aria-expanded={filtroAberto}
+                        aria-controls="filtro-status-opcoes"
+                        onClick={() => setFiltroAberto(!filtroAberto)}
+                    >
+                        {statusSelecionado === "todos" ? "Filtrar status" : `Status: ${Cr2cd_chamadoscr2cd_status[Number(statusSelecionado) as Cr2cd_chamadoscr2cd_status]}`}
+                    </Button>
+                    {filtroAberto && (
+                        <div className="filtro-status-opcoes" id="filtro-status-opcoes">
+                            <label htmlFor="status-chamados">Status do chamado</label>
+                            <select
+                                id="status-chamados"
+                                value={statusSelecionado}
+                                onChange={(event) => {
+                                    setStatusSelecionado(event.target.value);
+                                    setFiltroAberto(false);
+                                }}
+                            >
+                                <option value="todos">Todos os status</option>
+                                {Object.entries(Cr2cd_chamadoscr2cd_status).map(([codigo, nome]) => (
+                                    <option key={codigo} value={codigo}>{nome}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                </div>
 
                 <Button onClick={abrirNovoChamado} icone="+">
                     Novo chamado

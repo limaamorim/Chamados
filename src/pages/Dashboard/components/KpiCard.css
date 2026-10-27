@@ -54,3 +54,6 @@
     background-color: #eee7ff;
     color: #7450c7;
 }
+.kpi-card { min-height: 112px; padding: 22px; border-radius: 12px; box-shadow: 0 2px 6px rgb(29 48 72 / 3%); }
+.kpi-card span { font-size: 13px; }
+.kpi-icone { width: 44px; height: 44px; border-radius: 10px; }

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Icone from "../ui/Icone";
+import type { NomeIcone } from "../ui/Icone";
 import "./Sidebar.css";
 
 type SidebarProps = {
@@ -12,22 +14,22 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
     const itensMenu = [
         {
             id: "chamados",
-            icone: "▣",
-            texto: "Meus chamados",
+            icone: "chamados" as NomeIcone,
+            texto: "Gerenciar chamados",
         },
         {
             id: "novo",
-            icone: "+",
+            icone: "adicionar" as NomeIcone,
             texto: "Novo chamado",
         },
         {
             id: "base",
-            icone: "▤",
+            icone: "livro" as NomeIcone,
             texto: "Base de conhecimento",
         },
         {
             id: "relatorios",
-            icone: "▥",
+            icone: "grafico" as NomeIcone,
             texto: "Relatórios",
         },
     ];
@@ -48,7 +50,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
                     onClick={() => setMenuAberto(!menuAberto)}
                     title={menuAberto ? "Recolher menu" : "Expandir menu"}
                 >
-                    ☰
+                    <Icone nome="menu" />
                 </button>
             </div>
 
@@ -69,7 +71,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
                         title={!menuAberto ? item.texto : ""}
                     >
                         <span className="menu-icone" aria-hidden="true">
-                            {item.icone}
+                            <Icone nome={item.icone} />
                         </span>
 
                         {menuAberto && (

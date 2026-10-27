@@ -1,176 +1,46 @@
-.barra-acoes {
-    margin-bottom: 18px;
-    display: flex;
-    gap: 16px;
-}
-
-.tabela-container {
-    overflow-x: auto;
-    border: 1px solid #dce4ed;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(29, 48, 72, 0.06);
-}
-
-.tabela-chamados {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.tabela-chamados th,
-.tabela-chamados td {
-    padding: 19px 18px;
-    border-bottom: 1px solid #e1e7ee;
-    text-align: left;
-}
-
-.tabela-chamados th {
-    color: #48576d;
-    background-color: #fbfcfe;
-    font-size: 14px;
-}
-
-.tabela-chamados tbody tr:hover {
-    background-color: #f7faff;
-}
-
-.numero-chamado {
-    color: #087ed8;
-    font-weight: bold;
-}
-
-.status {
-    display: inline-block;
-    padding: 6px 11px;
-    border-radius: 20px;
-    font-size: 13px;
-}
-
-.status-aberto {
-    background-color: #e2efff;
-    color: #096fc3;
-}
-
-.status-em-andamento {
-    background-color: #fff0d8;
-    color: #a8660d;
-}
-
-.status-resolvido {
-    background-color: #def6e6;
-    color: #23844a;
-}
-
-.acoes-chamado {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-}
-
-.botao-acao {
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-.botao-visualizar {
-    color: #172033;
-}
-
-.botao-visualizar:hover {
-    background-color: #eef4fb;
-    color: #0078d4;
-}
-
-.botao-editar {
-    color: #2563eb;
-}
-
-.botao-editar:hover {
-    background-color: #e8f1ff;
-}
-
-.botao-excluir {
-    color: #dc2626;
-}
-
-.botao-excluir:hover {
-    background-color: #feecec;
-}
-
-.tabela-vazia {
-    padding: 28px !important;
-    text-align: center !important;
-    color: #68768a;
-}
-
-/* A pesquisa ocupa menos espaço para manter os botões na mesma linha. */
-.barra-acoes {
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.barra-acoes .campo-pesquisa {
-    flex: 1 1 220px;
-    max-width: 480px;
-    min-width: 0;
-}
-
-.barra-acoes .button {
-    white-space: nowrap;
-}
-
-.filtro-status {
-    position: relative;
-}
-
-.filtro-status-opcoes {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 2;
-    width: 220px;
-    padding: 16px;
-    border: 1px solid #dce4ed;
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 4px 12px rgba(29, 48, 72, 0.12);
-}
-
-.filtro-status-opcoes label {
-    display: block;
-    margin-bottom: 8px;
-    color: #48576d;
-}
-
-.filtro-status-opcoes select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #d4dee9;
-    border-radius: 8px;
-    color: #25344d;
-    background: white;
-}
-
+.barra-acoes { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.barra-acoes .campo-pesquisa { flex: 1 1 240px; max-width: 400px; min-width: 0; }
+.barra-acoes .button { white-space: nowrap; min-height: 44px; }
+.filtro-status { display: flex; align-items: center; gap: 8px; }
+.filtro-status label { font-size: 13px; font-weight: 600; color: #526176; }
+.filtro-status select { min-height: 44px; padding: 0 12px; border: 1px solid #d4dee9; border-radius: 8px; background: white; color: #25344d; }
+.resumo-tabela { margin: 0 0 12px; color: #617087; font-size: 13px; }
+.tabela-container { overflow-x: auto; border: 1px solid #dce4ed; border-radius: 12px; background: white; box-shadow: 0 2px 6px rgb(29 48 72 / 3%); }
+.tabela-chamados { width: 100%; min-width: 1060px; border-collapse: collapse; font-size: 14px; }
+.tabela-chamados th, .tabela-chamados td { padding: 16px; border-bottom: 1px solid #e8edf3; text-align: left; }
+.tabela-chamados th { color: #526176; background: #f8fafc; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.tabela-chamados tbody tr:last-child td { border-bottom: 0; }
+.tabela-chamados tbody tr:hover { background: #f8fbff; }
+.tabela-chamados td:nth-child(2) { min-width: 180px; max-width: 300px; overflow-wrap: anywhere; font-weight: 600; }
+.numero-chamado { color: #0870bb; font-weight: 600; white-space: nowrap; }
+.solicitante-chamado { max-width: 180px; overflow-wrap: anywhere; }
+.data-chamado { white-space: nowrap; color: #617087; }
+.status, .prioridade { display: inline-block; padding: 5px 9px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.status-aberto { background: #e8f2ff; color: #0963a8; }
+.status-em-andamento { background: #fff3df; color: #8a5707; }
+.status-resolvido { background: #e5f6ec; color: #21643d; }
+.prioridade { background: #f1f3f6; color: #526176; }
+.prioridade-997180001 { background: #fff3df; color: #8a5707; }
+.prioridade-997180002 { background: #feeeee; color: #b42318; }
+.acoes-chamado { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+.tabela-chamados .coluna-acoes { text-align: right; }
+.botao-acao { width: 32px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 6px; background: transparent; cursor: pointer; }
+.botao-visualizar { color: #526176; }
+.botao-editar { color: #1969b7; }
+.botao-excluir { color: #b42318; }
+.botao-acao:hover:not(:disabled) { background: #eaf0f8; }
+.botao-excluir:hover:not(:disabled) { background: #feeeee; }
+.botao-etapa { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 10px; border: 1px solid #c9def2; border-radius: 6px; background: #f3f8ff; color: #125a99; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.botao-etapa:hover:not(:disabled) { background: #e3effe; }
+.botao-acao:disabled, .botao-etapa:disabled { opacity: .5; cursor: wait; }
+.tabela-vazia { padding: 36px !important; text-align: center !important; color: #617087; }
 @media (max-width: 600px) {
-    .barra-acoes .campo-pesquisa {
-        flex-basis: 100%;
-        max-width: none;
-    }
-
-    .filtro-status-opcoes {
-        right: auto;
-        left: 0;
-    }
+    .barra-acoes .campo-pesquisa { flex-basis: 100%; max-width: none; }
+    .filtro-status { flex: 1 1 100%; }
+    .filtro-status select { flex: 1; }
 }
+/* As ações ficam em duas linhas para caberem junto às informações do chamado. */
+.tabela-chamados th, .tabela-chamados td { padding: 14px 12px; }
+.tabela-chamados td:nth-child(2) { min-width: 160px; }
+.acoes-chamado { flex-wrap: wrap; max-width: 180px; min-width: 164px; margin-left: auto; gap: 4px; }
+.botao-etapa { width: 100%; }

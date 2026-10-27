@@ -37,7 +37,7 @@ Todos os caminhos abaixo partem da raiz do projeto.
 ## O que não foi encontrado
 
 - **Collect para acrescentar registros a uma coleção local:** não há operação que junte novos chamados/artigos à lista anterior. Ter um array em `useState` não é executar Collect. Criar um registro no banco também pode lembrar Collect sobre uma fonte, mas aqui a comparação mais direta é Patch com Defaults; não há coleção local sendo incrementada.
-- **LookUp:** não há busca com `find()` nem consulta de registro único no fluxo atual da aplicação. A tabela passa o próprio chamado clicado ao modal, como a ideia de ThisItem; os artigos também passam o objeto selecionado. Os mapas de código para nome em `utils/chamados.ts` são acessos diretos por chave, não uma pesquisa LookUp em tabela.
+- **LookUp (aproximação):** `consultarChamadoAtual`, em `src/services/chamadosService.ts`, usa `get(id)` para buscar o registro atual antes de editar, excluir ou avançar o status. A tabela passa o próprio chamado clicado ao modal, como a ideia de ThisItem; os artigos também passam o objeto selecionado. Os mapas de código para nome em `utils/chamados.ts` são acessos diretos por chave, não uma pesquisa LookUp em tabela.
 - **Set global:** os estados ficam em componentes/hooks. O estado do App só chega aos filhos pelas propriedades.
 
 Os serviços em `src/generated/` oferecem operações adicionais, mas uma operação estar disponível não significa que a aplicação a utiliza. Esses arquivos são gerados pela CLI e não foram editados.
@@ -59,3 +59,29 @@ Pense assim: **componentes mostram e recebem cliques; hooks guardam estado e coo
 - `useState` guarda valores que afetam a interface. `useRef` guarda controles internos, como impedir envio duplicado, e não atualiza a interface ao mudar.
 - `useMemo` reaproveita um cálculo conforme suas dependências; não consulta nem grava dados sozinho.
 - Os filtros locais só trabalham sobre os registros que o serviço devolveu; não representam automaticamente filtros delegados à fonte.
+
+## Painel de atendimento: etapas do chamado
+
+A página e o menu agora usam **Gerenciar chamados**. A tabela mostra solicitante,
+data de abertura (com `createdon` como alternativa), prioridade com etiquetas e um
+seletor de status sempre visível. Os ícones SVG ficam no componente simples `Icone.tsx`.
+
+- **Aberto:** visualizar, editar, excluir com confirmação e iniciar atendimento.
+- **Em andamento:** visualizar e resolver chamado.
+- **Resolvido:** visualizar.
+
+O caminho do clique é `ChamadosTable` → `Dashboard` → `useChamados.avancarStatus`
+→ `avancarStatusChamado` → serviço gerado do Dataverse. `obterProximoStatus`, em
+`utils/chamados.ts`, define a próxima etapa. O `update` equivale à ideia de
+`Patch`: envia somente `cr2cd_status`. Depois, a lista é consultada novamente
+(ideia de `Refresh` + `ClearCollect`), atualizando também os indicadores.
+
+O serviço consulta o status atual antes de editar, excluir ou avançar a etapa.
+Se o status já tiver mudado, a operação incompatível é bloqueada. Essa consulta
+não é uma atualização atômica: regras contra alterações simultâneas e permissões
+por perfil devem ser garantidas no Dataverse. O painel não cria um perfil de
+segurança de administrador; a identificação no cabeçalho é apenas visual.
+
+Para validar no Power Apps, use registros de teste: inicie um aberto, confirme
+que edição/exclusão desaparecem, resolva o chamado e confira o filtro e os cartões.
+Também confira edição e exclusão de outro chamado aberto e falhas de permissão.

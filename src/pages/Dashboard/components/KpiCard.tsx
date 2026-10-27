@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import "./KpiCard.css";
 
 type KpiCardProps = {
     titulo: string;
     valor: number;
-    icone: string;
+    icone: ReactNode;
     cor: "azul" | "laranja" | "verde" | "roxo";
 };
 

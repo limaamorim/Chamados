@@ -22,7 +22,7 @@ function Header({ titulo, descricao }: HeaderProps) {
 
                 <div className="dados-usuario">
                     <strong>{nomeUsuario}</strong>
-                    <span>Solicitante</span>
+                    <span>Painel de atendimento</span>
                 </div>
             </div>
         </header>

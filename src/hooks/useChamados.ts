@@ -5,6 +5,7 @@ import {
     listarChamados,
     atualizarChamado,
     excluirChamado,
+    avancarStatusChamado,
 } from "../services/chamadosService";
 import { useMensagemTemporaria } from "./useMensagemTemporaria";
 
@@ -16,7 +17,7 @@ export function useChamados() {
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
     const [erroOperacao, setErroOperacao] = useState("");
-    const [operacao, setOperacao] = useState<"salvar" | "excluir" | null>(null);
+    const [operacao, setOperacao] = useState<"salvar" | "excluir" | "status" | null>(null);
     const { mensagem, setMensagem } = useMensagemTemporaria();
     const ativo = useRef(false);
     const emOperacao = useRef(false);
@@ -107,6 +108,28 @@ export function useChamados() {
         }
     }
 
+    async function avancarStatus(chamado: Cr2cd_chamados) {
+        if (emOperacao.current) return false;
+        emOperacao.current = true;
+        setOperacao("status");
+        setErroOperacao("");
+        setMensagem("");
+        try {
+            await avancarStatusChamado(chamado);
+            // Refresh + ClearCollect: tabela e indicadores recebem os dados atualizados.
+            await carregar();
+            if (ativo.current) setMensagem("Status atualizado com sucesso!");
+            return true;
+        } catch (error) {
+            if (ativo.current) setErroOperacao(error instanceof Error
+                ? error.message : "Não foi possível alterar o status.");
+            return false;
+        } finally {
+            emOperacao.current = false;
+            if (ativo.current) setOperacao(null);
+        }
+    }
+
     function recarregar() {
         // Lembra UpdateContext({carregando: true}): mostra o estado de carregamento.
         setCarregando(true);
@@ -122,6 +145,7 @@ export function useChamados() {
         mensagem,
         salvar,
         excluir,
+        avancarStatus,
         recarregar,
         limparErroOperacao: () => setErroOperacao(""),
     };

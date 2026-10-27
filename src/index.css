@@ -55,3 +55,10 @@ textarea {
   border-color: #fcd34d;
   color: #92400e;
 }
+
+/* Foco visível também nos filtros, ícones e na tabela com rolagem. */
+:where(button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+svg { flex-shrink: 0; vertical-align: middle; }

@@ -113,3 +113,10 @@
     padding: 0;
     justify-content: center;
 }
+.menu-icone { display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 760px) {
+    .sidebar { width: 76px; min-width: 76px; padding: 24px 12px; }
+    .sidebar-cabecalho { padding: 0; justify-content: center; }
+    .sidebar-cabecalho > div, .menu-texto { display: none; }
+    .menu-item { padding: 0; justify-content: center; }
+}

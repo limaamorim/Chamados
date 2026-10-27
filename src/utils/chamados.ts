@@ -7,6 +7,22 @@ import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 
 // Funções e valores compartilhados. Este arquivo não acessa o Dataverse nem usa React.
 export const STATUS_ABERTO = 997180000;
+export const STATUS_EM_ANDAMENTO = 997180001;
+export const STATUS_RESOLVIDO = 997180002;
+
+// O próximo passo é fixo: não permite pular o atendimento nem reabrir um resolvido.
+export function obterProximoStatus(chamado: Pick<Cr2cd_chamados, "cr2cd_status">) {
+    if (chamado.cr2cd_status === STATUS_ABERTO) return STATUS_EM_ANDAMENTO;
+    if (chamado.cr2cd_status === STATUS_EM_ANDAMENTO) return STATUS_RESOLVIDO;
+    return null;
+}
+
+export function formatarDataAbertura(chamado: Pick<Cr2cd_chamados, "cr2cd_datadeabertura" | "createdon">) {
+    const valor = chamado.cr2cd_datadeabertura || chamado.createdon;
+    if (!valor) return "-";
+    const data = new Date(valor);
+    return Number.isNaN(data.getTime()) ? "-" : data.toLocaleDateString("pt-BR");
+}
 export const CATEGORIA_PADRAO: Cr2cd_chamadoscr2cd_categoria = 997180000;
 export const PRIORIDADE_PADRAO: Cr2cd_chamadoscr2cd_prioridade = 997180000;
 

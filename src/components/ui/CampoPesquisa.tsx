@@ -1,3 +1,4 @@
+import Icone from "./Icone";
 import "./CampoPesquisa.css";
 
 type CampoPesquisaProps = {
@@ -13,7 +14,7 @@ function CampoPesquisa({
 }: CampoPesquisaProps) {
     return (
         <div className="campo-pesquisa">
-            <span aria-hidden="true">⌕</span>
+            <Icone nome="pesquisar" />
 
             <input
                 type="search"

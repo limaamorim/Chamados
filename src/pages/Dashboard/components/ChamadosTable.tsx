@@ -3,13 +3,13 @@ import {
     obterStatus,
     obterCategoria,
     obterPrioridade,
-    podeAlterarChamado,
 } from "../../../utils/chamados";
 
 import { Cr2cd_chamadoscr2cd_status } from "../../../generated/models/Cr2cd_chamadosModel";
 import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
 import CampoPesquisa from "../../../components/ui/CampoPesquisa";
 import Button from "../../../components/ui/Button";
+import MenuAcoesChamado from "./MenuAcoesChamado";
 
 import "./ChamadosTable.css";
 
@@ -95,7 +95,7 @@ function ChamadosTable({
                             <th>Categoria</th>
                             <th>Prioridade</th>
                             <th>Status</th>
-                            <th></th>
+                            <th className="coluna-acoes">Ações</th>
                         </tr>
                     </thead>
 
@@ -127,45 +127,12 @@ function ChamadosTable({
                                     </td>
 
                                     <td>
-                                        <div className="acoes-chamado">
-                                            <button
-                                                className="botao-acao botao-visualizar"
-                                                onClick={() =>
-                                                    visualizarChamado(chamado)
-                                                }
-                                                title="Visualizar chamado"
-                                            >
-                                                →
-                                            </button>
-
-                                            {podeAlterarChamado(chamado) && (
-                                                <>
-                                                    <button
-                                                        className="botao-acao botao-editar"
-                                                        onClick={() =>
-                                                            editarChamado(
-                                                                chamado
-                                                            )
-                                                        }
-                                                        title="Editar chamado"
-                                                    >
-                                                        ✎
-                                                    </button>
-
-                                                    <button
-                                                        className="botao-acao botao-excluir"
-                                                        onClick={() =>
-                                                            excluirChamado(
-                                                                chamado
-                                                            )
-                                                        }
-                                                        title="Excluir chamado"
-                                                    >
-                                                        🗑
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
+                                        <MenuAcoesChamado
+                                            chamado={chamado}
+                                            visualizar={() => visualizarChamado(chamado)}
+                                            editar={() => editarChamado(chamado)}
+                                            excluir={() => excluirChamado(chamado)}
+                                        />
                                     </td>
                                 </tr>
                             );

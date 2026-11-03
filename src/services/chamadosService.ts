@@ -5,7 +5,7 @@ import type { Cr2cd_chamados, Cr2cd_chamadosBase } from "../generated/models/Cr2
 import {
     obterCategoria,
     obterPrioridade,
-    podeAlterarChamado,
+    podeExcluirChamado,
     STATUS_ABERTO,
     validarCamposChamado,
 } from "../utils/chamados";
@@ -61,7 +61,6 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
 }
 
     export async function atualizarChamado(chamado: Cr2cd_chamados, dados: DadosChamado) {
-        if (!podeAlterarChamado(chamado)) throw new Error("Somente chamados abertos podem ser editados.");
         const erro = validarCamposChamado(dados.titulo, dados.descricao); 
         if (erro) throw new Error(erro); 
 
@@ -77,7 +76,7 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
     }
 
 export async function excluirChamado(chamado: Cr2cd_chamados) { 
-    if (!podeAlterarChamado(chamado)) throw new Error("Somente chamados abertos podem ser excluídos.");
+    if (!podeExcluirChamado(chamado)) throw new Error("Somente chamados abertos podem ser excluídos.");
     
     await Cr2cd_chamadosService.delete(chamado.cr2cd_chamadoid); 
 }

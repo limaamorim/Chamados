@@ -51,8 +51,8 @@ export function obterStatus(chamado: Pick<Cr2cd_chamados, "cr2cd_status">) {
     return Cr2cd_chamadoscr2cd_status[chamado.cr2cd_status] ?? "-";
 }
 
-// A regra usa o código do status; o texto traduzido serve apenas para exibição.
-export function podeAlterarChamado(
+// A exclusão continua restrita aos chamados abertos; a edição aceita qualquer status.
+export function podeExcluirChamado(
     chamado: Pick<Cr2cd_chamados, "cr2cd_status">
 ) {
     return chamado.cr2cd_status === STATUS_ABERTO;

@@ -7,7 +7,7 @@ import DetalhesChamadoModal from "./components/DetalhesChamadoModal";
 import EditarChamadoModal from "./components/EditarChamadoModal";
 import ExcluirChamadoModal from "./components/ExcluirChamadoModal";
 import { useChamados } from "../../hooks/useChamados";
-import { podeAlterarChamado } from "../../utils/chamados";
+import { STATUS_ABERTO } from "../../utils/chamados";
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import "./Dashboard.css";
 
@@ -39,7 +39,7 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
     }
 
     // Filter: seleciona cada status na lista carregada; length conta os registros.
-    const abertos = chamados.filter(podeAlterarChamado).length;
+    const abertos = chamados.filter((chamado) => chamado.cr2cd_status === STATUS_ABERTO).length;
     const emAndamento = chamados.filter(
         (chamado) => chamado.cr2cd_status === 997180001
     ).length;

@@ -13,7 +13,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
         {
             id: "chamados",
             icone: "▣",
-            texto: "Meus chamados",
+            texto: "Visão geral",
         },
         {
             id: "novo",

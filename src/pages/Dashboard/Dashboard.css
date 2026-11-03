@@ -14,3 +14,28 @@
         grid-template-columns: 1fr;
     }
 }
+
+.dashboard-graficos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+.dashboard-secao-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.dashboard-secao-topo h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #25344d;
+}
+@media (max-width: 900px) {
+    .dashboard-graficos { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .dashboard-secao-topo { align-items: flex-start; flex-wrap: wrap; }
+}

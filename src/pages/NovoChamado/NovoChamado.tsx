@@ -1,52 +1,37 @@
-import { useState } from "react";
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
-import ChamadoCampos from "../../components/chamados/ChamadoCampos";
-import { useCriarChamado } from "../../hooks/useCriarChamado";
-import { criarDadosFormulario } from "../../utils/chamados";
-import type { FormEvent } from "react";
-import "./NovoChamado.css";
+import ChamadosTable from "../Dashboard/components/ChamadosTable";
+import type { AcoesChamados } from "../Dashboard/components/ChamadosTable";
+import type { EstadoChamados } from "../../hooks/useChamados";
 
-type NovoChamadoProps = { voltar: () => void };
+type NovoChamadoProps = {
+    dados: EstadoChamados;
+    acoes: AcoesChamados;
+    abrirNovoChamado: () => void;
+};
 
-export default function NovoChamado({ voltar }: NovoChamadoProps) {
-    // Somente o rascunho do formulário pertence à página; a operação fica no hook.
-    const [dados, setDados] = useState(criarDadosFormulario);
-    const { salvar, salvando, erro, aviso, mensagem } = useCriarChamado();
-
-    async function enviar(evento: FormEvent<HTMLFormElement>) {
-        evento.preventDefault();
-        const criado = await salvar(dados);
-        if (criado) setDados(criarDadosFormulario());
-    }
-
+// A tabela é a mesma usada no Dashboard; o formulário só é montado dentro do modal.
+export default function NovoChamado({ dados, acoes, abrirNovoChamado }: NovoChamadoProps) {
     return (
         <Pagina
             titulo="Novo chamado"
-            descricao="Preencha os dados da sua solicitação."
-            mensagem={mensagem}
-            erro={erro}
-            aviso={aviso}
+            descricao="Consulte os chamados e cadastre novas solicitações."
+            mensagem={dados.mensagem}
+            erro={dados.erro}
+            aviso={dados.aviso}
         >
-            <form className="formulario-card" onSubmit={enviar}>
-                <ChamadoCampos
-                    dados={dados}
-                    alterar={setDados}
-                    disabled={salvando}
-                />
-                <div className="acoes-formulario">
-                    <Button
-                        variante="secundario"
-                        onClick={voltar}
-                        disabled={salvando}
-                    >
-                        Cancelar
-                    </Button>
-                    <Button type="submit" icone="+" disabled={salvando}>
-                        {salvando ? "Criando..." : "Criar chamado"}
-                    </Button>
-                </div>
-            </form>
+            {dados.erro && (
+                <Button variante="secundario" onClick={dados.recarregar} disabled={dados.carregando}>
+                    Tentar carregar novamente
+                </Button>
+            )}
+            {dados.carregando && <p role="status">Atualizando chamados...</p>}
+            <ChamadosTable
+                chamados={dados.chamados}
+                carregando={dados.carregando}
+                abrirNovoChamado={abrirNovoChamado}
+                {...acoes}
+            />
         </Pagina>
     );
 }

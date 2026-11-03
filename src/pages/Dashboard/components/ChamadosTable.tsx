@@ -13,17 +13,23 @@ import MenuAcoesChamado from "./MenuAcoesChamado";
 
 import "./ChamadosTable.css";
 
-type ChamadosTableProps = {
-    chamados: Cr2cd_chamados[];
-
-    abrirNovoChamado: () => void;
+export type AcoesChamados = {
     visualizarChamado: (chamado: Cr2cd_chamados) => void;
     editarChamado: (chamado: Cr2cd_chamados) => void;
     excluirChamado: (chamado: Cr2cd_chamados) => void;
 };
 
+type ChamadosTableProps = AcoesChamados & {
+    chamados: Cr2cd_chamados[];
+    carregando?: boolean;
+    mostrarBarraAcoes?: boolean;
+    abrirNovoChamado?: () => void;
+};
+
 function ChamadosTable({
     chamados,
+    carregando = false,
+    mostrarBarraAcoes = true,
     abrirNovoChamado,
     visualizarChamado,
     editarChamado,
@@ -45,7 +51,7 @@ function ChamadosTable({
 
     return (
         <>
-            <div className="barra-acoes">
+            {mostrarBarraAcoes && <div className="barra-acoes">
                 <CampoPesquisa
                     valor={pesquisa}
                     aoAlterar={setPesquisa}
@@ -81,10 +87,12 @@ function ChamadosTable({
                     )}
                 </div>
 
-                <Button onClick={abrirNovoChamado} icone="+">
-                    Novo chamado
-                </Button>
-            </div>
+                {abrirNovoChamado && (
+                    <Button onClick={abrirNovoChamado} icone="+">
+                        Novo Chamado
+                    </Button>
+                )}
+            </div>}
 
             <div className="tabela-container">
                 <table className="tabela-chamados">
@@ -141,7 +149,7 @@ function ChamadosTable({
                         {chamadosFiltrados.length === 0 && (
                             <tr>
                                 <td colSpan={6} className="tabela-vazia">
-                                    Nenhum chamado encontrado.
+                                    {carregando ? "Carregando chamados..." : "Nenhum chamado encontrado."}
                                 </td>
                             </tr>
                         )}

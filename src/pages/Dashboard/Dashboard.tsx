@@ -1,58 +1,40 @@
-import { useState } from "react";
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
 import KpiCard from "./components/KpiCard";
 import ChamadosTable from "./components/ChamadosTable";
-import DetalhesChamadoModal from "./components/DetalhesChamadoModal";
-import EditarChamadoModal from "./components/EditarChamadoModal";
-import ExcluirChamadoModal from "./components/ExcluirChamadoModal";
-import { useChamados } from "../../hooks/useChamados";
+import type { AcoesChamados } from "./components/ChamadosTable";
+import GraficoChamados from "./components/GraficoChamados";
+import type { EstadoChamados } from "../../hooks/useChamados";
+import {
+    Cr2cd_chamadoscr2cd_categoria,
+    Cr2cd_chamadoscr2cd_status,
+} from "../../generated/models/Cr2cd_chamadosModel";
+import { agruparChamados, obterUltimosChamados } from "../../utils/resumoChamados";
 import { STATUS_ABERTO } from "../../utils/chamados";
-import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import "./Dashboard.css";
 
-type DashboardProps = { abrirNovoChamado: () => void };
-type ModalAtivo = {
-    tipo: "detalhes" | "editar" | "excluir";
-    chamado: Cr2cd_chamados;
+type DashboardProps = {
+    dados: EstadoChamados;
+    acoes: AcoesChamados;
+    verTodos: () => void;
 };
 
-export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
-    const {
-        chamados,
-        carregando,
-        erro,
-        erroOperacao,
-        operacao,
-        mensagem,
-        salvar,
-        excluir,
-        recarregar,
-        limparErroOperacao,
-    } = useChamados();
-    // Abrir e fechar modais é responsabilidade da interface, não do hook de dados.
-    const [modal, setModal] = useState<ModalAtivo | null>(null);
-
-    function abrirModal(tipo: ModalAtivo["tipo"], chamado: Cr2cd_chamados) {
-        limparErroOperacao();
-        setModal({ tipo, chamado });
-    }
-
-    // Filter: seleciona cada status na lista carregada; length conta os registros.
+export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
+    const { chamados, carregando, erro, mensagem, aviso, recarregar } = dados;
     const abertos = chamados.filter((chamado) => chamado.cr2cd_status === STATUS_ABERTO).length;
-    const emAndamento = chamados.filter(
-        (chamado) => chamado.cr2cd_status === 997180001
-    ).length;
-    const resolvidos = chamados.filter(
-        (chamado) => chamado.cr2cd_status === 997180002
-    ).length;
+    const emAndamento = chamados.filter((chamado) => chamado.cr2cd_status === 997180001).length;
+    const resolvidos = chamados.filter((chamado) => chamado.cr2cd_status === 997180002).length;
+    const porCategoria = agruparChamados(chamados, "cr2cd_categoria", Cr2cd_chamadoscr2cd_categoria);
+    const porStatus = agruparChamados(chamados, "cr2cd_status", Cr2cd_chamadoscr2cd_status);
+    const ultimosChamados = obterUltimosChamados(chamados);
 
     return (
         <Pagina
-            titulo="Meus chamados"
-            descricao="Gerencie e acompanhe suas solicitações."
+            titulo="Visão geral"
+            descricao="Acompanhe os indicadores e os chamados mais recentes."
             mensagem={mensagem}
             erro={erro}
+            aviso={aviso}
         >
             <div className="kpis">
                 <KpiCard
@@ -80,51 +62,30 @@ export default function Dashboard({ abrirNovoChamado }: DashboardProps) {
                     cor="roxo"
                 />
             </div>
-            {carregando && <p role="status">Carregando chamados...</p>}
+            {carregando && <p role="status">Atualizando chamados...</p>}
             {erro && (
-                <Button
-                    variante="secundario"
-                    onClick={recarregar}
-                    disabled={carregando}
-                >
+                <Button variante="secundario" onClick={recarregar} disabled={carregando}>
                     Tentar carregar novamente
                 </Button>
             )}
-            {!carregando && !erro && (
-                <ChamadosTable
-                    chamados={chamados}
-                    abrirNovoChamado={abrirNovoChamado}
-                    visualizarChamado={(chamado) =>
-                        abrirModal("detalhes", chamado)
-                    }
-                    editarChamado={(chamado) => abrirModal("editar", chamado)}
-                    excluirChamado={(chamado) => abrirModal("excluir", chamado)}
-                />
-            )}
-            {modal?.tipo === "detalhes" && (
-                <DetalhesChamadoModal
-                    chamado={modal.chamado}
-                    fechar={() => setModal(null)}
-                />
-            )}
-            {modal?.tipo === "editar" && (
-                <EditarChamadoModal
-                    key={modal.chamado.cr2cd_chamadoid}
-                    chamado={modal.chamado}
-                    erro={erroOperacao}
-                    salvando={operacao === "salvar"}
-                    fechar={() => setModal(null)}
-                    salvar={(dados) => salvar(modal.chamado, dados)}
-                />
-            )}
-            {modal?.tipo === "excluir" && (
-                <ExcluirChamadoModal
-                    chamado={modal.chamado}
-                    erro={erroOperacao}
-                    excluindo={operacao === "excluir"}
-                    fechar={() => setModal(null)}
-                    confirmar={() => excluir(modal.chamado)}
-                />
+            {!erro && (!carregando || chamados.length > 0) && (
+                <>
+                    <div className="dashboard-graficos">
+                        <GraficoChamados titulo="Chamados por Categoria" grupos={porCategoria} />
+                        <GraficoChamados titulo="Chamados por Status" grupos={porStatus} variante="status" />
+                    </div>
+                    <section aria-labelledby="ultimos-chamados-titulo">
+                        <div className="dashboard-secao-topo">
+                            <h2 id="ultimos-chamados-titulo">Últimos chamados cadastrados</h2>
+                            <Button variante="secundario" onClick={verTodos}>Ver todos</Button>
+                        </div>
+                        <ChamadosTable
+                            chamados={ultimosChamados}
+                            mostrarBarraAcoes={false}
+                            {...acoes}
+                        />
+                    </section>
+                </>
             )}
         </Pagina>
     );

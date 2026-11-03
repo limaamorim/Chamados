@@ -7,13 +7,15 @@ import {
     excluirChamado,
 } from "../services/chamadosService";
 import { useMensagemTemporaria } from "./useMensagemTemporaria";
+import { ordenarChamadosRecentes } from "../utils/resumoChamados";
 
-// Controla os dados e as operações do Dashboard. Não decide quais modais estão abertos.
+// Lista compartilhada pelo Dashboard e pela página NovoChamado; os modais pertencem à interface.
 export function useChamados() {
     const [chamados, setChamados] = useState<Cr2cd_chamados[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
     const [erroOperacao, setErroOperacao] = useState("");
+    const [aviso, setAviso] = useState("");
     const [operacao, setOperacao] = useState<"salvar" | "excluir" | null>(null);
     const { mensagem, setMensagem } = useMensagemTemporaria();
     const ativo = useRef(false);
@@ -27,7 +29,7 @@ export function useChamados() {
             .then((dados) => {
                 if (ativo.current && busca === ultimaBusca.current) {
                     // Substitui a lista inteira: aproximação de ClearCollect, não de Collect.
-                    setChamados(dados);
+                    setChamados(ordenarChamadosRecentes(dados));
                     setErro("");
                 }
             })
@@ -60,6 +62,7 @@ export function useChamados() {
         setOperacao("salvar");
         setErroOperacao("");
         setMensagem("");
+        setAviso("");
         try {
             await atualizarChamado(chamado, dados);
             await carregar();
@@ -85,6 +88,7 @@ export function useChamados() {
         setOperacao("excluir");
         setErroOperacao("");
         setMensagem("");
+        setAviso("");
         try {
             await excluirChamado(chamado);
             await carregar();
@@ -109,6 +113,13 @@ export function useChamados() {
         void carregar();
     }
 
+    function aposCriar(avisoCriacao: string) {
+        setMensagem("Chamado criado com sucesso!");
+        setAviso(avisoCriacao);
+        // Busca novamente no Dataverse; cards, gráficos e tabelas recebem a mesma resposta.
+        recarregar();
+    }
+
     return {
         chamados,
         carregando,
@@ -116,9 +127,13 @@ export function useChamados() {
         erroOperacao,
         operacao,
         mensagem,
+        aviso,
+        aposCriar,
         salvar,
         excluir,
         recarregar,
         limparErroOperacao: () => setErroOperacao(""),
     };
 }
+
+export type EstadoChamados = ReturnType<typeof useChamados>;

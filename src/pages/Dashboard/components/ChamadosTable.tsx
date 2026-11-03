@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
+import { filtrarChamados, validarPeriodoDatas } from "../../../utils/filtrosChamados";
+import Mensagem from "../../../components/ui/Mensagem";
 import {
     obterStatus,
     obterCategoria,
@@ -22,6 +24,7 @@ export type AcoesChamados = {
 type ChamadosTableProps = AcoesChamados & {
     chamados: Cr2cd_chamados[];
     carregando?: boolean;
+    erroCarregamento?: boolean;
     mostrarBarraAcoes?: boolean;
     abrirNovoChamado?: () => void;
 };
@@ -29,6 +32,7 @@ type ChamadosTableProps = AcoesChamados & {
 function ChamadosTable({
     chamados,
     carregando = false,
+    erroCarregamento = false,
     mostrarBarraAcoes = true,
     abrirNovoChamado,
     visualizarChamado,
@@ -41,13 +45,35 @@ function ChamadosTable({
     const [statusSelecionado, setStatusSelecionado] = useState("todos");
     const [filtroAberto, setFiltroAberto] = useState(false);
 
-    // Filter: filtra somente os chamados já carregados no navegador.
-    const chamadosFiltrados = chamados.filter((chamado) =>
-        (chamado.cr2cd_titulo ?? "")
-            .toLowerCase()
-            .includes(pesquisa.toLowerCase()) &&
-        (statusSelecionado === "todos" || chamado.cr2cd_status === Number(statusSelecionado))
-    );
+    const idFiltros = useId();
+    const [dataInicial, setDataInicial] = useState("");
+    const [dataFinal, setDataFinal] = useState("");
+    const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
+    const [erroRelatorio, setErroRelatorio] = useState("");
+    const exportando = useRef(false);
+    const erroPeriodo = validarPeriodoDatas(dataInicial, dataFinal);
+    const filtros = { pesquisa, status: statusSelecionado, dataInicial, dataFinal };
+
+    // A tabela e o PDF usam exatamente esta mesma lista filtrada.
+    const chamadosFiltrados = filtrarChamados(chamados, filtros);
+
+    async function gerarRelatorio() {
+        if (exportando.current || carregando || erroCarregamento || erroPeriodo) return;
+        exportando.current = true;
+        setGerandoRelatorio(true);
+        setErroRelatorio("");
+        try {
+            // A biblioteca do PDF só é carregada quando o usuário solicita o relatório.
+            const { baixarRelatorioChamados } = await import("../../../utils/relatorioChamados");
+            await baixarRelatorioChamados(chamadosFiltrados, filtros);
+        } catch (erro) {
+            console.error("Falha ao gerar relatório:", erro);
+            setErroRelatorio("Não foi possível gerar o PDF. Tente novamente.");
+        } finally {
+            exportando.current = false;
+            setGerandoRelatorio(false);
+        }
+    }
 
     return (
         <>
@@ -93,6 +119,60 @@ function ChamadosTable({
                     </Button>
                 )}
             </div>}
+
+            {mostrarBarraAcoes && (
+                <>
+                    <div className="filtros-data-relatorio">
+                        <div className="filtro-data-campo">
+                            <label htmlFor={idFiltros + "-inicio"}>Data inicial</label>
+                            <input
+                                id={idFiltros + "-inicio"}
+                                type="date"
+                                value={dataInicial}
+                                max={dataFinal || undefined}
+                                aria-invalid={!!erroPeriodo}
+                                aria-describedby={erroPeriodo ? idFiltros + "-erro" : undefined}
+                                onChange={(evento) => setDataInicial(evento.target.value)}
+                            />
+                        </div>
+                        <div className="filtro-data-campo">
+                            <label htmlFor={idFiltros + "-fim"}>Data final</label>
+                            <input
+                                id={idFiltros + "-fim"}
+                                type="date"
+                                value={dataFinal}
+                                min={dataInicial || undefined}
+                                aria-invalid={!!erroPeriodo}
+                                aria-describedby={erroPeriodo ? idFiltros + "-erro" : undefined}
+                                onChange={(evento) => setDataFinal(evento.target.value)}
+                            />
+                        </div>
+                        <Button
+                            variante="secundario"
+                            onClick={() => {
+                                setDataInicial("");
+                                setDataFinal("");
+                            }}
+                            disabled={!dataInicial && !dataFinal}
+                        >
+                            Limpar datas
+                        </Button>
+                        <Button
+                            className="botao-gerar-relatorio"
+                            variante="secundario"
+                            onClick={gerarRelatorio}
+                            disabled={gerandoRelatorio || carregando || erroCarregamento || !!erroPeriodo}
+                        >
+                            {gerandoRelatorio ? "Gerando PDF..." : "Gerar relatório"}
+                        </Button>
+                    </div>
+                    <p className="filtros-data-resumo" role="status">
+                        Período por data de cadastro · {chamadosFiltrados.length} chamado(s) encontrado(s)
+                    </p>
+                    {erroPeriodo && <p id={idFiltros + "-erro"} className="mensagem-erro" role="alert">{erroPeriodo}</p>}
+                    <Mensagem tipo="erro">{erroRelatorio}</Mensagem>
+                </>
+            )}
 
             <div className="tabela-container">
                 <table className="tabela-chamados">

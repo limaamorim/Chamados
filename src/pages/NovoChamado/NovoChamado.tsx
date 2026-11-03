@@ -29,6 +29,7 @@ export default function NovoChamado({ dados, acoes, abrirNovoChamado }: NovoCham
             <ChamadosTable
                 chamados={dados.chamados}
                 carregando={dados.carregando}
+                erroCarregamento={!!dados.erro}
                 abrirNovoChamado={abrirNovoChamado}
                 {...acoes}
             />

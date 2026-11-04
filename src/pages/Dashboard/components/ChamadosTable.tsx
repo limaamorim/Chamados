@@ -181,6 +181,7 @@ function ChamadosTable({
                             <th>Número</th>
                             <th>Título</th>
                             <th>Categoria</th>
+                            <th>Data de abertura</th>
                             <th>Prioridade</th>
                             <th>Status</th>
                             <th className="coluna-acoes">Ações</th>
@@ -202,7 +203,14 @@ function ChamadosTable({
                                     <td>{chamado.cr2cd_titulo ?? "-"}</td>
 
                                     <td>{categoria}</td>
+
+                                    <td>
+                                        {chamado.cr2cd_datadeabertura
+                                            ? new Date(chamado.cr2cd_datadeabertura).toLocaleDateString("pt-BR")
+                                            : "-"}
+                                    </td>
                                     <td>{prioridade}</td>
+
 
                                     <td>
                                         <span
@@ -228,7 +236,7 @@ function ChamadosTable({
 
                         {chamadosFiltrados.length === 0 && (
                             <tr>
-                                <td colSpan={6} className="tabela-vazia">
+                                <td colSpan={7} className="tabela-vazia">
                                     {carregando ? "Carregando chamados..." : "Nenhum chamado encontrado."}
                                 </td>
                             </tr>

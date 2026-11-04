@@ -183,7 +183,7 @@ export async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: Filt
 
     const paginas = pdf.getPages();
     paginas.forEach((item, indice) => {
-        item.drawText("Caze - Service Desk", { x: margem, y: 26, size: 8, font: fonte, color: cinza });
+        item.drawText("Case - Service Desk", { x: margem, y: 26, size: 8, font: fonte, color: cinza });
         const numero = "Página " + (indice + 1) + " de " + paginas.length;
         item.drawText(numero, { x: 802 - fonte.widthOfTextAtSize(numero, 8), y: 26, size: 8, font: fonte, color: cinza });
     });

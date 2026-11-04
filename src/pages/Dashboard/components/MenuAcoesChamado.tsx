@@ -77,15 +77,50 @@ export default function MenuAcoesChamado({ chamado, visualizar, editar, excluir 
                 role="group"
                 aria-label="Ações do chamado"
             >
-                <button type="button" onClick={() => executar(visualizar)}>Visualizar</button>
-                <button type="button" onClick={() => executar(editar)}>Editar</button>
+                <button type="button" onClick={() => executar(visualizar)}>
+                    <svg
+                        width="18" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" strokeWidth="1.8"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    Visualizar
+                </button>
+
+                <button type="button" onClick={() => executar(editar)}>
+                    <svg
+                        width="18" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" strokeWidth="1.8"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="m16 3 5 5M4 20l4-1L21 6a2.1 2.1 0 0 0-3-3L5 16l-1 4Z" />
+                    </svg>
+                    Editar
+                </button>
+
                 <button
                     type="button"
                     className="menu-acao-excluir"
                     disabled={!permiteExcluir}
-                    title={permiteExcluir ? "Excluir chamado" : "Somente chamados abertos podem ser excluídos."}
+                    title={
+                        permiteExcluir
+                            ? "Excluir chamado"
+                            : "Somente chamados abertos podem ser excluídos."
+                    }
                     onClick={() => executar(excluir)}
                 >
+                    <svg
+                        width="18" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" strokeWidth="1.8"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6" />
+                    </svg>
                     Excluir
                 </button>
             </div>

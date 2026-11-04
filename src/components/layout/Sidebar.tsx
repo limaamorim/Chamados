@@ -37,7 +37,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
             <div className="sidebar-cabecalho">
                 {menuAberto && (
                     <div>
-                        <h2>Caze</h2>
+                        <h2>Case</h2>
                         <span>Service Desk</span>
                     </div>
                 )}

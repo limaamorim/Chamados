@@ -17,6 +17,7 @@ const coresStatus: Record<string, string> = {
 
 export default function GraficoChamados({ titulo, grupos, variante = "categoria" }: Props) {
     const tituloId = useId();
+    
     const maior = Math.max(1, ...grupos.map((grupo) => grupo.total));
     const total = grupos.reduce((soma, grupo) => soma + grupo.total, 0);
 

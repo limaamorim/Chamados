@@ -71,8 +71,17 @@ export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
             {!erro && (!carregando || chamados.length > 0) && (
                 <>
                     <div className="dashboard-graficos">
-                        <GraficoChamados titulo="Chamados por Categoria" grupos={porCategoria} />
-                        <GraficoChamados titulo="Chamados por Status" grupos={porStatus} variante="status" />
+                        <GraficoChamados
+                            titulo="Chamados por Categoria"
+                            grupos={porCategoria}
+                            variante="categoria"
+                        />
+
+                        <GraficoChamados
+                            titulo="Chamados por Status"
+                            grupos={porStatus}
+                            variante="status"
+                        />
                     </div>
                     <section aria-labelledby="ultimos-chamados-titulo">
                         <div className="dashboard-secao-topo">

@@ -1,10 +1,12 @@
 .sidebar {
+    box-sizing: border-box;
     width: 270px;
     min-width: 270px;
     min-height: 100vh;
     padding: 28px 20px;
-    background-color: #061d36;
+    background-color: #0f172e;
     color: white;
+
     transition:
         width 0.25s ease,
         min-width 0.25s ease;
@@ -23,22 +25,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
 }
 
 .sidebar-cabecalho h2 {
+    margin: 0;
     font-size: 26px;
 }
 
 .sidebar-cabecalho span {
     display: block;
     margin-top: 3px;
-    color: #b9c8d9;
+    color: #b8c1d6;
     font-size: 13px;
 }
 
 .botao-recolher {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
     width: 40px;
     height: 40px;
+    padding: 0;
     border: none;
     border-radius: 8px;
     background-color: transparent;
@@ -48,7 +58,7 @@
 }
 
 .botao-recolher:hover {
-    background-color: #143b62;
+    background-color: #202b46;
 }
 
 .menu {
@@ -58,20 +68,22 @@
 }
 
 .menu-item {
+    box-sizing: border-box;
     width: 100%;
-    height: 54px;
-    padding: 0 16px;
+    min-height: 54px;
+    padding: 12px;
 
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 
     border: none;
     border-radius: 10px;
     background-color: transparent;
-    color: #dce7f2;
+    color: #eef0f7;
 
-    font-size: 15px;
+    font-family: inherit;
+    font-size: 14px;
     text-align: left;
     cursor: pointer;
 
@@ -81,29 +93,48 @@
 }
 
 .menu-item:hover {
-    background-color: #143b62;
+    background-color: #202b46;
     color: white;
 }
 
-.menu-item-ativo {
-    background-color: #087ed8;
-    color: white;
-}
-
+/* Página selecionada: fundo roxo. */
+.menu-item-ativo,
 .menu-item-ativo:hover {
-    background-color: #087ed8;
+    background: linear-gradient(110deg, #7734d4, #5925bd);
+    color: white;
+    font-weight: 600;
 }
 
+/* Espaço reservado para o ícone. */
 .menu-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
     width: 24px;
-    font-size: 21px;
-    text-align: center;
+    height: 24px;
+}
+
+/* Aparência dos SVGs colocados no Sidebar.tsx. */
+.menu-icone svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .menu-texto {
-    white-space: nowrap;
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.4;
 }
 
+/* Menu recolhido. */
 .sidebar-fechada .sidebar-cabecalho {
     padding: 0;
     justify-content: center;
@@ -112,4 +143,11 @@
 .sidebar-fechada .menu-item {
     padding: 0;
     justify-content: center;
+}
+
+/* Destaque para navegação pelo teclado. */
+.botao-recolher:focus-visible,
+.menu-item:focus-visible {
+    outline: 2px solid #c4b5fd;
+    outline-offset: 3px;
 }

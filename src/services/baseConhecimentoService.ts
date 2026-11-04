@@ -1,5 +1,5 @@
-import { BaseConhecimentoService } from "../generated/services/BaseConhecimentoService";
-import type { BaseConhecimentoRead } from "../generated/models/BaseConhecimentoModel";
+import { BaseConhecimento_1Service } from "../generated/services/BaseConhecimento_Service";
+import type { BaseConhecimento_1Read } from "../generated/models/BaseConhecimento_Model";
 import type { Artigo } from "../data/baseConhecimento";
 
 // O SharePoint pode devolver Conteudo como texto simples ou texto com formatação.
@@ -10,7 +10,7 @@ function obterParagrafos(conteudo: string) {
     return (documento.body.textContent ?? "").split(/\r?\n/).map((texto) => texto.trim()).filter(Boolean);
 }
 
-function converterArtigo(item: BaseConhecimentoRead): Artigo {
+function converterArtigo(item: BaseConhecimento_1Read): Artigo {
     const conteudo = obterParagrafos(item.Conteudo ?? "");
     return {
         id: item.ID!,
@@ -24,7 +24,7 @@ function converterArtigo(item: BaseConhecimentoRead): Artigo {
 }
 
 export async function listarArtigos(): Promise<Artigo[]> {
-    const resultado = await BaseConhecimentoService.getAll();
+    const resultado = await BaseConhecimento_1Service.getAll();
     if (!resultado.success || !resultado.data) {
         throw new Error(resultado.error?.message ?? "Não foi possível carregar os artigos.");
     }

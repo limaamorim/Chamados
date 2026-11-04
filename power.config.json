@@ -34,13 +34,17 @@
       "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
       "displayName": "SharePoint",
       "dataSources": [
-        "baseconhecimento"
+        "baseconhecimento",
+        "baseconhecimento_1"
       ],
       "dataSets": {
         "https://devgbsn.sharepoint.com": {
           "dataSources": {
             "baseconhecimento": {
               "tableName": "4ff14333-ea34-405e-aae1-a3350976d547"
+            },
+            "baseconhecimento_1": {
+              "tableName": "ae908a1a-d97e-46e8-82ea-dea51aebc537"
             }
           }
         }

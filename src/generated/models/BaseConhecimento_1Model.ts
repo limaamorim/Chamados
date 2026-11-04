@@ -29,9 +29,10 @@ export interface EditorValue {
   JobTitle: string;
 }
 
-export interface BaseConhecimentoBase {
+export interface BaseConhecimento_1Base {
   ID?: number;
   Title?: string;
+  Descricao?: string;
   "Categoria#Id"?: number;
   Conteudo?: string;
   Minutos?: number;
@@ -69,13 +70,13 @@ export interface BaseConhecimentoBase {
   "{TriggerWindowEndToken}"?: string;
 }
 
-export interface BaseConhecimentoRead extends BaseConhecimentoBase {
+export interface BaseConhecimento_1Read extends BaseConhecimento_1Base {
   Categoria?: CategoriaValue;
   Author?: AuthorValue;
   Editor?: EditorValue;
 }
 
-export interface BaseConhecimentoWrite extends BaseConhecimentoBase {
+export interface BaseConhecimento_1Write extends BaseConhecimento_1Base {
   Categoria?: string;
   Author?: AuthorValue;
   Editor?: EditorValue;

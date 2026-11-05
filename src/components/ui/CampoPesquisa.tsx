@@ -1,3 +1,4 @@
+// Exibe um campo de pesquisa cujo valor e alterações são controlados pela página.
 import "./CampoPesquisa.css";
 
 type CampoPesquisaProps = {
@@ -15,6 +16,7 @@ function CampoPesquisa({
         <div className="campo-pesquisa">
             <span aria-hidden="true">⌕</span>
 
+            {/* value mostra o estado recebido; onChange devolve o texto digitado para o componente pai. */}
             <input
                 type="search"
                 aria-label={placeholder}

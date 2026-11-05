@@ -1,3 +1,4 @@
+// Controla a janela modal nativa, seu fechamento e a área de ações.
 import { useEffect, useId, useRef } from "react";
 import type { ReactNode } from "react";
 import "./Modal.css";
@@ -20,9 +21,11 @@ export default function Modal({
     children,
     acoes,
 }: ModalProps) {
+    // A ref dá acesso ao dialog real do navegador; useId cria um identificador único para seu título.
     const dialogRef = useRef<HTMLDialogElement>(null);
     const tituloId = useId();
 
+    // Ao montar, abre o dialog; a função retornada o fecha quando o componente sai da tela. O array vazio indica que não depende de valores variáveis.
     useEffect(() => {
         const dialog = dialogRef.current;
         dialog?.showModal();

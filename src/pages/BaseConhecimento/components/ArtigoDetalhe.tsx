@@ -1,3 +1,4 @@
+// Apresenta o conteúdo completo do artigo e as ações de voltar ou criar chamado.
 import type { Artigo } from "../../../types/baseConhecimento";
 import Button from "../../../components/ui/Button";
 import "./ArtigoDetalhe.css";
@@ -24,6 +25,7 @@ export default function ArtigoDetalhe({
             <p className="base-artigo-descricao">{artigo.descricao}</p>
             <div className="base-passo-a-passo">
                 <h3>Como resolver</h3>
+                {/* Cada parágrafo do conteúdo vira um passo da lista por meio do map abaixo. */}
                 <ol>
                     {artigo.conteudo.map((passo, indice) => (
                         <li key={indice}>{passo}</li>

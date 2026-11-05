@@ -1,3 +1,4 @@
+// Exibe um indicador com título, quantidade, ícone e cor.
 import type { ReactNode } from "react";
 import "./KpiCard.css";
 

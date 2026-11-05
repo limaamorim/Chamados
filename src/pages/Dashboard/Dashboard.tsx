@@ -1,3 +1,4 @@
+// Transforma a lista compartilhada em indicadores, gráficos e chamados recentes.
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
 import KpiCard from "./components/KpiCard";
@@ -21,9 +22,11 @@ type DashboardProps = {
 
 export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
     const { chamados, carregando, erro, mensagem, aviso, recarregar } = dados;
+    // filter mantém apenas os registros de cada status; length fornece a quantidade exibida nos indicadores.
     const abertos = chamados.filter((chamado) => chamado.cr2cd_status === STATUS_ABERTO).length;
     const emAndamento = chamados.filter((chamado) => chamado.cr2cd_status === 997180001).length;
     const resolvidos = chamados.filter((chamado) => chamado.cr2cd_status === 997180002).length;
+    // Os agrupamentos produzem nome e quantidade para os gráficos; a lista recente separa os cinco últimos registros.
     const porCategoria = agruparChamados(chamados, "cr2cd_categoria", Cr2cd_chamadoscr2cd_categoria);
     const porStatus = agruparChamados(chamados, "cr2cd_status", Cr2cd_chamadoscr2cd_status);
     const ultimosChamados = obterUltimosChamados(chamados);

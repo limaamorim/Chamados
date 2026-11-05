@@ -1,3 +1,4 @@
+// Monta o PDF com os chamados filtrados e inicia o download pelo navegador.
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import type { PDFFont } from "pdf-lib";
 import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
@@ -72,6 +73,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
     const cinza = rgb(0.4, 0.46, 0.54);
     const claro = rgb(0.95, 0.97, 0.99);
     const borda = rgb(0.86, 0.9, 0.93);
+    // Cada largura corresponde a uma coluna. y guarda a posição vertical e diminui à medida que o conteúdo é desenhado.
     const larguras = [72, 276, 98, 76, 115, 125];
     const titulos = ["Número", "Título", "Categoria", "Prioridade", "Status", "Cadastro"];
     const margem = 40;
@@ -93,6 +95,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
         y = 486;
     }
 
+    // Adiciona uma folha e repete o cabeçalho para continuar o conteúdo sem ultrapassar o espaço disponível.
     function novaPagina() {
         pagina = pdf.addPage([842, 595]);
         cabecalho();
@@ -161,6 +164,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             obterStatus(chamado),
             dataCadastro(chamado.createdon),
         ];
+        // map quebra o texto de cada célula; a maior quantidade de linhas determina a altura necessária para o registro.
         const celulas = valores.map((valor, indice) => quebrarLinhas(valor, larguras[indice] - 16, fonte, 9));
         const numeroLinhas = Math.max(...celulas.map((linhas) => linhas.length));
         let deslocamento = 0;
@@ -184,6 +188,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
         }
     }
 
+    // Depois de montar o conteúdo, percorre todas as folhas para escrever o número da página e o total.
     const paginas = pdf.getPages();
     paginas.forEach((item, indice) => {
         item.drawText("Case - Service Desk", { x: margem, y: 26, size: 8, font: fonte, color: cinza });
@@ -193,6 +198,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
     return pdf.save();
 }
 
+// Transforma os bytes do PDF em um arquivo temporário e usa um link para disparar o download.
 export async function baixarRelatorioChamados(chamados: Cr2cd_chamados[], filtros: FiltrosChamados) {
     const bytes = await criarPdfChamados(chamados, filtros);
     const blob = new Blob([new Uint8Array(bytes).buffer], { type: "application/pdf" });
@@ -208,6 +214,7 @@ export async function baixarRelatorioChamados(chamados: Cr2cd_chamados[], filtro
     document.body.appendChild(link);
     try { link.click(); } finally {
         link.remove();
+        // Libera a URL temporária após iniciar o download, evitando manter o arquivo na memória.
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 }

@@ -1,3 +1,4 @@
+// Compartilha opções, nomes, validações e valores iniciais dos formulários de chamados.
 import {
     Cr2cd_chamadoscr2cd_categoria,
     Cr2cd_chamadoscr2cd_prioridade,
@@ -10,6 +11,7 @@ export const STATUS_ABERTO = 997180000;
 const CATEGORIA_PADRAO: Cr2cd_chamadoscr2cd_categoria = 997180000;
 const PRIORIDADE_PADRAO: Cr2cd_chamadoscr2cd_prioridade = 997180000;
 
+// Este tipo descreve os valores do formulário; os nomes das colunas do Dataverse ficam no service.
 export type DadosChamado = { // Objeto com esses 4 campos
     titulo: string;
     descricao: string;
@@ -32,6 +34,7 @@ export const prioridadesChamado = Object.entries(
     nome,
 }));
 
+// As funções obter convertem códigos numéricos em nomes e usam um traço quando o valor não está disponível.
 export function obterCategoria(
     chamado: Pick<Cr2cd_chamados, "cr2cd_categoria">
 ) {

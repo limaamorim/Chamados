@@ -1,8 +1,10 @@
+// Reúne os campos compartilhados pelos formulários de criação e edição.
 import { useId } from "react";
 import { categoriasChamado, prioridadesChamado } from "../../utils/chamados";
 import type { DadosChamado } from "../../utils/chamados";
 import "./ChamadoCampos.css";
 
+// O pai fornece os dados e a função alterar; os campos não mantêm outro rascunho próprio.
 type ChamadoCamposProps = {
     dados: DadosChamado;
     alterar: (dados: DadosChamado) => void;
@@ -21,6 +23,7 @@ export default function ChamadoCampos({
             <legend className="somente-leitor">Dados do chamado</legend>
             <div className="chamado-campo chamado-campo-completo">
                 <label htmlFor={`${id}-titulo`}>Título</label>
+                {/* O spread ...dados preserva os outros campos; alterar devolve ao pai uma cópia com o novo título. */}
                 <input
                     id={`${id}-titulo`}
                     value={dados.titulo}
@@ -44,6 +47,7 @@ export default function ChamadoCampos({
                         })
                     }
                 >
+                    {/* map cria uma opção por categoria; o select devolve texto, convertido para número no onChange. */}
                     {categoriasChamado.map(({ codigo, nome }) => (
                         <option key={codigo} value={codigo}>
                             {nome}

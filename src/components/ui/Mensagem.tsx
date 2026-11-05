@@ -1,3 +1,4 @@
+// Apresenta mensagens de sucesso, erro ou aviso em páginas e modais.
 import type { ReactNode } from "react";
 
 type MensagemProps = {

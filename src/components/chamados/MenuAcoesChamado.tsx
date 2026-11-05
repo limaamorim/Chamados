@@ -1,3 +1,4 @@
+// Apresenta as ações de um chamado e posiciona o menu sobre a tabela.
 import { useEffect, useId, useRef } from "react";
 import type { MouseEvent } from "react";
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export default function MenuAcoesChamado({ chamado, visualizar, editar, excluir }: Props) {
+    // As refs acessam menu e botão no navegador; a regra de exclusão define se a ação fica habilitada.
     const menuId = useId();
     const menuRef = useRef<HTMLDivElement>(null);
     const botaoRef = useRef<HTMLButtonElement>(null);
@@ -31,6 +33,7 @@ export default function MenuAcoesChamado({ chamado, visualizar, editar, excluir 
         };
     }, []);
 
+    // Calcula a posição perto do botão, respeitando as bordas da janela para o menu continuar visível.
     function posicionar(evento: MouseEvent<HTMLButtonElement>) {
         const menu = menuRef.current;
         if (!menu) return;

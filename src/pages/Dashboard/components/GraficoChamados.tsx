@@ -1,7 +1,9 @@
+// Desenha gráficos de colunas e rosca a partir das contagens recebidas.
 import { useId } from "react";
 import type { GrupoChamados } from "../../../utils/resumoChamados";
 import "./GraficoChamados.css";
 
+// Recebe grupos já contados; a variante escolhe entre categorias em colunas e status em rosca.
 type Props = {
     titulo: string;
     grupos: GrupoChamados[];
@@ -42,6 +44,7 @@ export default function GraficoChamados({
         0
     );
 
+    // Converte uma contagem em parte do total e evita dividir por zero quando a lista está vazia.
     function porcentagem(quantidade: number) {
         return total === 0 ? 0 : (quantidade / total) * 100;
     }

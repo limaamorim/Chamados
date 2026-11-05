@@ -1,3 +1,4 @@
+// Valida datas e combina os critérios de pesquisa da lista de chamados.
 import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 
 export type FiltrosChamados = {
@@ -8,6 +9,7 @@ export type FiltrosChamados = {
     dataFinal: string;
 };
 
+// Converte AAAA-MM-DD para meia-noite local e confere se a data existe no calendário.
 function dataLocal(valor: string) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return null;
     const data = new Date(valor + "T00:00:00");
@@ -16,6 +18,7 @@ function dataLocal(valor: string) {
         && data.getMonth() + 1 === mes && data.getDate() === dia ? data : null;
 }
 
+// Devolve uma mensagem para datas inválidas ou fora de ordem; texto vazio significa período válido.
 export function validarPeriodoDatas(inicio: string, fim: string) {
     if ((inicio && !dataLocal(inicio)) || (fim && !dataLocal(fim))) {
         return "Informe datas válidas.";
@@ -31,9 +34,11 @@ export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
     if (validarPeriodoDatas(filtros.dataInicial, filtros.dataFinal)) return [];
     const inicio = filtros.dataInicial ? dataLocal(filtros.dataInicial)!.getTime() : null;
     const fim = filtros.dataFinal ? dataLocal(filtros.dataFinal)! : null;
+    // Usa o começo do dia seguinte como limite exclusivo, incluindo todas as horas da data final.
     if (fim) fim.setDate(fim.getDate() + 1);
     const limiteFinal = fim?.getTime() ?? null;
 
+    // filter preserva apenas os chamados que atendem a todos os critérios; a pesquisa compara títulos sem diferenciar maiúsculas.
     return chamados.filter((chamado) => {
         const correspondePesquisa = (chamado.cr2cd_titulo ?? "")
             .toLowerCase().includes(filtros.pesquisa.toLowerCase());
@@ -43,6 +48,7 @@ export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             || chamado.cr2cd_prioridade === Number(filtros.prioridade);
         if (!correspondePesquisa || !correspondeStatus || !correspondePrioridade) return false;
         if (inicio === null && limiteFinal === null) return true;
+        // O período é comparado com createdon, a data de cadastro, e não com a data de abertura mostrada na coluna.
         const cadastro = Date.parse(chamado.createdon ?? "");
         return !Number.isNaN(cadastro)
             && (inicio === null || cadastro >= inicio)

@@ -1,3 +1,4 @@
+// Exibe chamados com pesquisa, filtros, paginação, ações e exportação em PDF.
 import { useId, useMemo, useRef, useState } from "react";
 import { filtrarChamados, validarPeriodoDatas } from "../../utils/filtrosChamados";
 import Mensagem from "../ui/Mensagem";
@@ -15,6 +16,7 @@ import MenuAcoesChamado from "./MenuAcoesChamado";
 
 import "./ChamadosTable.css";
 
+// Descreve as funções que o App fornece para abrir os modais com o chamado escolhido.
 export type AcoesChamados = {
     visualizarChamado: (chamado: Cr2cd_chamados) => void;
     editarChamado: (chamado: Cr2cd_chamados) => void;
@@ -44,12 +46,14 @@ function ChamadosTable({
     // Estado local da pesquisa: funciona como uma variável de contexto desta interface.
     const [pesquisa, setPesquisa] = useState("");
 
+    // As seleções guardam os filtros; os booleanos controlam somente a abertura de suas caixas de opções.
     const [statusSelecionado, setStatusSelecionado] = useState("todos");
     const [filtroAberto, setFiltroAberto] = useState(false);
     const [prioridadeSelecionada, setPrioridadeSelecionada] = useState("todos");
     const [filtroPrioridadeAberto, setFiltroPrioridadeAberto] = useState(false);
 
     const idFiltros = useId();
+    // As datas limitam a consulta local; os estados do relatório permitem mostrar processamento e falhas.
     const [dataInicial, setDataInicial] = useState("");
     const [dataFinal, setDataFinal] = useState("");
     const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
@@ -63,6 +67,7 @@ function ChamadosTable({
         () => filtrarChamados(chamados, { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal }),
         [chamados, pesquisa, statusSelecionado, prioridadeSelecionada, dataInicial, dataFinal]
     );
+    // A página começa em 1 e cada página exibe 20 itens inicialmente. Mudar filtros volta à primeira página.
     const [pagina, setPagina] = useState(1);
     const [itensPorPagina, setItensPorPagina] = useState(20);
     const totalFiltrado = chamadosFiltrados.length;
@@ -70,6 +75,7 @@ function ChamadosTable({
     // Evita uma página vazia quando registros são excluídos ou recarregados.
     const paginaAtual = Math.min(pagina, totalPaginas);
     const inicio = (paginaAtual - 1) * itensPorPagina;
+    // slice separa apenas os registros da página atual, sem modificar a lista filtrada.
     const chamadosVisiveis = paginacao
         ? chamadosFiltrados.slice(inicio, inicio + itensPorPagina)
         : chamadosFiltrados;
@@ -90,6 +96,7 @@ function ChamadosTable({
         paginas.push(totalPaginas);
     }
 
+    // Bloqueia exportações simultâneas e envia ao PDF todos os resultados filtrados, não apenas a página visível.
     async function gerarRelatorio() {
         if (exportando.current || carregando || erroCarregamento || erroPeriodo) return;
         exportando.current = true;
@@ -229,6 +236,7 @@ function ChamadosTable({
                         <Button
                             variante="secundario"
                             onClick={() => {
+                                // Limpa todos os critérios e retorna a listagem à primeira página.
                                 setPesquisa("");
                                 setStatusSelecionado("todos");
                                 setPrioridadeSelecionada("todos");
@@ -275,6 +283,7 @@ function ChamadosTable({
                     </thead>
 
                     <tbody>
+                        {/* Cada registro visível vira uma linha. O ID usado em key permite ao React identificar qual linha mudou. */}
                         {chamadosVisiveis.map((chamado) => {
                             const status = obterStatus(chamado);
                             const categoria = obterCategoria(chamado);

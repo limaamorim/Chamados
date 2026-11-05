@@ -1,3 +1,4 @@
+// Monta o formulário de criação e entrega o resultado ao App após salvar.
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
 import Modal from "../ui/Modal";
@@ -14,10 +15,12 @@ type Props = {
 
 // Formulário compartilhado de criação; o App controla sua abertura e fechamento.
 export default function NovoChamadoModal({ fechar, aoCriar }: Props) {
+    // useState cria o rascunho uma vez; o hook separado controla a gravação e seus erros.
     const [dados, setDados] = useState(criarDadosFormulario);
     const { salvar, salvando, erro } = useCriarChamado();
     const formId = useId();
 
+    // Evita o envio padrão do HTML, aguarda a gravação e avisa o App somente se o registro foi criado.
     async function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
         const resultado = await salvar(dados);

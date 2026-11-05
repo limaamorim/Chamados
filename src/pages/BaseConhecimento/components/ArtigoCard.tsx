@@ -1,3 +1,4 @@
+// Mostra o resumo de um artigo e avisa a página quando ele é selecionado.
 import type { Artigo } from "../../../types/baseConhecimento";
 import "./ArtigoCard.css";
 
@@ -13,6 +14,7 @@ function ArtigoCard({ artigo, aoAbrir }: ArtigoCardProps) {
             className="artigo-card"
             onClick={() => aoAbrir(artigo)}
         >
+            {/* O nome da categoria é normalizado para formar a classe CSS que escolhe a aparência do ícone. */}
             <div
                 className={`artigo-icone categoria-${artigo.categoria
                     .toLowerCase()

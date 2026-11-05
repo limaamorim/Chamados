@@ -1,3 +1,4 @@
+// Exibe o relatório Power BI incorporado dentro da estrutura comum de página.
 import Pagina from "../../components/layout/Pagina";
 import "./Relatorio.css";
 

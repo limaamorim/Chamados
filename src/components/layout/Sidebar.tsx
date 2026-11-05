@@ -1,3 +1,4 @@
+// Exibe o menu lateral e comunica ao App qual página foi escolhida.
 import { useState } from "react";
 import "./Sidebar.css";
 
@@ -7,6 +8,7 @@ type SidebarProps = {
 };
 
 function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
+    // O estado define se o menu mostra os textos ou fica recolhido com os ícones.
     const [menuAberto, setMenuAberto] = useState(true);
 
     const itensMenu = [
@@ -72,6 +74,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
             </div>
 
             <nav className="menu">
+                {/* map transforma cada opção do menu em um botão; o clique devolve seu identificador ao App. */}
                 {itensMenu.map((item) => (
                     <button
                         key={item.id}

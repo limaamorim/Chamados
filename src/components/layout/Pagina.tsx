@@ -1,3 +1,4 @@
+// Padroniza cabeçalho, mensagens e conteúdo das páginas.
 import type { ReactNode } from "react";
 import Header from "./Header";
 import Mensagem from "../ui/Mensagem";
@@ -29,6 +30,7 @@ export default function Pagina({
             <Mensagem>{mensagem}</Mensagem>
             <Mensagem tipo="erro">{erro}</Mensagem>
             <Mensagem tipo="aviso">{aviso}</Mensagem>
+            {/* children é o conteúdo enviado pela página entre as tags de Pagina. */}
             {children}
         </section>
     );

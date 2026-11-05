@@ -1,3 +1,4 @@
+// Monta os botões de categoria e destaca a opção selecionada na página.
 import "./CategoriasCard.css";
 
 type Categoria = {
@@ -26,6 +27,7 @@ function CategoriasCard({
             </div>
 
             <div className="base-categorias">
+                {/* A categoria atual vem da página; o clique comunica a nova escolha sem manter uma seleção duplicada aqui. */}
                 {categorias.map((categoria) => (
                     <button
                         type="button"

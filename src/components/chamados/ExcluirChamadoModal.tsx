@@ -1,3 +1,4 @@
+// Pede confirmação antes de executar a exclusão recebida pelas props.
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import Modal from "../ui/Modal";
 import Button from "../ui/Button";
@@ -19,6 +20,7 @@ export default function ExcluirChamadoModal({
     fechar,
     confirmar,
 }: Props) {
+    // Espera a confirmação da operação e mantém o modal aberto se ela falhar.
     async function excluir() {
         if (await confirmar()) fechar();
     }

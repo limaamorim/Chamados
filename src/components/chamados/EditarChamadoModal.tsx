@@ -1,3 +1,4 @@
+// Mantém o rascunho de edição e envia as alterações pela função recebida.
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
@@ -27,6 +28,7 @@ export default function EditarChamadoModal({
     // O rascunho fica no modal; as páginas não precisam conhecer cada campo da edição.
     const [dados, setDados] = useState(() => criarDadosFormulario(chamado));
     const formId = useId();
+    // A função salvar vem do App; o modal fecha apenas quando ela confirma o sucesso.
     async function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
         if (await salvar(dados)) fechar();

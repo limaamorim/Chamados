@@ -1,3 +1,4 @@
+// Agrupa e ordena os chamados para os indicadores e gráficos do Dashboard.
 import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 
 export type GrupoChamados = { nome: string; total: number };
@@ -8,6 +9,7 @@ export function agruparChamados(
     campo: "cr2cd_categoria" | "cr2cd_status",
     opcoes: Record<number, string>,
 ): GrupoChamados[] {
+    // Cria uma contagem inicial zero para cada opção; o Map permite encontrar e somar um grupo pelo código.
     const grupos = new Map<string, GrupoChamados>(
         Object.entries(opcoes).map(([codigo, nome]) => [codigo, { nome, total: 0 }]),
     );
@@ -32,6 +34,7 @@ export function ordenarChamadosRecentes(chamados: Cr2cd_chamados[]) {
     return [...chamados].sort((a, b) => dataCadastro(b) - dataCadastro(a));
 }
 
+// slice limita a cópia ordenada aos cinco registros mais recentes.
 export function obterUltimosChamados(chamados: Cr2cd_chamados[]) {
     return ordenarChamadosRecentes(chamados).slice(0, 5);
 }

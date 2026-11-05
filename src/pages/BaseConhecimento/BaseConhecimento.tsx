@@ -1,3 +1,4 @@
+// Carrega artigos do SharePoint e controla pesquisa, categoria e artigo aberto.
 import { useEffect, useMemo, useState } from "react";
 import ArtigoCard from "./components/ArtigoCard";
 import type { Artigo } from "../../types/baseConhecimento";
@@ -16,10 +17,12 @@ type BaseConhecimentoProps = {
 export default function BaseConhecimento({
     abrirNovoChamado,
 }: BaseConhecimentoProps) {
+    // Guarda os artigos recebidos e os estados de carregamento e erro usados na página.
     const [artigos, setArtigos] = useState<Artigo[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
 
+    // Consulta o SharePoint ao montar; a variável ativo faz a resposta ser ignorada se a página já tiver sido fechada.
     useEffect(() => {
         let ativo = true;
         listarArtigos()
@@ -35,6 +38,7 @@ export default function BaseConhecimento({
         return () => { ativo = false; };
     }, []);
 
+    // Set elimina categorias repetidas; map transforma os nomes únicos nas opções mostradas pelos botões.
     const categorias = [
         { nome: "Todos", icone: "▦" },
         ...Array.from(new Set(artigos.map((artigo) => artigo.categoria)))

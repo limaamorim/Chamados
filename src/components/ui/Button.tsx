@@ -1,6 +1,8 @@
+// Oferece um botão reutilizável com as variantes visuais do aplicativo.
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import "./Button.css";
 
+// O tipo inclui as props nativas de button, como onClick e disabled, além das opções visuais.
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     variante?: "principal" | "secundario" | "perigo";
     icone?: ReactNode;

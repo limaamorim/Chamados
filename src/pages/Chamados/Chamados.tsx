@@ -1,3 +1,4 @@
+// Monta a página de listagem com a tabela compartilhada e o acesso à criação.
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
 import ChamadosTable from "../../components/chamados/ChamadosTable";

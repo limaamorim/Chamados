@@ -1,13 +1,16 @@
+// Controla o envio de novos chamados e os estados de processamento e erro.
 import { useEffect, useRef, useState } from "react";
 import { criarChamado } from "../services/chamadosService";
 import type { DadosChamado } from "../utils/chamados";
 
 // A página cuida dos campos. O hook controla o processamento, os erros e as mensagens.
 export function useCriarChamado() {
+    // O estado salvando desabilita o formulário durante o envio; erro guarda o texto mostrado ao usuário.
     const [salvando, setSalvando] = useState(false);
     const [erro, setErro] = useState("");
     const ativo = useRef(false);
     const emOperacao = useRef(false);
+    // O array vazio acompanha a montagem e a saída do componente; ativo evita atualizar a tela após sua saída.
     useEffect(() => {
         ativo.current = true;
         return () => {
@@ -15,6 +18,7 @@ export function useCriarChamado() {
         };
     }, []);
 
+    // A ref bloqueia cliques repetidos enquanto a criação está pendente; finally libera uma nova tentativa.
     async function salvar(dados: DadosChamado) {
         if (emOperacao.current) return null;
         emOperacao.current = true;

@@ -1,3 +1,4 @@
+// Exibe os dados de um chamado para consulta, sem editar o registro.
 import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import {
     obterStatus,

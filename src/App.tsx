@@ -1,3 +1,4 @@
+// Coordena as páginas, os dados compartilhados e os modais do aplicativo.
 import { useState } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -17,12 +18,14 @@ type ModalAtivo =
     | { tipo: "detalhes" | "editar" | "excluir"; chamado: Cr2cd_chamados };
 
 function App() {
+    // Estes estados guardam a página exibida, o modal aberto e a versão usada para reiniciar a listagem.
     const [paginaAtiva, setPaginaAtiva] = useState("chamados");
     const [modal, setModal] = useState<ModalAtivo | null>(null);
     const [versaoLista, setVersaoLista] = useState(0);
     // Uma única lista alimenta as duas páginas, os gráficos e os indicadores.
     const dados = useChamados();
 
+    // As ações da tabela chegam aqui com o registro selecionado; erros anteriores são limpos antes de abrir o modal.
     function abrirModal(tipo: "detalhes" | "editar" | "excluir", chamado: Cr2cd_chamados) {
         dados.limparErroOperacao();
         setModal({ tipo, chamado });
@@ -45,6 +48,7 @@ function App() {
         dados.aposCriar(aviso);
     }
 
+    // Escolhe o componente da página sem recarregar o navegador e repassa dados e funções pelas props.
     function exibirPagina() {
         if (paginaAtiva === "novo") {
             return (

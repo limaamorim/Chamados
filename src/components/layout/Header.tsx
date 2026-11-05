@@ -1,3 +1,4 @@
+// Exibe o título da página, o usuário conectado e o botão de tema.
 import { useUsuario } from "../../hooks/useUsuario";
 import { useTema } from "../../hooks/useTema";
 import "./Header.css";
@@ -8,6 +9,7 @@ type HeaderProps = {
 };
 
 function Header({ titulo, descricao }: HeaderProps) {
+    // Os hooks fornecem o tema e o nome; este componente cuida apenas de como apresentá-los.
     const { tema, alternarTema } = useTema();
     const nomeUsuario = useUsuario();
     const inicial = nomeUsuario.charAt(0).toUpperCase();
@@ -29,6 +31,7 @@ function Header({ titulo, descricao }: HeaderProps) {
                     title={tema === "claro" ? "Ativar modo escuro" : "Ativar modo claro"}
                 >
                     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        {/* O ternário mostra a lua para ativar o escuro ou o sol para voltar ao claro; o SVG desenha esses ícones. */}
                         {tema === "claro" ? (
                             <path d="M20.5 13.5A8.5 8.5 0 0 1 10.5 3.5a8.5 8.5 0 1 0 10 10Z" />
                         ) : (

@@ -1,3 +1,4 @@
+// Executa consultas e gravações no Dataverse e aciona o fluxo de notificação.
 
 import { Cr2cd_chamadosService } from "../generated/services/Cr2cd_chamadosService";
 import { FLW_NotificarNovoChamadoService } from "../generated/services/FLW_NotificarNovoChamadoService";
@@ -21,6 +22,7 @@ export async function listarChamados(): Promise<Cr2cd_chamados[]> {
     let skipToken: string | undefined;
 
     do {
+        // await espera uma página do Dataverse; maxPageSize limita cada resposta, não o total da lista.
         const resultado = await Cr2cd_chamadosService.getAll({
             // O ID desempata registros com a mesma data.
             orderBy: ["createdon desc", "cr2cd_chamadoid asc"],
@@ -83,6 +85,7 @@ export async function criarChamado(dados: DadosChamado, solicitante: string) {
     }
 }
 
+// Valida o rascunho e envia somente os campos editáveis, identificando o registro pelo ID.
 export async function atualizarChamado(chamado: Cr2cd_chamados, dados: DadosChamado) {
     const erro = validarCamposChamado(dados.titulo, dados.descricao);
     if (erro) throw new Error(erro);
@@ -98,6 +101,7 @@ export async function atualizarChamado(chamado: Cr2cd_chamados, dados: DadosCham
     }
 }
 
+// Confere a regra de status antes de pedir ao serviço gerado que exclua o registro.
 export async function excluirChamado(chamado: Cr2cd_chamados) {
     if (!podeExcluirChamado(chamado)) throw new Error("Somente chamados abertos podem ser excluídos.");
 

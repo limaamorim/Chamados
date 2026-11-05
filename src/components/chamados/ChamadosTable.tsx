@@ -261,7 +261,7 @@ function ChamadosTable({
                         </Button>
                     </div>
                     <p className="filtros-data-resumo" role="status">
-                        Período por data de cadastro · {chamadosFiltrados.length} chamado(s) encontrado(s)
+                        Período por data de abertura · {chamadosFiltrados.length} chamado(s) encontrado(s)
                     </p>
                     {erroPeriodo && <p id={idFiltros + "-erro"} className="mensagem-erro" role="alert">{erroPeriodo}</p>}
                     <Mensagem tipo="erro">{erroRelatorio}</Mensagem>

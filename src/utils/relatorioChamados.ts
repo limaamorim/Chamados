@@ -11,7 +11,7 @@ function dataFiltro(valor: string) {
     return valor ? valor.split("-").reverse().join("/") : "Sem limite";
 }
 
-function dataCadastro(valor?: string) {
+function dataAbertura(valor?: string) {
     const data = new Date(valor ?? "");
     return Number.isNaN(data.getTime()) ? "-" : data.toLocaleDateString("pt-BR");
 }
@@ -75,7 +75,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
     const borda = rgb(0.86, 0.9, 0.93);
     // Cada largura corresponde a uma coluna. y guarda a posição vertical e diminui à medida que o conteúdo é desenhado.
     const larguras = [72, 276, 98, 76, 115, 125];
-    const titulos = ["Número", "Título", "Categoria", "Prioridade", "Status", "Cadastro"];
+    const titulos = ["Número", "Título", "Categoria", "Prioridade", "Status", "Data de abertura"];
     const margem = 40;
     let pagina = pdf.addPage([842, 595]);
     let y = 0;
@@ -125,7 +125,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
         ["Prioridade", prioridade],
         ["Data inicial", dataFiltro(filtros.dataInicial)],
         ["Data final", dataFiltro(filtros.dataFinal)],
-        ["Critério de data", "Data de cadastro (createdon), no horário local; limites inclusivos"],
+        ["Critério de data", "Data de abertura, no horário local; limites inclusivos"],
         ["Registros", String(chamados.length)],
     ];
     for (const [rotulo, valor] of criterios) {
@@ -162,7 +162,7 @@ async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             obterCategoria(chamado),
             obterPrioridade(chamado),
             obterStatus(chamado),
-            dataCadastro(chamado.createdon),
+            dataAbertura(chamado.cr2cd_datadeabertura),
         ];
         // map quebra o texto de cada célula; a maior quantidade de linhas determina a altura necessária para o registro.
         const celulas = valores.map((valor, indice) => quebrarLinhas(valor, larguras[indice] - 16, fonte, 9));

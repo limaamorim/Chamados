@@ -31,7 +31,7 @@ A página antes implementada em `pages/NovoChamado/NovoChamado.tsx` agora se cha
 ## Comportamentos preservados
 
 - A lista compartilhada alimenta as tabelas, os gráficos e os indicadores. O serviço percorre as páginas retornadas pelo Dataverse.
-- A listagem combina pesquisa, status, prioridade e período de **data de cadastro (`createdon`)**, antes da paginação. O PDF recebe todos os resultados filtrados e inclui os critérios no cabeçalho.
+- A listagem combina pesquisa, status, prioridade e período de **data de abertura (`cr2cd_datadeabertura`)**, a mesma exibida na tabela, antes da paginação. O PDF recebe todos os resultados filtrados e inclui os critérios no cabeçalho.
 - `Limpar filtros` limpa pesquisa, status, prioridade e datas, voltando à primeira página.
 - O formulário valida título e descrição. A edição aceita qualquer status; a exclusão permanece restrita aos chamados abertos.
 - A notificação só é acionada depois de criar o registro. Se falhar, o chamado continua criado e a interface mostra um aviso para evitar cadastro duplicado.
@@ -55,6 +55,7 @@ npm.cmd run dev
 ```powershell
 npm.cmd run build
 npm.cmd run lint
+npm.cmd test
 ```
 
 A reorganização foi verificada com build de produção (`tsc -b && vite build`), lint e revisão dos imports e do diff. Os arquivos gerados, esquemas, configurações de conexão e versões das dependências não foram alterados.
@@ -62,3 +63,5 @@ A reorganização foi verificada com build de produção (`tsc -b && vite build`
 Neste ambiente Linux, o script de instalação da dependência nativa `keytar` da CLI falhou. As dependências foram então instaladas com `npm ci --ignore-scripts --no-audit --no-fund` para executar build e lint. Isso não valida a autenticação nem a execução da CLI neste ambiente; o projeto e o lockfile não precisaram de alterações.
 
 Para validar as integrações, use o ambiente Power Apps autenticado e registros de teste autorizados: navegue pelas quatro páginas, combine e limpe filtros, alterne/reabra o tema, abra os modais, gere o PDF e confira criação, edição, exclusão e notificações. Build e lint não substituem a conferência de Dataverse, SharePoint, Power BI e entrega real de e-mail.
+
+Os testes do filtro cobrem abertura diferente do cadastro, limites inclusivos, datas inválidas ou ausentes, filtros combinados e recorte da paginação. O fuso dos testes é fixado em `America/Recife` para representar os limites de dia locais.

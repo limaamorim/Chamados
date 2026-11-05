@@ -48,10 +48,10 @@ export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             || chamado.cr2cd_prioridade === Number(filtros.prioridade);
         if (!correspondePesquisa || !correspondeStatus || !correspondePrioridade) return false;
         if (inicio === null && limiteFinal === null) return true;
-        // O período é comparado com createdon, a data de cadastro, e não com a data de abertura mostrada na coluna.
-        const cadastro = Date.parse(chamado.createdon ?? "");
-        return !Number.isNaN(cadastro)
-            && (inicio === null || cadastro >= inicio)
-            && (limiteFinal === null || cadastro < limiteFinal);
+        // Compara a mesma data de abertura exibida na tabela; registros sem data válida ficam fora do período.
+        const abertura = Date.parse(chamado.cr2cd_datadeabertura ?? "");
+        return !Number.isNaN(abertura)
+            && (inicio === null || abertura >= inicio)
+            && (limiteFinal === null || abertura < limiteFinal);
     });
 }

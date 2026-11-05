@@ -38,6 +38,7 @@
     border: 0;
     border-radius: 8px;
     background: transparent;
+    color: inherit;
     font-size: 26px;
     cursor: pointer;
 }
@@ -58,8 +59,4 @@
     gap: 12px;
     padding: 18px 24px;
     border-top: 1px solid var(--borda, #e4e7ec);
-}
-
-.modal-fechar {
-    color: inherit;
 }

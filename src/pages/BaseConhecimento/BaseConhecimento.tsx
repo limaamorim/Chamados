@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ArtigoCard from "./components/ArtigoCard";
-import type { Artigo } from "../../data/baseConhecimento";
+import type { Artigo } from "../../types/baseConhecimento";
 import Pagina from "../../components/layout/Pagina";
 import ArtigoDetalhe from "./components/ArtigoDetalhe";
 import CampoPesquisa from "../../components/ui/CampoPesquisa";

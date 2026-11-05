@@ -19,8 +19,5 @@
     border: none;
     outline: none;
     color: var(--texto, #25344d);
-}
-
-.campo-pesquisa input {
     background: transparent;
 }

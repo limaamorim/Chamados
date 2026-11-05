@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef } from "react";
 import type { MouseEvent } from "react";
-import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
-import { podeExcluirChamado } from "../../../utils/chamados";
+import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
+import { podeExcluirChamado } from "../../utils/chamados";
 import "./MenuAcoesChamado.css";
 
 type Props = {
@@ -46,7 +46,7 @@ export default function MenuAcoesChamado({ chamado, visualizar, editar, excluir 
     function executar(acao: () => void) {
         menuRef.current?.hidePopover();
         botaoRef.current?.focus();
-        // Reaproveita os modais e as operações que o Dashboard já oferece.
+        // Reaproveita os modais e as operações compartilhados pelo aplicativo.
         acao();
     }
 

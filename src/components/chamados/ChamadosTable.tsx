@@ -1,16 +1,16 @@
 import { useId, useMemo, useRef, useState } from "react";
-import { filtrarChamados, validarPeriodoDatas } from "../../../utils/filtrosChamados";
-import Mensagem from "../../../components/ui/Mensagem";
+import { filtrarChamados, validarPeriodoDatas } from "../../utils/filtrosChamados";
+import Mensagem from "../ui/Mensagem";
 import {
     obterStatus,
     obterCategoria,
     obterPrioridade,
-} from "../../../utils/chamados";
+} from "../../utils/chamados";
 
-import { Cr2cd_chamadoscr2cd_status, Cr2cd_chamadoscr2cd_prioridade } from "../../../generated/models/Cr2cd_chamadosModel";
-import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
-import CampoPesquisa from "../../../components/ui/CampoPesquisa";
-import Button from "../../../components/ui/Button";
+import { Cr2cd_chamadoscr2cd_status, Cr2cd_chamadoscr2cd_prioridade } from "../../generated/models/Cr2cd_chamadosModel";
+import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
+import CampoPesquisa from "../ui/CampoPesquisa";
+import Button from "../ui/Button";
 import MenuAcoesChamado from "./MenuAcoesChamado";
 
 import "./ChamadosTable.css";
@@ -97,7 +97,7 @@ function ChamadosTable({
         setErroRelatorio("");
         try {
             // A biblioteca do PDF só é carregada quando o usuário solicita o relatório.
-            const { baixarRelatorioChamados } = await import("../../../utils/relatorioChamados");
+            const { baixarRelatorioChamados } = await import("../../utils/relatorioChamados");
             await baixarRelatorioChamados(chamadosFiltrados, filtros);
         } catch (erro) {
             console.error("Falha ao gerar relatório:", erro);

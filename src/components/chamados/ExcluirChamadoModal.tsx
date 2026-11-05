@@ -1,7 +1,7 @@
-import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
-import Modal from "../../../components/ui/Modal";
-import Button from "../../../components/ui/Button";
-import Mensagem from "../../../components/ui/Mensagem";
+import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
+import Mensagem from "../ui/Mensagem";
 import "./ExcluirChamadoModal.css";
 
 type Props = {

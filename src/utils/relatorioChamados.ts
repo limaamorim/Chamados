@@ -56,7 +56,7 @@ function quebrarLinhas(texto: string, largura: number, fonte: PDFFont, tamanho: 
 }
 
 // Recebe a mesma lista exibida pela tabela. A geração não consulta nem altera o Dataverse.
-export async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosChamados) {
+async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: FiltrosChamados) {
     const erro = validarPeriodoDatas(filtros.dataInicial, filtros.dataFinal);
     if (erro) throw new Error(erro);
     const pdf = await PDFDocument.create();

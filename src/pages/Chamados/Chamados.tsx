@@ -1,17 +1,17 @@
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
-import ChamadosTable from "../Dashboard/components/ChamadosTable";
-import type { AcoesChamados } from "../Dashboard/components/ChamadosTable";
+import ChamadosTable from "../../components/chamados/ChamadosTable";
+import type { AcoesChamados } from "../../components/chamados/ChamadosTable";
 import type { EstadoChamados } from "../../hooks/useChamados";
 
-type NovoChamadoProps = {
+type ChamadosProps = {
     dados: EstadoChamados;
     acoes: AcoesChamados;
     abrirNovoChamado: () => void;
 };
 
 // A tabela é a mesma usada no Dashboard; o formulário só é montado dentro do modal.
-export default function NovoChamado({ dados, acoes, abrirNovoChamado }: NovoChamadoProps) {
+export default function Chamados({ dados, acoes, abrirNovoChamado }: ChamadosProps) {
     return (
         <Pagina
             titulo="Novo chamado"

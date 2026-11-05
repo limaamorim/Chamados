@@ -9,7 +9,7 @@ import {
 import { useMensagemTemporaria } from "./useMensagemTemporaria";
 import { ordenarChamadosRecentes } from "../utils/resumoChamados";
 
-// Lista compartilhada pelo Dashboard e pela página NovoChamado; os modais pertencem à interface.
+// Lista compartilhada pelo Dashboard e pela página Chamados; os modais pertencem à interface.
 export function useChamados() {
     const [chamados, setChamados] = useState<Cr2cd_chamados[]>([]);
     const [carregando, setCarregando] = useState(true);

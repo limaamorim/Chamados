@@ -1,12 +1,12 @@
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
-import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
-import type { DadosChamado } from "../../../utils/chamados";
-import { criarDadosFormulario, obterStatus } from "../../../utils/chamados";
-import Modal from "../../../components/ui/Modal";
-import Button from "../../../components/ui/Button";
-import Mensagem from "../../../components/ui/Mensagem";
-import ChamadoCampos from "../../../components/chamados/ChamadoCampos";
+import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
+import type { DadosChamado } from "../../utils/chamados";
+import { criarDadosFormulario, obterStatus } from "../../utils/chamados";
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
+import Mensagem from "../ui/Mensagem";
+import ChamadoCampos from "./ChamadoCampos";
 import "./EditarChamadoModal.css";
 
 type Props = {
@@ -24,7 +24,7 @@ export default function EditarChamadoModal({
     fechar,
     salvar,
 }: Props) {
-    // O rascunho fica no modal; o Dashboard não precisa conhecer cada campo da edição.
+    // O rascunho fica no modal; as páginas não precisam conhecer cada campo da edição.
     const [dados, setDados] = useState(() => criarDadosFormulario(chamado));
     const formId = useId();
     async function enviar(evento: FormEvent<HTMLFormElement>) {

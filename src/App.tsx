@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import NovoChamado from "./pages/NovoChamado/NovoChamado";
-import NovoChamadoModal from "./pages/NovoChamado/components/NovoChamadoModal";
+import Chamados from "./pages/Chamados/Chamados";
+import NovoChamadoModal from "./components/chamados/NovoChamadoModal";
 import BaseConhecimento from "./pages/BaseConhecimento/BaseConhecimento";
 import Relatorios from "./pages/Relatorio/Relatorio";
-import DetalhesChamadoModal from "./pages/Dashboard/components/DetalhesChamadoModal";
-import EditarChamadoModal from "./pages/Dashboard/components/EditarChamadoModal";
-import ExcluirChamadoModal from "./pages/Dashboard/components/ExcluirChamadoModal";
+import DetalhesChamadoModal from "./components/chamados/DetalhesChamadoModal";
+import EditarChamadoModal from "./components/chamados/EditarChamadoModal";
+import ExcluirChamadoModal from "./components/chamados/ExcluirChamadoModal";
 import { useChamados } from "./hooks/useChamados";
 import type { Cr2cd_chamados } from "./generated/models/Cr2cd_chamadosModel";
 import "./App.css";
@@ -48,7 +48,7 @@ function App() {
     function exibirPagina() {
         if (paginaAtiva === "novo") {
             return (
-                <NovoChamado
+                <Chamados
                     key={versaoLista}
                     dados={dados}
                     acoes={acoes}

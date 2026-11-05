@@ -1,4 +1,4 @@
-import type { Artigo } from "../../../data/baseConhecimento";
+import type { Artigo } from "../../../types/baseConhecimento";
 import Button from "../../../components/ui/Button";
 import "./ArtigoDetalhe.css";
 

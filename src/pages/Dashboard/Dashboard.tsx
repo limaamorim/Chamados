@@ -1,8 +1,8 @@
 import Pagina from "../../components/layout/Pagina";
 import Button from "../../components/ui/Button";
 import KpiCard from "./components/KpiCard";
-import ChamadosTable from "./components/ChamadosTable";
-import type { AcoesChamados } from "./components/ChamadosTable";
+import ChamadosTable from "../../components/chamados/ChamadosTable";
+import type { AcoesChamados } from "../../components/chamados/ChamadosTable";
 import GraficoChamados from "./components/GraficoChamados";
 import type { EstadoChamados } from "../../hooks/useChamados";
 import {

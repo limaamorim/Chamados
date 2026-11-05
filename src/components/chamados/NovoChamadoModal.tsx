@@ -1,18 +1,18 @@
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
-import Modal from "../../../components/ui/Modal";
-import Button from "../../../components/ui/Button";
-import Mensagem from "../../../components/ui/Mensagem";
-import ChamadoCampos from "../../../components/chamados/ChamadoCampos";
-import { useCriarChamado } from "../../../hooks/useCriarChamado";
-import { criarDadosFormulario } from "../../../utils/chamados";
+import Modal from "../ui/Modal";
+import Button from "../ui/Button";
+import Mensagem from "../ui/Mensagem";
+import ChamadoCampos from "./ChamadoCampos";
+import { useCriarChamado } from "../../hooks/useCriarChamado";
+import { criarDadosFormulario } from "../../utils/chamados";
 
 type Props = {
     fechar: () => void;
     aoCriar: (aviso: string) => void;
 };
 
-// Formulário movido da página NovoChamado, mantendo os campos e o hook existentes.
+// Formulário compartilhado de criação; o App controla sua abertura e fechamento.
 export default function NovoChamadoModal({ fechar, aoCriar }: Props) {
     const [dados, setDados] = useState(criarDadosFormulario);
     const { salvar, salvando, erro } = useCriarChamado();

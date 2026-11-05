@@ -1,6 +1,6 @@
 import { BaseConhecimento_2Service } from "../generated/services/BaseConhecimento_2Service";
 import type { BaseConhecimento_2Read } from "../generated/models/BaseConhecimento_2Model";
-import type { Artigo } from "../data/baseConhecimento";
+import type { Artigo } from "../types/baseConhecimento";
 
 // O SharePoint pode devolver Conteudo como texto simples ou texto com formatação.
 function obterParagrafos(conteudo: string) {

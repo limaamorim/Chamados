@@ -1,10 +1,10 @@
-import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
+import type { Cr2cd_chamados } from "../../generated/models/Cr2cd_chamadosModel";
 import {
     obterStatus,
     obterCategoria,
     obterPrioridade,
-} from "../../../utils/chamados";
-import Modal from "../../../components/ui/Modal";
+} from "../../utils/chamados";
+import Modal from "../ui/Modal";
 import "./DetalhesChamadoModal.css";
 
 type Props = { chamado: Cr2cd_chamados; fechar: () => void };

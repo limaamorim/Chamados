@@ -19,7 +19,6 @@
     font-size: 18px;
     color: var(--texto, #25344d);
 }
-.grafico-cabecalho > span,
 .grafico-legenda,
 .grafico-vazio {
     font-size: 13px;

@@ -7,8 +7,8 @@ import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 
 // Funções e valores compartilhados. Este arquivo não acessa o Dataverse nem usa React.
 export const STATUS_ABERTO = 997180000;
-export const CATEGORIA_PADRAO: Cr2cd_chamadoscr2cd_categoria = 997180000;
-export const PRIORIDADE_PADRAO: Cr2cd_chamadoscr2cd_prioridade = 997180000;
+const CATEGORIA_PADRAO: Cr2cd_chamadoscr2cd_categoria = 997180000;
+const PRIORIDADE_PADRAO: Cr2cd_chamadoscr2cd_prioridade = 997180000;
 
 export type DadosChamado = { // Objeto com esses 4 campos
     titulo: string;

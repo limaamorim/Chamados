@@ -42,9 +42,6 @@ export async function listarChamados(): Promise<Cr2cd_chamados[]> {
         skipToken = resultado.skipToken || undefined;
     } while (skipToken);
 
-    // Diagnóstico temporário: pode remover após conferir.
-    console.log("Total de chamados carregados:", todosChamados.length);
-
     return todosChamados;
 }
 

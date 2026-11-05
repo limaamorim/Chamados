@@ -27,7 +27,7 @@ function Sidebar({ paginaAtiva, mudarPagina }: SidebarProps) {
                     <path d="M12 5v14M5 12h14" />
                 </svg>
             ),
-            texto: "Novo chamado",
+            texto: "Chamados",
         },
         {
             id: "base",

@@ -1,6 +1,5 @@
 // Monta a página de listagem com a tabela compartilhada e o acesso à criação.
 import Pagina from "../../components/layout/Pagina";
-import Button from "../../components/ui/Button";
 import ChamadosTable from "../../components/chamados/ChamadosTable";
 import type { AcoesChamados } from "../../components/chamados/ChamadosTable";
 import type { EstadoChamados } from "../../hooks/useChamados";
@@ -18,20 +17,12 @@ export default function Chamados({ dados, acoes, abrirNovoChamado }: ChamadosPro
             titulo="Novo chamado"
             descricao="Consulte os chamados e cadastre novas solicitações."
             mensagem={dados.mensagem}
-            erro={dados.erro}
             aviso={dados.aviso}
         >
-            {dados.erro && (
-                <Button variante="secundario" onClick={dados.recarregar} disabled={dados.carregando}>
-                    Tentar carregar novamente
-                </Button>
-            )}
-            {dados.carregando && <p role="status">Atualizando chamados...</p>}
             <ChamadosTable
                 paginacao
-                chamados={dados.chamados}
-                carregando={dados.carregando}
-                erroCarregamento={!!dados.erro}
+                versao={dados.versao}
+                recarregar={dados.recarregar}
                 abrirNovoChamado={abrirNovoChamado}
                 {...acoes}
             />

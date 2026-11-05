@@ -22,7 +22,7 @@ function App() {
     const [paginaAtiva, setPaginaAtiva] = useState("chamados");
     const [modal, setModal] = useState<ModalAtivo | null>(null);
     const [versaoLista, setVersaoLista] = useState(0);
-    // Uma única lista alimenta as duas páginas, os gráficos e os indicadores.
+    // As operações são compartilhadas; cada página consulta seus próprios dados.
     const dados = useChamados();
 
     // As ações da tabela chegam aqui com o registro selecionado; erros anteriores são limpos antes de abrir o modal.

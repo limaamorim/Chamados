@@ -1,5 +1,6 @@
 // Executa consultas e gravações no Dataverse e aciona o fluxo de notificação.
 
+import { criarConsultasChamados } from "./consultasChamados";
 import { Cr2cd_chamadosService } from "../generated/services/Cr2cd_chamadosService";
 import { FLW_NotificarNovoChamadoService } from "../generated/services/FLW_NotificarNovoChamadoService";
 import type { Cr2cd_chamados, Cr2cd_chamadosBase } from "../generated/models/Cr2cd_chamadosModel";
@@ -12,40 +13,14 @@ import {
 } from "../utils/chamados";
 import type { DadosChamado } from "../utils/chamados";
 
-// As páginas chamam estas funções. Somente este arquivo conversa com os serviços gerados.
-// Não editamos generated/: seus arquivos podem ser recriados pela CLI do Power Apps.
-export async function listarChamados(): Promise<Cr2cd_chamados[]> {
-    // Acumula os chamados de todas as páginas.
-    const todosChamados: Cr2cd_chamados[] = [];
-
-    // A primeira consulta não precisa de token.
-    let skipToken: string | undefined;
-
-    do {
-        // await espera uma página do Dataverse; maxPageSize limita cada resposta, não o total da lista.
-        const resultado = await Cr2cd_chamadosService.getAll({
-            // O ID desempata registros com a mesma data.
-            orderBy: ["createdon desc", "cr2cd_chamadoid asc"],
-            maxPageSize: 500,
-            skipToken,
-        });
-
-        if (!resultado.success || !resultado.data) {
-            throw new Error(
-                resultado.error?.message ??
-                "Não foi possível carregar os chamados."
-            );
-        }
-
-        // Adiciona os registros desta página à lista.
-        todosChamados.push(...resultado.data);
-
-        // Se houver token, o laço buscará a próxima página.
-        skipToken = resultado.skipToken || undefined;
-    } while (skipToken);
-
-    return todosChamados;
-}
+// Mantém os arquivos gerados intactos; todas as otimizações ficam nesta camada do app.
+const consultas = criarConsultasChamados((opcoes) => Cr2cd_chamadosService.getAll(opcoes));
+export const consultarPaginaChamados = consultas.pagina;
+export const contarChamados = consultas.total;
+export const consultarIndicadores = consultas.indicadores;
+export const consultarRecentes = consultas.recentes;
+export const listarChamadosParaPdf = consultas.exportar;
+export const invalidarConsultasChamados = consultas.invalidar;
 
 export async function criarChamado(dados: DadosChamado, solicitante: string) {
     const erro = validarCamposChamado(dados.titulo, dados.descricao);

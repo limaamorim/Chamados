@@ -6,12 +6,7 @@ import ChamadosTable from "../../components/chamados/ChamadosTable";
 import type { AcoesChamados } from "../../components/chamados/ChamadosTable";
 import GraficoChamados from "./components/GraficoChamados";
 import type { EstadoChamados } from "../../hooks/useChamados";
-import {
-    Cr2cd_chamadoscr2cd_categoria,
-    Cr2cd_chamadoscr2cd_status,
-} from "../../generated/models/Cr2cd_chamadosModel";
-import { agruparChamados, obterUltimosChamados } from "../../utils/resumoChamados";
-import { STATUS_ABERTO } from "../../utils/chamados";
+import { useDashboard } from "../../hooks/useDashboard";
 import "./Dashboard.css";
 
 type DashboardProps = {
@@ -21,15 +16,9 @@ type DashboardProps = {
 };
 
 export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
-    const { chamados, carregando, erro, mensagem, aviso, recarregar } = dados;
-    // filter mantém apenas os registros de cada status; length fornece a quantidade exibida nos indicadores.
-    const abertos = chamados.filter((chamado) => chamado.cr2cd_status === STATUS_ABERTO).length;
-    const emAndamento = chamados.filter((chamado) => chamado.cr2cd_status === 997180001).length;
-    const resolvidos = chamados.filter((chamado) => chamado.cr2cd_status === 997180002).length;
-    // Os agrupamentos produzem nome e quantidade para os gráficos; a lista recente separa os cinco últimos registros.
-    const porCategoria = agruparChamados(chamados, "cr2cd_categoria", Cr2cd_chamadoscr2cd_categoria);
-    const porStatus = agruparChamados(chamados, "cr2cd_status", Cr2cd_chamadoscr2cd_status);
-    const ultimosChamados = obterUltimosChamados(chamados);
+    const { mensagem, aviso, recarregar } = dados;
+    const { dados: resumo, carregando, erro } = useDashboard(dados.versao);
+    const { abertos = 0, emAndamento = 0, resolvidos = 0, total = 0, porCategoria = [], porStatus = [], recentes = [] } = resumo ?? {};
 
     return (
         <Pagina
@@ -60,7 +49,7 @@ export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
                 />
                 <KpiCard
                     titulo="Total"
-                    valor={chamados.length}
+                    valor={total}
                     icone="Σ"
                     cor="roxo"
                 />
@@ -71,7 +60,7 @@ export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
                     Tentar carregar novamente
                 </Button>
             )}
-            {!erro && (!carregando || chamados.length > 0) && (
+            {!erro && (!carregando || recentes.length > 0) && (
                 <>
                     <div className="dashboard-graficos">
                         <GraficoChamados
@@ -92,7 +81,7 @@ export default function Dashboard({ dados, acoes, verTodos }: DashboardProps) {
                             <Button variante="secundario" onClick={verTodos}>Ver todos</Button>
                         </div>
                         <ChamadosTable
-                            chamados={ultimosChamados}
+                            chamados={recentes}
                             mostrarBarraAcoes={false}
                             {...acoes}
                         />

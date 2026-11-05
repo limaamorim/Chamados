@@ -55,3 +55,23 @@ export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             && (limiteFinal === null || abertura < limiteFinal);
     });
 }
+
+// Monta condições OData para o Dataverse filtrar antes de transmitir os registros.
+export function criarFiltroDataverse(filtros: FiltrosChamados) {
+    const erro = validarPeriodoDatas(filtros.dataInicial, filtros.dataFinal);
+    if (erro) throw new Error(erro);
+    const partes: string[] = [];
+    if (filtros.pesquisa) partes.push(`contains(cr2cd_titulo,'${filtros.pesquisa.replaceAll("'", "''")}')`);
+    for (const [campo, valor] of [["cr2cd_status", filtros.status], ["cr2cd_prioridade", filtros.prioridade]]) {
+        if (valor === "todos") continue;
+        if (!/^\d+$/.test(valor)) throw new Error("Filtro de chamado inválido.");
+        partes.push(`${campo} eq ${valor}`);
+    }
+    if (filtros.dataInicial) partes.push(`cr2cd_datadeabertura ge ${dataLocal(filtros.dataInicial)!.toISOString()}`);
+    if (filtros.dataFinal) {
+        const fim = dataLocal(filtros.dataFinal)!;
+        fim.setDate(fim.getDate() + 1);
+        partes.push(`cr2cd_datadeabertura lt ${fim.toISOString()}`);
+    }
+    return partes.join(" and ");
+}

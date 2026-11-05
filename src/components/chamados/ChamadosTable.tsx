@@ -1,6 +1,8 @@
 // Exibe chamados com pesquisa, filtros, paginação, ações e exportação em PDF.
 import { useId, useMemo, useRef, useState } from "react";
 import { filtrarChamados, validarPeriodoDatas } from "../../utils/filtrosChamados";
+import { usePaginaChamados } from "../../hooks/usePaginaChamados";
+import { listarChamadosParaPdf } from "../../services/chamadosService";
 import Mensagem from "../ui/Mensagem";
 import {
     obterStatus,
@@ -24,7 +26,9 @@ export type AcoesChamados = {
 };
 
 type ChamadosTableProps = AcoesChamados & {
-    chamados: Cr2cd_chamados[];
+    chamados?: Cr2cd_chamados[];
+    versao?: number;
+    recarregar?: () => void;
     carregando?: boolean;
     erroCarregamento?: boolean;
     mostrarBarraAcoes?: boolean;
@@ -33,9 +37,11 @@ type ChamadosTableProps = AcoesChamados & {
 };
 
 function ChamadosTable({
-    chamados,
-    carregando = false,
-    erroCarregamento = false,
+    chamados = [],
+    versao = 0,
+    recarregar,
+    carregando: carregandoProp = false,
+    erroCarregamento: erroCarregamentoProp = false,
     mostrarBarraAcoes = true,
     paginacao = false,
     abrirNovoChamado,
@@ -62,23 +68,22 @@ function ChamadosTable({
     const erroPeriodo = validarPeriodoDatas(dataInicial, dataFinal);
     const filtros = { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal };
 
-    // Filtra antes de paginar; o PDF continua usando todos os resultados filtrados.
+    // O Dashboard já fornece cinco registros; na listagem os filtros e a paginação são executados no Dataverse.
     const chamadosFiltrados = useMemo(
-        () => filtrarChamados(chamados, { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal }),
-        [chamados, pesquisa, statusSelecionado, prioridadeSelecionada, dataInicial, dataFinal]
+        () => paginacao ? chamados : filtrarChamados(chamados, { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal }),
+        [chamados, paginacao, pesquisa, statusSelecionado, prioridadeSelecionada, dataInicial, dataFinal]
     );
     // A página começa em 1 e cada página exibe 20 itens inicialmente. Mudar filtros volta à primeira página.
     const [pagina, setPagina] = useState(1);
     const [itensPorPagina, setItensPorPagina] = useState(20);
-    const totalFiltrado = chamadosFiltrados.length;
+    const remoto = usePaginaChamados(filtros, pagina, itensPorPagina, versao, paginacao);
+    const carregando = carregandoProp || remoto.carregando;
+    const erroCarregamento = erroCarregamentoProp || !!remoto.erro;
+    const totalFiltrado = paginacao ? remoto.dados?.total ?? 0 : chamadosFiltrados.length;
     const totalPaginas = Math.max(1, Math.ceil(totalFiltrado / itensPorPagina));
-    // Evita uma página vazia quando registros são excluídos ou recarregados.
-    const paginaAtual = Math.min(pagina, totalPaginas);
+    const paginaAtual = paginacao ? remoto.dados?.pagina ?? pagina : Math.min(pagina, totalPaginas);
     const inicio = (paginaAtual - 1) * itensPorPagina;
-    // slice separa apenas os registros da página atual, sem modificar a lista filtrada.
-    const chamadosVisiveis = paginacao
-        ? chamadosFiltrados.slice(inicio, inicio + itensPorPagina)
-        : chamadosFiltrados;
+    const chamadosVisiveis = paginacao ? remoto.dados?.chamados ?? [] : chamadosFiltrados;
 
     // Janela de até cinco páginas, mais os extremos: não cria milhares de botões.
     const primeiraPaginaVisivel = Math.max(1, Math.min(paginaAtual - 2, totalPaginas - 4));
@@ -105,7 +110,8 @@ function ChamadosTable({
         try {
             // A biblioteca do PDF só é carregada quando o usuário solicita o relatório.
             const { baixarRelatorioChamados } = await import("../../utils/relatorioChamados");
-            await baixarRelatorioChamados(chamadosFiltrados, filtros);
+            const registrosPdf = paginacao ? await listarChamadosParaPdf(filtros) : chamadosFiltrados;
+            await baixarRelatorioChamados(registrosPdf, filtros);
         } catch (erro) {
             console.error("Falha ao gerar relatório:", erro);
             setErroRelatorio("Não foi possível gerar o PDF. Tente novamente.");
@@ -117,6 +123,9 @@ function ChamadosTable({
 
     return (
         <>
+            <Mensagem tipo="erro">{remoto.erro}</Mensagem>
+            {remoto.erro && recarregar && <Button variante="secundario" onClick={recarregar} disabled={carregando}>Tentar carregar novamente</Button>}
+            {paginacao && carregando && <p role="status">Atualizando chamados...</p>}
             {mostrarBarraAcoes && <div className="barra-acoes">
                 <CampoPesquisa
                     valor={pesquisa}
@@ -261,7 +270,7 @@ function ChamadosTable({
                         </Button>
                     </div>
                     <p className="filtros-data-resumo" role="status">
-                        Período por data de abertura · {chamadosFiltrados.length} chamado(s) encontrado(s)
+                        Período por data de abertura · {totalFiltrado} chamado(s) encontrado(s)
                     </p>
                     {erroPeriodo && <p id={idFiltros + "-erro"} className="mensagem-erro" role="alert">{erroPeriodo}</p>}
                     <Mensagem tipo="erro">{erroRelatorio}</Mensagem>
@@ -329,7 +338,7 @@ function ChamadosTable({
                             );
                         })}
 
-                        {chamadosFiltrados.length === 0 && (
+                        {chamadosVisiveis.length === 0 && (
                             <tr>
                                 <td colSpan={7} className="tabela-vazia">
                                     {carregando ? "Carregando chamados..." : "Nenhum chamado encontrado."}

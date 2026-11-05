@@ -1,65 +1,30 @@
-// Centraliza a lista de chamados, as operações de edição/exclusão e seus estados.
-import { useCallback, useEffect, useRef, useState } from "react";
+// Centraliza as operações e mensagens; cada tela consulta apenas os dados de que precisa.
+import { useEffect, useRef, useState } from "react";
 import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 import type { DadosChamado } from "../utils/chamados";
 import {
-    listarChamados,
+    invalidarConsultasChamados,
     atualizarChamado,
     excluirChamado,
 } from "../services/chamadosService";
 import { useMensagemTemporaria } from "./useMensagemTemporaria";
-import { ordenarChamadosRecentes } from "../utils/resumoChamados";
 
-// Lista compartilhada pelo Dashboard e pela página Chamados; os modais pertencem à interface.
+// Os modais usam estas operações; uma gravação invalida o cache de leitura.
 export function useChamados() {
-    // Os estados armazenam os registros e as informações que as telas usam para mostrar carregamento, erros e avisos.
-    const [chamados, setChamados] = useState<Cr2cd_chamados[]>([]);
-    const [carregando, setCarregando] = useState(true);
-    const [erro, setErro] = useState("");
+    // Uma nova versão invalida somente as consultas das telas que estão abertas.
+    const [versao, setVersao] = useState(0);
     const [erroOperacao, setErroOperacao] = useState("");
     const [aviso, setAviso] = useState("");
     const [operacao, setOperacao] = useState<"salvar" | "excluir" | null>(null);
     const { mensagem, setMensagem } = useMensagemTemporaria();
-    // As refs persistem entre renderizações sem redesenhar a tela: controlam montagem, operação em curso e ordem das buscas.
+    // As refs persistem entre renderizações sem redesenhar a tela e controlam montagem e operação em curso.
     const ativo = useRef(false);
     const emOperacao = useRef(false);
-    const ultimaBusca = useRef(0);
 
-    // useCallback mantém a mesma função entre renderizações; a consulta e seus resultados são tratados de forma assíncrona.
-    const carregar = useCallback(() => {
-        // Ignora respostas antigas se uma nova consulta já tiver começado.
-        const busca = ++ultimaBusca.current;
-        return listarChamados()
-            .then((dados) => {
-                if (ativo.current && busca === ultimaBusca.current) {
-                    // Substitui a lista inteira: aproximação de ClearCollect, não de Collect.
-                    setChamados(ordenarChamadosRecentes(dados));
-                    setErro("");
-                }
-            })
-            .catch((error: unknown) => {
-                if (ativo.current && busca === ultimaBusca.current) {
-                    setErro(
-                        error instanceof Error
-                            ? error.message
-                            : "Não foi possível carregar os chamados."
-                    );
-                }
-            })
-            .finally(() => {
-                if (ativo.current && busca === ultimaBusca.current)
-                    setCarregando(false);
-            });
-    }, []);
-
-    // Busca os dados ao montar. Ao desmontar, marca o hook como inativo para ignorar respostas que chegarem depois.
     useEffect(() => {
         ativo.current = true;
-        void carregar();
-        return () => {
-            ativo.current = false;
-        };
-    }, [carregar]);
+        return () => { ativo.current = false; };
+    }, []);
 
     // Evita envios simultâneos, atualiza o Dataverse e recarrega a lista; devolve sucesso ou falha ao modal.
     async function salvar(chamado: Cr2cd_chamados, dados: DadosChamado) {
@@ -71,7 +36,7 @@ export function useChamados() {
         setAviso("");
         try {
             await atualizarChamado(chamado, dados);
-            await carregar();
+            recarregar();
             if (ativo.current) setMensagem("Chamado atualizado com sucesso!");
             return true;
         } catch (error) {
@@ -98,7 +63,7 @@ export function useChamados() {
         setAviso("");
         try {
             await excluirChamado(chamado);
-            await carregar();
+            recarregar();
             if (ativo.current) setMensagem("Chamado excluído com sucesso!");
             return true;
         } catch (error) {
@@ -116,21 +81,19 @@ export function useChamados() {
     }
 
     function recarregar() {
-        setCarregando(true);
-        void carregar();
+        invalidarConsultasChamados();
+        setVersao((atual) => atual + 1);
     }
 
     function aposCriar(avisoCriacao: string) {
         setMensagem("Chamado criado com sucesso!");
         setAviso(avisoCriacao);
-        // Busca novamente no Dataverse; cards, gráficos e tabelas recebem a mesma resposta.
+        // Invalida indicadores e páginas para que a próxima consulta reflita a gravação.
         recarregar();
     }
 
     return {
-        chamados,
-        carregando,
-        erro,
+        versao,
         erroOperacao,
         operacao,
         mensagem,

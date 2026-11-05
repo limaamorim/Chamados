@@ -27,6 +27,7 @@ export default function NovoChamado({ dados, acoes, abrirNovoChamado }: NovoCham
             )}
             {dados.carregando && <p role="status">Atualizando chamados...</p>}
             <ChamadosTable
+                paginacao
                 chamados={dados.chamados}
                 carregando={dados.carregando}
                 erroCarregamento={!!dados.erro}

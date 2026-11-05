@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { filtrarChamados, validarPeriodoDatas } from "../../../utils/filtrosChamados";
 import Mensagem from "../../../components/ui/Mensagem";
 import {
@@ -27,6 +27,7 @@ type ChamadosTableProps = AcoesChamados & {
     erroCarregamento?: boolean;
     mostrarBarraAcoes?: boolean;
     abrirNovoChamado?: () => void;
+    paginacao?: boolean;
 };
 
 function ChamadosTable({
@@ -34,6 +35,7 @@ function ChamadosTable({
     carregando = false,
     erroCarregamento = false,
     mostrarBarraAcoes = true,
+    paginacao = false,
     abrirNovoChamado,
     visualizarChamado,
     editarChamado,
@@ -54,8 +56,37 @@ function ChamadosTable({
     const erroPeriodo = validarPeriodoDatas(dataInicial, dataFinal);
     const filtros = { pesquisa, status: statusSelecionado, dataInicial, dataFinal };
 
-    // A tabela e o PDF usam exatamente esta mesma lista filtrada.
-    const chamadosFiltrados = filtrarChamados(chamados, filtros);
+    // Filtra antes de paginar; o PDF continua usando todos os resultados filtrados.
+    const chamadosFiltrados = useMemo(
+        () => filtrarChamados(chamados, { pesquisa, status: statusSelecionado, dataInicial, dataFinal }),
+        [chamados, pesquisa, statusSelecionado, dataInicial, dataFinal]
+    );
+    const [pagina, setPagina] = useState(1);
+    const [itensPorPagina, setItensPorPagina] = useState(20);
+    const totalFiltrado = chamadosFiltrados.length;
+    const totalPaginas = Math.max(1, Math.ceil(totalFiltrado / itensPorPagina));
+    // Evita uma página vazia quando registros são excluídos ou recarregados.
+    const paginaAtual = Math.min(pagina, totalPaginas);
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const chamadosVisiveis = paginacao
+        ? chamadosFiltrados.slice(inicio, inicio + itensPorPagina)
+        : chamadosFiltrados;
+
+    // Janela de até cinco páginas, mais os extremos: não cria milhares de botões.
+    const primeiraPaginaVisivel = Math.max(1, Math.min(paginaAtual - 2, totalPaginas - 4));
+    const ultimaPaginaVisivel = Math.min(totalPaginas, primeiraPaginaVisivel + 4);
+    const paginas: (number | string)[] = [];
+    if (primeiraPaginaVisivel > 1) {
+        paginas.push(1);
+        if (primeiraPaginaVisivel > 2) paginas.push("inicio");
+    }
+    for (let numero = primeiraPaginaVisivel; numero <= ultimaPaginaVisivel; numero++) {
+        paginas.push(numero);
+    }
+    if (ultimaPaginaVisivel < totalPaginas) {
+        if (ultimaPaginaVisivel < totalPaginas - 1) paginas.push("fim");
+        paginas.push(totalPaginas);
+    }
 
     async function gerarRelatorio() {
         if (exportando.current || carregando || erroCarregamento || erroPeriodo) return;
@@ -80,7 +111,10 @@ function ChamadosTable({
             {mostrarBarraAcoes && <div className="barra-acoes">
                 <CampoPesquisa
                     valor={pesquisa}
-                    aoAlterar={setPesquisa}
+                    aoAlterar={(valor) => {
+                        setPesquisa(valor);
+                        setPagina(1);
+                    }}
                     placeholder="Pesquisar chamados..."
                 />
 
@@ -101,6 +135,7 @@ function ChamadosTable({
                                 value={statusSelecionado}
                                 onChange={(event) => {
                                     setStatusSelecionado(event.target.value);
+                                    setPagina(1);
                                     setFiltroAberto(false);
                                 }}
                             >
@@ -132,7 +167,10 @@ function ChamadosTable({
                                 max={dataFinal || undefined}
                                 aria-invalid={!!erroPeriodo}
                                 aria-describedby={erroPeriodo ? idFiltros + "-erro" : undefined}
-                                onChange={(evento) => setDataInicial(evento.target.value)}
+                                onChange={(evento) => {
+                                    setDataInicial(evento.target.value);
+                                    setPagina(1);
+                                }}
                             />
                         </div>
                         <div className="filtro-data-campo">
@@ -144,7 +182,10 @@ function ChamadosTable({
                                 min={dataInicial || undefined}
                                 aria-invalid={!!erroPeriodo}
                                 aria-describedby={erroPeriodo ? idFiltros + "-erro" : undefined}
-                                onChange={(evento) => setDataFinal(evento.target.value)}
+                                onChange={(evento) => {
+                                    setDataFinal(evento.target.value);
+                                    setPagina(1);
+                                }}
                             />
                         </div>
                         <Button
@@ -152,6 +193,7 @@ function ChamadosTable({
                             onClick={() => {
                                 setDataInicial("");
                                 setDataFinal("");
+                                setPagina(1);
                             }}
                             disabled={!dataInicial && !dataFinal}
                         >
@@ -189,7 +231,7 @@ function ChamadosTable({
                     </thead>
 
                     <tbody>
-                        {chamadosFiltrados.map((chamado) => {
+                        {chamadosVisiveis.map((chamado) => {
                             const status = obterStatus(chamado);
                             const categoria = obterCategoria(chamado);
                             const prioridade = obterPrioridade(chamado);
@@ -244,6 +286,60 @@ function ChamadosTable({
                     </tbody>
                 </table>
             </div>
+            {paginacao && (
+                <div className="chamados-paginacao">
+                    <p className="paginacao-resumo" role="status" aria-atomic="true">
+                        Mostrando {totalFiltrado === 0 ? 0 : inicio + 1}–{Math.min(inicio + itensPorPagina, totalFiltrado)} de {totalFiltrado} chamados
+                    </p>
+
+                    <div className="paginacao-tamanho">
+                        <label htmlFor={idFiltros + "-itens"}>Itens por página</label>
+                        <select
+                            id={idFiltros + "-itens"}
+                            value={itensPorPagina}
+                            onChange={(evento) => {
+                                setItensPorPagina(Number(evento.target.value));
+                                setPagina(1);
+                            }}
+                        >
+                            {[10, 20, 50, 100].map((quantidade) => (
+                                <option key={quantidade} value={quantidade}>{quantidade}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <nav className="paginacao-navegacao" aria-label="Paginação de chamados">
+                        <button
+                            type="button"
+                            disabled={paginaAtual === 1 || carregando}
+                            onClick={() => setPagina(paginaAtual - 1)}
+                        >
+                            Anterior
+                        </button>
+                        {paginas.map((numero) => typeof numero === "number" ? (
+                            <button
+                                key={numero}
+                                type="button"
+                                aria-label={`Página ${numero}`}
+                                aria-current={paginaAtual === numero ? "page" : undefined}
+                                disabled={carregando}
+                                onClick={() => setPagina(numero)}
+                            >
+                                {numero}
+                            </button>
+                        ) : (
+                            <span key={numero} className="paginacao-reticencias" aria-hidden="true">…</span>
+                        ))}
+                        <button
+                            type="button"
+                            disabled={paginaAtual === totalPaginas || carregando}
+                            onClick={() => setPagina(paginaAtual + 1)}
+                        >
+                            Próxima
+                        </button>
+                    </nav>
+                </div>
+            )}
         </>
     );
 }

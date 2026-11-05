@@ -35,7 +35,9 @@
       "displayName": "SharePoint",
       "dataSources": [
         "baseconhecimento",
-        "baseconhecimento_1"
+        "baseconhecimento_1",
+        "baseconhecimento_1000_itens_1_",
+        "baseconhecimento_2"
       ],
       "dataSets": {
         "https://devgbsn.sharepoint.com": {
@@ -45,6 +47,12 @@
             },
             "baseconhecimento_1": {
               "tableName": "ae908a1a-d97e-46e8-82ea-dea51aebc537"
+            },
+            "baseconhecimento_1000_itens_1_": {
+              "tableName": "60da1752-4dad-4a62-b610-f969d213602e"
+            },
+            "baseconhecimento_2": {
+              "tableName": "7738601f-5b1a-4696-a949-9ba2cb66c57b"
             }
           }
         }

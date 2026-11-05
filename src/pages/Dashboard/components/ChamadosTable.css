@@ -176,3 +176,69 @@
     .filtro-data-campo { flex: 1 1 100%; }
     .botao-gerar-relatorio { margin-left: 0; }
 }
+
+/* Rodapé da tabela paginada, exclusivo da tela que habilita a paginação. */
+.chamados-paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 14px;
+    padding: 16px 18px;
+    border: 1px solid #dce4ed;
+    border-radius: 12px;
+    background: white;
+    color: #48576d;
+    font-size: 13px;
+}
+.paginacao-resumo { margin: 0; }
+.paginacao-tamanho,
+.paginacao-navegacao {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.paginacao-tamanho { gap: 10px; }
+.paginacao-tamanho select,
+.paginacao-navegacao button {
+    min-height: 36px;
+    border: 1px solid #d4dee9;
+    border-radius: 8px;
+    background: white;
+    color: #48576d;
+    font: inherit;
+}
+.paginacao-tamanho select { padding: 6px 10px; }
+.paginacao-navegacao button {
+    min-width: 36px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+.paginacao-navegacao button:hover:not(:disabled) {
+    background: #eef4fb;
+    border-color: #b9d7ef;
+    color: #0078d4;
+}
+.paginacao-navegacao button[aria-current="page"],
+.paginacao-navegacao button[aria-current="page"]:hover:not(:disabled) {
+    background: #087ed8;
+    border-color: #087ed8;
+    color: white;
+    font-weight: 600;
+}
+.paginacao-navegacao button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.paginacao-reticencias { padding: 0 3px; }
+.paginacao-navegacao button:focus-visible,
+.paginacao-tamanho select:focus-visible {
+    outline: 2px solid #0078d4;
+    outline-offset: 2px;
+}
+@media (max-width: 600px) {
+    .chamados-paginacao { align-items: flex-start; gap: 12px; }
+    .paginacao-navegacao { width: 100%; }
+}

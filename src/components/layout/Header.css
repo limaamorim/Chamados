@@ -10,14 +10,14 @@
 
 .header-titulo h1 {
     margin: 0;
-    color: #111827;
+    color: var(--texto, #111827);
     font-size: 28px;
     font-weight: 700;
 }
 
 .header-titulo p {
     margin: 8px 0 0;
-    color: #6b7280;
+    color: var(--texto-secundario, #6b7280);
     font-size: 14px;
 }
 
@@ -34,8 +34,8 @@
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: #e0e7ff;
-    color: #3730a3;
+    background: var(--azul-suave, #e0e7ff);
+    color: var(--roxo-texto, #3730a3);
     font-weight: 700;
 }
 
@@ -46,11 +46,42 @@
 }
 
 .dados-usuario strong {
-    color: #111827;
+    color: var(--texto, #111827);
     font-size: 14px;
 }
 
 .dados-usuario span {
-    color: #6b7280;
+    color: var(--texto-secundario, #6b7280);
     font-size: 12px;
+}
+
+.botao-tema {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--borda, #d4dee9);
+    border-radius: 10px;
+    background: var(--superficie, white);
+    color: var(--texto, #25344d);
+    cursor: pointer;
+}
+.botao-tema:hover {
+    background: var(--superficie-hover, #eef4fb);
+}
+.botao-tema:focus-visible {
+    outline: 3px solid var(--azul-texto, #0078d4);
+    outline-offset: 3px;
+}
+.botao-tema svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }

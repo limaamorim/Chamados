@@ -14,8 +14,8 @@ body,
 
 body {
   margin: 0;
-  background-color: #f4f7fb;
-  color: #17233c;
+  background-color: var(--fundo, #f4f7fb);
+  color: var(--texto, #17233c);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -39,19 +39,56 @@ textarea {
 }
 
 .mensagem-sucesso {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #065f46;
+  background: var(--verde-suave, #ecfdf5);
+  border-color: var(--verde-suave, #a7f3d0);
+  color: var(--verde-texto, #065f46);
 }
 
 .mensagem-erro {
-  background: #fff0f0;
-  border-color: #f1b5b5;
-  color: #b42318;
+  background: var(--vermelho-suave, #fff0f0);
+  border-color: var(--vermelho-suave, #f1b5b5);
+  color: var(--vermelho-texto, #b42318);
 }
 
 .mensagem-aviso {
-  background: #fffbeb;
-  border-color: #fcd34d;
-  color: #92400e;
+  background: var(--laranja-suave, #fffbeb);
+  border-color: var(--laranja-texto, #fcd34d);
+  color: var(--laranja-texto, #92400e);
+}
+
+/* Os valores de reserva nos componentes preservam a paleta original do tema claro. */
+:root {
+  color-scheme: light;
+}
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --fundo: #0b1220;
+  --superficie: #152033;
+  --superficie-suave: #19273c;
+  --superficie-hover: #20324c;
+  --texto: #e7edf6;
+  --texto-secundario: #bac6d8;
+  --borda: #36475e;
+  --borda-destaque: #5b83b0;
+  --azul-texto: #80c5ff;
+  --azul-suave: #173955;
+  --roxo-texto: #c7b5ff;
+  --roxo-suave: #322748;
+  --verde-texto: #7ce0ad;
+  --verde-suave: #153c32;
+  --laranja-texto: #ffd08a;
+  --laranja-suave: #47351f;
+  --vermelho-texto: #ffaba9;
+  --vermelho-suave: #47282d;
+  --sidebar: #080f1d;
+  --sidebar-hover: #1b2a43;
+  --grafico-grade: #293951;
+  --botao-principal: #066bbb;
+  --botao-principal-hover: #075b9d;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--texto-secundario, #667085);
+  opacity: 1;
 }

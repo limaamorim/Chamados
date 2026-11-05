@@ -8,5 +8,5 @@
   flex: 1;
   min-width: 0;
   padding: 0;
-  background-color: #f5f7fa;
+  background-color: var(--fundo, #f5f7fa);
 }

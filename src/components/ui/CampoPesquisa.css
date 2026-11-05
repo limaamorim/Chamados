@@ -5,9 +5,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    border: 1px solid #d4dee9;
+    border: 1px solid var(--borda, #d4dee9);
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--superficie, white);
 }
 
 .campo-pesquisa span {
@@ -18,5 +18,9 @@
     width: 100%;
     border: none;
     outline: none;
-    color: #25344d;
+    color: var(--texto, #25344d);
+}
+
+.campo-pesquisa input {
+    background: transparent;
 }

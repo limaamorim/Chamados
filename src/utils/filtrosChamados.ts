@@ -3,6 +3,7 @@ import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
 export type FiltrosChamados = {
     pesquisa: string;
     status: string;
+    prioridade: string;
     dataInicial: string;
     dataFinal: string;
 };
@@ -38,7 +39,9 @@ export function filtrarChamados(chamados: Cr2cd_chamados[], filtros: FiltrosCham
             .toLowerCase().includes(filtros.pesquisa.toLowerCase());
         const correspondeStatus = filtros.status === "todos"
             || chamado.cr2cd_status === Number(filtros.status);
-        if (!correspondePesquisa || !correspondeStatus) return false;
+        const correspondePrioridade = filtros.prioridade === "todos"
+            || chamado.cr2cd_prioridade === Number(filtros.prioridade);
+        if (!correspondePesquisa || !correspondeStatus || !correspondePrioridade) return false;
         if (inicio === null && limiteFinal === null) return true;
         const cadastro = Date.parse(chamado.createdon ?? "");
         return !Number.isNaN(cadastro)

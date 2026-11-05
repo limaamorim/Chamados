@@ -8,7 +8,7 @@
     overflow-wrap: anywhere;
 }
 .conteudo-exclusao .aviso-exclusao {
-    color: #b91c1c;
+    color: var(--vermelho-texto, #b91c1c);
     margin-bottom: 0;
     font-size: 13px;
 }

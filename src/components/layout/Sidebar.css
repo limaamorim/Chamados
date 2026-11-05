@@ -4,7 +4,7 @@
     min-width: 270px;
     min-height: 100vh;
     padding: 28px 20px;
-    background-color: #0f172e;
+    background-color: var(--sidebar, #0f172e);
     color: white;
 
     transition:
@@ -58,7 +58,7 @@
 }
 
 .botao-recolher:hover {
-    background-color: #202b46;
+    background-color: var(--sidebar-hover, #202b46);
 }
 
 .menu {
@@ -93,7 +93,7 @@
 }
 
 .menu-item:hover {
-    background-color: #202b46;
+    background-color: var(--sidebar-hover, #202b46);
     color: white;
 }
 
@@ -148,6 +148,6 @@
 /* Destaque para navegação pelo teclado. */
 .botao-recolher:focus-visible,
 .menu-item:focus-visible {
-    outline: 2px solid #c4b5fd;
+    outline: 2px solid var(--azul-texto, #c4b5fd);
     outline-offset: 3px;
 }

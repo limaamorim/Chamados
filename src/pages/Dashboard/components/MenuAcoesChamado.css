@@ -9,10 +9,10 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    border: 1px solid #dce4ed;
+    border: 1px solid var(--borda, #dce4ed);
     border-radius: 9px;
-    background: white;
-    color: #48576d;
+    background: var(--superficie, white);
+    color: var(--texto-secundario, #48576d);
     font-family: inherit;
     font-size: 20px;
     font-weight: 700;
@@ -21,14 +21,14 @@
 }
 
 .botao-menu-acoes:hover {
-    background: #eef4fb;
-    color: #0078d4;
-    border-color: #b9d7ef;
+    background: var(--superficie-hover, #eef4fb);
+    color: var(--azul-texto, #0078d4);
+    border-color: var(--borda-destaque, #b9d7ef);
 }
 
 .botao-menu-acoes:focus-visible,
 .menu-acoes-chamado button:focus-visible {
-    outline: 2px solid #0078d4;
+    outline: 2px solid var(--azul-texto, #0078d4);
     outline-offset: 2px;
 }
 
@@ -42,10 +42,10 @@
     max-height: calc(100vh - 16px);
     margin: 0;
     padding: 8px;
-    border: 1px solid #dce4ed;
+    border: 1px solid var(--borda, #dce4ed);
     border-radius: 12px;
-    background: white;
-    color: #25344d;
+    background: var(--superficie, white);
+    color: var(--texto, #25344d);
     box-shadow: 0 8px 24px rgba(29, 48, 72, 0.16);
 }
 
@@ -71,21 +71,21 @@
 }
 
 .menu-acoes-chamado button:hover {
-    background: #eef4fb;
-    color: #0078d4;
+    background: var(--superficie-hover, #eef4fb);
+    color: var(--azul-texto, #0078d4);
 }
 
 .menu-acoes-chamado .menu-acao-excluir {
-    color: #dc2626;
+    color: var(--vermelho-texto, #dc2626);
 }
 
 .menu-acoes-chamado .menu-acao-excluir:hover {
-    background: #feecec;
-    color: #dc2626;
+    background: var(--vermelho-suave, #feecec);
+    color: var(--vermelho-texto, #dc2626);
 }
 
 .menu-acoes-chamado button:disabled {
-    color: #68768a;
+    color: var(--texto-secundario, #68768a);
     background: transparent;
     opacity: 0.6;
     cursor: not-allowed;

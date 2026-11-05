@@ -4,12 +4,12 @@
     gap: 20px;
 }
 .detalhes-chamado dt {
-    color: #667085;
+    color: var(--texto-secundario, #667085);
     font-size: 13px;
     margin-bottom: 7px;
 }
 .detalhes-chamado dd {
-    color: #344054;
+    color: var(--texto, #344054);
     font-size: 14px;
     font-weight: 600;
     overflow-wrap: anywhere;

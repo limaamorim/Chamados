@@ -13,13 +13,13 @@
 
 .base-titulo-secao h2 {
     margin: 0;
-    color: #1e293b;
+    color: var(--texto, #1e293b);
     font-size: 18px;
     font-weight: 700;
 }
 
 .base-titulo-secao > span {
-    color: #64748b;
+    color: var(--texto-secundario, #64748b);
     font-size: 12px;
 }
 
@@ -42,19 +42,19 @@
     gap: 18px;
     margin-top: 24px;
     padding: 22px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
+    background: var(--azul-suave, #eff6ff);
+    border: 1px solid var(--borda, #dbeafe);
     border-radius: 12px;
 }
 
 .base-ajuda-final strong {
-    color: #1e3a5f;
+    color: var(--texto, #1e3a5f);
     font-size: 14px;
 }
 
 .base-ajuda-final p {
     margin: 7px 0 0;
-    color: #64748b;
+    color: var(--texto-secundario, #64748b);
     font-size: 13px;
     line-height: 1.5;
 }
@@ -62,13 +62,13 @@
 .base-vazio {
     padding: 36px 20px;
     text-align: center;
-    background: #ffffff;
-    border: 1px dashed #cbd5e1;
+    background: var(--superficie, #ffffff);
+    border: 1px dashed var(--borda, #cbd5e1);
     border-radius: 12px;
 }
 
 .base-vazio > span {
-    color: #94a3b8;
+    color: var(--texto-secundario, #94a3b8);
     font-size: 32px;
 }
 
@@ -79,7 +79,7 @@
 
 .base-vazio p {
     margin: 0 0 20px;
-    color: #64748b;
+    color: var(--texto-secundario, #64748b);
     font-size: 13px;
 }
 

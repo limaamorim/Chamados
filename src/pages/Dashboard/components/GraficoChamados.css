@@ -1,9 +1,9 @@
 .grafico-chamados {
     min-width: 0;
     padding: 24px;
-    border: 1px solid #dce4ed;
+    border: 1px solid var(--borda, #dce4ed);
     border-radius: 15px;
-    background: white;
+    background: var(--superficie, white);
     box-shadow: 0 4px 12px rgba(29, 48, 72, 0.06);
 }
 .grafico-cabecalho {
@@ -17,13 +17,13 @@
 .grafico-cabecalho h2 {
     margin: 0;
     font-size: 18px;
-    color: #25344d;
+    color: var(--texto, #25344d);
 }
 .grafico-cabecalho > span,
 .grafico-legenda,
 .grafico-vazio {
     font-size: 13px;
-    color: #68768a;
+    color: var(--texto-secundario, #68768a);
 }
 .grafico-rosca-conteudo {
     display: flex;
@@ -43,7 +43,7 @@
     fill: none;
     stroke-width: 28px;
 }
-.rosca-fundo { stroke: #eef3f8; }
+.rosca-fundo { stroke: var(--grafico-grade, #eef3f8); }
 .rosca-total,
 .rosca-total-legenda {
     text-anchor: middle;
@@ -52,11 +52,11 @@
 .rosca-total {
     font-size: 34px;
     font-weight: 700;
-    fill: #25344d;
+    fill: var(--texto, #25344d);
 }
 .rosca-total-legenda {
     font-size: 12px;
-    fill: #68768a;
+    fill: var(--texto-secundario, #68768a);
 }
 .rosca-legenda {
     flex: 1 1 210px;
@@ -72,7 +72,7 @@
     align-items: center;
     gap: 10px;
     font-size: 13px;
-    color: #48576d;
+    color: var(--texto-secundario, #48576d);
 }
 .rosca-cor {
     width: 10px;
@@ -82,11 +82,11 @@
 .rosca-categoria { overflow-wrap: anywhere; }
 .rosca-legenda strong,
 .coluna-quantidade {
-    color: #25344d;
+    color: var(--texto, #25344d);
     font-variant-numeric: tabular-nums;
 }
 .rosca-porcentagem {
-    color: #68768a;
+    color: var(--texto-secundario, #68768a);
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
@@ -105,13 +105,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    border-bottom: 1px solid #dce4ed;
+    border-bottom: 1px solid var(--borda, #dce4ed);
     background: repeating-linear-gradient(
         to top,
         transparent 0,
         transparent calc(25% - 1px),
-        #eef3f8 calc(25% - 1px),
-        #eef3f8 25%
+        var(--grafico-grade, #eef3f8) calc(25% - 1px),
+        var(--grafico-grade, #eef3f8) 25%
     );
 }
 .coluna-quantidade {
@@ -133,7 +133,7 @@
     text-align: center;
     font-size: 13px;
     line-height: 20px;
-    color: #48576d;
+    color: var(--texto-secundario, #48576d);
     overflow-wrap: anywhere;
 }
 .grafico-legenda {

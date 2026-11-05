@@ -1,4 +1,4 @@
 .edicao-status {
     margin-bottom: 20px;
-    color: #475569;
+    color: var(--texto-secundario, #475569);
 }

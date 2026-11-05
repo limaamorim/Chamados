@@ -1,4 +1,4 @@
 .pagina-relatorios iframe {
     border-radius: 12px;
-    background: white;
+    background: var(--superficie, white);
 }

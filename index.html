@@ -2,6 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Restaura o tema antes de renderizar a página, evitando um flash claro.
+      try {
+        document.documentElement.dataset.tema =
+          localStorage.getItem("caze-tema") === "escuro" ? "escuro" : "claro";
+      } catch {
+        document.documentElement.dataset.tema = "claro";
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>vite</title>

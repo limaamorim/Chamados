@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import type { PDFFont } from "pdf-lib";
 import type { Cr2cd_chamados } from "../generated/models/Cr2cd_chamadosModel";
-import { Cr2cd_chamadoscr2cd_status } from "../generated/models/Cr2cd_chamadosModel";
+import { Cr2cd_chamadoscr2cd_status, Cr2cd_chamadoscr2cd_prioridade } from "../generated/models/Cr2cd_chamadosModel";
 import type { FiltrosChamados } from "./filtrosChamados";
 import { validarPeriodoDatas } from "./filtrosChamados";
 import { obterCategoria, obterPrioridade, obterStatus } from "./chamados";
@@ -114,9 +114,12 @@ export async function criarPdfChamados(chamados: Cr2cd_chamados[], filtros: Filt
     y -= 16;
     const status = filtros.status === "todos" ? "Todos os status"
         : Cr2cd_chamadoscr2cd_status[Number(filtros.status) as Cr2cd_chamadoscr2cd_status] ?? "Não informado";
+    const prioridade = filtros.prioridade === "todos" ? "Todas as prioridades"
+        : Cr2cd_chamadoscr2cd_prioridade[Number(filtros.prioridade) as Cr2cd_chamadoscr2cd_prioridade] ?? "Não informado";
     const criterios = [
         ["Pesquisa", filtros.pesquisa || "Sem pesquisa"],
         ["Status", status],
+        ["Prioridade", prioridade],
         ["Data inicial", dataFiltro(filtros.dataInicial)],
         ["Data final", dataFiltro(filtros.dataFinal)],
         ["Critério de data", "Data de cadastro (createdon), no horário local; limites inclusivos"],

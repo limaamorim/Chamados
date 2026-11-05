@@ -13,18 +13,18 @@
 }
 .button-principal {
     color: white;
-    background: #087ed8;
+    background: var(--botao-principal, #087ed8);
 }
 .button-principal:hover:not(:disabled) {
-    background: #066bbb;
+    background: var(--botao-principal-hover, #066bbb);
 }
 .button-secundario {
-    color: #344054;
-    background: white;
-    border-color: #d0d5dd;
+    color: var(--texto, #344054);
+    background: var(--superficie, white);
+    border-color: var(--borda, #d0d5dd);
 }
 .button-secundario:hover:not(:disabled) {
-    background: #f5f7fa;
+    background: var(--fundo, #f5f7fa);
 }
 .button-perigo {
     color: white;
@@ -38,6 +38,6 @@
     cursor: not-allowed;
 }
 .button:focus-visible {
-    outline: 3px solid #93c5fd;
+    outline: 3px solid var(--azul-texto, #93c5fd);
     outline-offset: 3px;
 }

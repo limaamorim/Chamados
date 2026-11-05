@@ -7,7 +7,7 @@ import {
     obterPrioridade,
 } from "../../../utils/chamados";
 
-import { Cr2cd_chamadoscr2cd_status } from "../../../generated/models/Cr2cd_chamadosModel";
+import { Cr2cd_chamadoscr2cd_status, Cr2cd_chamadoscr2cd_prioridade } from "../../../generated/models/Cr2cd_chamadosModel";
 import type { Cr2cd_chamados } from "../../../generated/models/Cr2cd_chamadosModel";
 import CampoPesquisa from "../../../components/ui/CampoPesquisa";
 import Button from "../../../components/ui/Button";
@@ -46,6 +46,8 @@ function ChamadosTable({
 
     const [statusSelecionado, setStatusSelecionado] = useState("todos");
     const [filtroAberto, setFiltroAberto] = useState(false);
+    const [prioridadeSelecionada, setPrioridadeSelecionada] = useState("todos");
+    const [filtroPrioridadeAberto, setFiltroPrioridadeAberto] = useState(false);
 
     const idFiltros = useId();
     const [dataInicial, setDataInicial] = useState("");
@@ -54,12 +56,12 @@ function ChamadosTable({
     const [erroRelatorio, setErroRelatorio] = useState("");
     const exportando = useRef(false);
     const erroPeriodo = validarPeriodoDatas(dataInicial, dataFinal);
-    const filtros = { pesquisa, status: statusSelecionado, dataInicial, dataFinal };
+    const filtros = { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal };
 
     // Filtra antes de paginar; o PDF continua usando todos os resultados filtrados.
     const chamadosFiltrados = useMemo(
-        () => filtrarChamados(chamados, { pesquisa, status: statusSelecionado, dataInicial, dataFinal }),
-        [chamados, pesquisa, statusSelecionado, dataInicial, dataFinal]
+        () => filtrarChamados(chamados, { pesquisa, status: statusSelecionado, prioridade: prioridadeSelecionada, dataInicial, dataFinal }),
+        [chamados, pesquisa, statusSelecionado, prioridadeSelecionada, dataInicial, dataFinal]
     );
     const [pagina, setPagina] = useState(1);
     const [itensPorPagina, setItensPorPagina] = useState(20);
@@ -122,16 +124,19 @@ function ChamadosTable({
                     <Button
                         variante="secundario"
                         aria-expanded={filtroAberto}
-                        aria-controls="filtro-status-opcoes"
-                        onClick={() => setFiltroAberto(!filtroAberto)}
+                        aria-controls={idFiltros + "-status-opcoes"}
+                        onClick={() => {
+                            setFiltroAberto(!filtroAberto);
+                            setFiltroPrioridadeAberto(false);
+                        }}
                     >
                         {statusSelecionado === "todos" ? "Filtrar status" : `Status: ${Cr2cd_chamadoscr2cd_status[Number(statusSelecionado) as Cr2cd_chamadoscr2cd_status]}`}
                     </Button>
                     {filtroAberto && (
-                        <div className="filtro-status-opcoes" id="filtro-status-opcoes">
-                            <label htmlFor="status-chamados">Status do chamado</label>
+                        <div className="filtro-status-opcoes" id={idFiltros + "-status-opcoes"}>
+                            <label htmlFor={idFiltros + "-status"}>Status do chamado</label>
                             <select
-                                id="status-chamados"
+                                id={idFiltros + "-status"}
                                 value={statusSelecionado}
                                 onChange={(event) => {
                                     setStatusSelecionado(event.target.value);
@@ -141,6 +146,39 @@ function ChamadosTable({
                             >
                                 <option value="todos">Todos os status</option>
                                 {Object.entries(Cr2cd_chamadoscr2cd_status).map(([codigo, nome]) => (
+                                    <option key={codigo} value={codigo}>{nome}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                </div>
+
+                <div className="filtro-status">
+                    <Button
+                        variante="secundario"
+                        aria-expanded={filtroPrioridadeAberto}
+                        aria-controls={idFiltros + "-prioridade-opcoes"}
+                        onClick={() => {
+                            setFiltroPrioridadeAberto(!filtroPrioridadeAberto);
+                            setFiltroAberto(false);
+                        }}
+                    >
+                        {prioridadeSelecionada === "todos" ? "Filtrar prioridade" : `Prioridade: ${Cr2cd_chamadoscr2cd_prioridade[Number(prioridadeSelecionada) as Cr2cd_chamadoscr2cd_prioridade]}`}
+                    </Button>
+                    {filtroPrioridadeAberto && (
+                        <div className="filtro-status-opcoes" id={idFiltros + "-prioridade-opcoes"}>
+                            <label htmlFor={idFiltros + "-prioridade"}>Prioridade do chamado</label>
+                            <select
+                                id={idFiltros + "-prioridade"}
+                                value={prioridadeSelecionada}
+                                onChange={(event) => {
+                                    setPrioridadeSelecionada(event.target.value);
+                                    setPagina(1);
+                                    setFiltroPrioridadeAberto(false);
+                                }}
+                            >
+                                <option value="todos">Todas as prioridades</option>
+                                {Object.entries(Cr2cd_chamadoscr2cd_prioridade).map(([codigo, nome]) => (
                                     <option key={codigo} value={codigo}>{nome}</option>
                                 ))}
                             </select>
@@ -191,13 +229,19 @@ function ChamadosTable({
                         <Button
                             variante="secundario"
                             onClick={() => {
+                                setPesquisa("");
+                                setStatusSelecionado("todos");
+                                setPrioridadeSelecionada("todos");
                                 setDataInicial("");
                                 setDataFinal("");
+                                setFiltroAberto(false);
+                                setFiltroPrioridadeAberto(false);
+                                setErroRelatorio("");
                                 setPagina(1);
                             }}
-                            disabled={!dataInicial && !dataFinal}
+                            disabled={!pesquisa && statusSelecionado === "todos" && prioridadeSelecionada === "todos" && !dataInicial && !dataFinal}
                         >
-                            Limpar datas
+                            Limpar filtros
                         </Button>
                         <Button
                             className="botao-gerar-relatorio"

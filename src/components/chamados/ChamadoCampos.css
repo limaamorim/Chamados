@@ -16,7 +16,7 @@
     grid-column: 1 / -1;
 }
 .chamado-campo label {
-    color: #263650;
+    color: var(--texto, #263650);
     font-size: 14px;
     font-weight: 600;
 }
@@ -25,10 +25,10 @@
 .chamado-campo textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccd7e3;
+    border: 1px solid var(--borda, #ccd7e3);
     border-radius: 8px;
-    color: #263650;
-    background: white;
+    color: var(--texto, #263650);
+    background: var(--superficie, white);
 }
 .chamado-campo textarea {
     resize: vertical;
@@ -36,7 +36,7 @@
 .chamado-campo input:focus,
 .chamado-campo select:focus,
 .chamado-campo textarea:focus {
-    outline: 2px solid #93c5fd;
+    outline: 2px solid var(--azul-texto, #93c5fd);
     outline-offset: 1px;
 }
 .chamado-campos:disabled {

@@ -31,7 +31,7 @@
 .dashboard-secao-topo h2 {
     margin: 0;
     font-size: 20px;
-    color: #25344d;
+    color: var(--texto, #25344d);
 }
 @media (max-width: 900px) {
     .dashboard-graficos { grid-template-columns: 1fr; }
